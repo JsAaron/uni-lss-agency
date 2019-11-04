@@ -1,0 +1,42 @@
+
+// 基础颜色值
+$red: #d43b33;
+$black: #000;
+$white: #fff;
+$orange: rgb(255, 153, 1);
+$green: #33cd5f;
+$gray: #c9c9c9; //普通灰
+$gray-light: rgb(242,242,242); //浅灰
+$gray-darker: #7d7e80; //暗灰
+$gray-dark: #999; //深灰
+$blue: #4f96ff;
+
+
+//action
+$opacity-half: 0.5;
+
+// 文本颜色
+$text-color-gray: #909399;
+$text-color-white: $white;
+$text-color-red: $red;
+$text-color-blue: $blue;
+$text-color-orange: $orange;
+
+
+// 背景颜色
+
+$background-color-red: $red; //背景红
+$background-color-gray: rgb(233, 233, 233);
+$background-color-white: $white;
+$background-color-blue: $blue;
+$background-color-orange: $orange;
+$background-color-gray--dark: $gray-dark;
+$background-color-gray--light: $gray-light;
+
+//状态文字颜色
+$color-success: #00950d;
+$color-fail: $red;
+
+
+$border-color-gray:rgb(217, 217, 217);
+$border-color-green:$green;

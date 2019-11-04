@@ -1,7 +1,7 @@
 {
   "name": "exchange-app",
   "version": "1.0.0",
-  "description": "数字货币交易系统",
+  "description": "脸刷刷纯支付代理商版",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

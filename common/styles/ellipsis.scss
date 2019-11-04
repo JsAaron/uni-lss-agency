@@ -1,0 +1,36 @@
+@mixin multi-ellipsis($lines) {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: $lines;
+	/* autoprefixer: ignore next */
+	-webkit-box-orient: vertical;
+}
+
+@mixin ellipsis() {
+	width: auto;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	word-wrap: normal;
+}
+
+// <view class="lss-ellipsis">这是一段宽度限制 250px 的文字，后面的内容会省略</view>
+// <!-- 最多显示两行 -->
+// <view class="lss-ellipsis--l2">这是一段最多显示两行的文字，后面的内容会省略</view>
+// <!-- 最多显示三行 -->
+// <view class="lss-ellipsis--l3">这是一段最多显示三行的文字，后面的内容会省略</view>
+
+.lss-ellipsis {
+	@include ellipsis();
+	&--text {
+		display: block;
+		@include ellipsis();
+	}
+	&--l2 {
+		@include multi-ellipsis(2);
+	}
+	&--l3 {
+		@include multi-ellipsis(3);
+	}
+}

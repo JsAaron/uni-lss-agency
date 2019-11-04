@@ -12,11 +12,7 @@
 	src: url('https://at.alicdn.com/t/font_1078604_zb46p0wdmn.ttf') format('truetype');
 }
 
-/*通用 */
-view{
-	font-size:28upx; 
-	line-height:1.8;
-}
+
 progress, checkbox-group{
 	width: 100%;
 }

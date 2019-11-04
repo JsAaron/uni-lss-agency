@@ -1,0 +1,92 @@
+//======================
+//  flex定位
+//======================
+
+//设置flex定位
+//justify-content属性定义了项目在主轴上的对齐方式
+//justify-content: flex-start | flex-end | center | space-between | space-around;
+
+//align-items属性定义项目在交叉轴上如何对齐。
+//align-items: flex-start | flex-end | center | baseline | stretch;
+
+@mixin flex($direction: row, $justify: center, $align: center) {
+	display: flex !important;
+	flex-direction: $direction;
+	align-items: $align;
+	justify-content: $justify;
+}
+
+//======================
+//  横向X
+//======================
+
+@mixin flex-h-align($align: center) {
+	display: flex;
+	flex-direction: row;
+	align-items: $align;
+}
+
+//横向设置,默认居中
+@mixin flex-h($justify: center, $align: center) {
+	@include flex(row, $justify, $align);
+}
+
+//横向左对齐
+@mixin flex-h-left($align: center) {
+	@include flex(row, flex-start, $align);
+}
+
+//横向右对齐
+@mixin flex-h-right($align: center) {
+	@include flex(row, flex-end, $align);
+}
+
+//横向两端对齐
+@mixin flex-h-between($align: center) {
+	@include flex(row, space-between, $align);
+}
+
+//横向平分
+@mixin flex-h-around($align: center) {
+	@include flex(row, space-around, $align);
+}
+
+//======================
+//  竖向Y
+//======================
+@mixin flex-v($justify: center, $align: center) {
+	@include flex(column, $justify, $align);
+}
+//竖直左边，设置上下
+@mixin flex-v-left($justify: center) {
+	@include flex(column, $justify, flex-start);
+}
+@mixin flex-v-around($align: center) {
+	@include flex(column, space-around, $align);
+}
+
+@mixin flex-v-between($align: center) {
+	@include flex(column, space-between, $align);
+}
+
+//======================
+//  position定位
+//======================
+@mixin position($position, $top, $left, $z-index: 0) {
+	position: $position;
+	top: $top;
+	left: $left;
+	z-index: $z-index;
+}
+
+@mixin position-transform($left: 50%, $top: 50%, $zIndex: 0) {
+	position: absolute;
+	top: $top;
+	left: $left;
+	z-index: $zIndex;
+	transform: translate(-$top, -$left);
+}
+
+@mixin position-center($z-index: 0) {
+	@include position-transform(50%, 50%, $z-index);
+}

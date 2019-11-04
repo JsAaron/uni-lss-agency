@@ -1,0 +1,71 @@
+@import './var';
+
+@mixin hairline-common() {
+	content: ' ';
+	position: absolute;
+	pointer-events: none;
+	box-sizing: border-box;
+	transform-origin: center;
+}
+
+@mixin hairline($border-color: #eee) {
+	@include hairline-common;
+	top: -50%;
+	left: -50%;
+	right: -50%;
+	bottom: -50%;
+	transform: scale(0.5);
+	border: 0 solid $border-color;
+}
+
+// 1px 边框
+// 为元素添加 Retina 屏幕下的 1px 边框（即 hairline），基于伪类 transform 实现。
+.lss-hairline,
+.lss-hairline--top,
+.lss-hairline--left,
+.lss-hairline--right,
+.lss-hairline--bottom,
+.lss-hairline--top-bottom .lss-hairline--surround {
+  position: relative;
+  &::after {
+    @include hairline($border-color-gray);
+  }
+}
+
+.lss-hairline {
+  &--top::after {
+    border-top-width: 1px;
+  }
+  &--left::after {
+    border-left-width: 1px;
+  }
+  &--right::after {
+    border-right-width: 1px;
+  }
+  &--bottom::after {
+    border-bottom-width: 1px;
+  }
+  &--top-bottom::after {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+  }
+  &--surround::after {
+    border-width: 1px;
+  }
+}
+
+.lss-hairline--bottom--balanced {
+  position: relative;
+  &::after {
+    @include hairline($green);
+    border-bottom-width: 1px;
+  }
+}
+
+.lss-hairline--bottom--black {
+  position: relative;
+  &::after {
+    @include hairline(#2B2B2B);
+    border-bottom-width: 1px;
+  }
+}

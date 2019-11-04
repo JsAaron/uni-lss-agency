@@ -1,7 +1,7 @@
 {
     "name" : "uni-lss-agency",
     "appid" : "__UNI__B8E1982",
-    "description" : "数字货币交易系统",
+    "description" : "脸刷刷纯支付代理商版",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "app-plus" : {
@@ -41,13 +41,12 @@
             /* ios打包配置 */
             "sdkConfigs" : {}
         },
-		
-		"softinput": {
-            "navBar": "auto", //是否显示软键盘上的导航条
-            "auxiliary": true, //是否开启辅助输入功能
-            "mode": "adjustPan" //软键盘弹出模式，
+        "softinput" : {
+            "navBar" : "auto", //是否显示软键盘上的导航条
+            "auxiliary" : true, //是否开启辅助输入功能
+            "mode" : "adjustPan" //软键盘弹出模式，
         }
-	},
+    },
     /* SDK配置 */
     "quickapp" : {},
     /* 快应用特有相关 */
