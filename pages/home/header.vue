@@ -7,7 +7,9 @@
 		<view class="header__data">
 			<view class="header__row">
 				<view class="header__col">
-					<view>1399.49</view>
+					<view>
+						<text>¥1399.49</text>
+					</view>
 					<view>总交易额</view>
 				</view>
 				<view class="header__col">
@@ -17,7 +19,7 @@
 			</view>
 			<view class="header__row">
 				<view class="header__col">
-					<view>1399.49</view>
+					<view>¥1399.49</view>
 					<view>佣金总额</view>
 				</view>
 				<view class="header__col">
@@ -41,6 +43,9 @@
 
 <script>
 export default {
+	components: {
+
+	},
 	data() {
 		return {};
 	},
@@ -91,6 +96,7 @@ export default {
 		width: 700rpx;
 		border-radius: 10px;
 		left: 25rpx;
+		font-weight: bold;
 	}
 	&__row {
 		padding: 20rpx 0;
