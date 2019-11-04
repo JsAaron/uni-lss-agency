@@ -1,15 +1,15 @@
 <template>
 	<view class="header">
 		<view class="header__top">
-			<view class="header__line"></view>
-			<text class="header__text">数据总览</text>
+			<view class="header__top-content">
+				<view class="header__line"></view>
+				<text class="header__text">数据总览</text>
+			</view>
 		</view>
 		<view class="header__data">
 			<view class="header__row">
 				<view class="header__col">
-					<view>
-						<text>¥1399.49</text>
-					</view>
+					<view><text>¥1399.49</text></view>
 					<view>总交易额</view>
 				</view>
 				<view class="header__col">
@@ -43,9 +43,7 @@
 
 <script>
 export default {
-	components: {
-
-	},
+	components: {},
 	data() {
 		return {};
 	},
@@ -70,7 +68,7 @@ export default {
 
 <style lang="scss">
 .header {
-	height: 550rpx;
+	height: 500rpx;
 	position: relative;
 	&__line {
 		margin: 0 20rpx;
@@ -79,23 +77,26 @@ export default {
 		background: #ffffff;
 	}
 	&__top {
-		@include flex-h-left;
-		height: 350rpx;
+		height: 300rpx;
 		width: 100%;
-		background-image:url("~@/static/img/logo.jpg");
+		background-image: url('~@/static/img/logo.jpg');
 		background-size: 100% 100%;
 		color: #ffffff;
+	}
+	&__top-content {
+		@include flex-h-left;
+		padding-top: 60rpx;
 	}
 	&__text {
 		font-size: 35px;
 	}
 
 	&__data {
-		box-shadow:0px 10px 10px #ccc;
+		box-shadow: 0px 10px 10px #ccc;
 		@include flex-h-around;
 		font-size: 25rpx;
 		position: absolute;
-		top: 230rpx;
+		top: 150rpx;
 		background: #ffffff;
 		width: 700rpx;
 		border-radius: 10px;
