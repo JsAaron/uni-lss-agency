@@ -1,6 +1,7 @@
 <template>
 	<view class="container">
 		<m-header></m-header>
+		<m-content></m-content>
 	</view>
 </template>  
 
@@ -8,6 +9,7 @@
 import { mapState, mapActions } from 'vuex';
 import { uniDrawer } from '@dcloudio/uni-ui';
 import mHeader from './header.vue';
+import mContent from './content.vue';
 import marketList from '../../components/marketList.vue';
 import settingDrawer from '../../components/settingDrawer.vue';
 export default {
@@ -28,6 +30,7 @@ export default {
 	},
 	components: {
 		mHeader,
+		mContent,
 		settingDrawer,
 		uniDrawer
 	},

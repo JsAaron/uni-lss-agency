@@ -70,6 +70,7 @@ export default {
 
 <style lang="scss">
 .header {
+	height: 550rpx;
 	position: relative;
 	&__line {
 		margin: 0 20rpx;
@@ -80,7 +81,9 @@ export default {
 	&__top {
 		@include flex-h-left;
 		height: 350rpx;
-		background: #0056b3;
+		width: 100%;
+		background-image:url("~@/static/img/logo.jpg");
+		background-size: 100% 100%;
 		color: #ffffff;
 	}
 	&__text {
@@ -88,6 +91,7 @@ export default {
 	}
 
 	&__data {
+		box-shadow:0px 10px 10px #ccc;
 		@include flex-h-around;
 		font-size: 25rpx;
 		position: absolute;
