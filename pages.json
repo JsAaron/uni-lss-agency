@@ -25,9 +25,9 @@
 			}
 		},
 		{
-			"path": "pages/quotation/main",
+			"path": "pages/product/main",
 			"style": {
-				"navigationBarTitleText": "行情"
+				"navigationBarTitleText": "进件"
 			}
 		},
 		{
