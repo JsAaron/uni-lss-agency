@@ -88,7 +88,7 @@ export default {
 		padding-top: 60rpx;
 	}
 	&__text {
-		font-size: 35px;
+		font-size: 20px;
 	}
 
 	&__data {

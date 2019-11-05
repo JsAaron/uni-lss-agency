@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "pages/home/main"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#2F85FC",
+    "backgroundColor": "#FFFFFF"
+  },
+  "tabBar": {
+    "color": "#130f13",
+    "selectedColor": "#0f0f0f",
+    "list": [
+      {
+        "pagePath": "pages/home/main",
+        "text": "首页",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/product/main",
+        "text": "进件",
+        "iconPath": "static/tabbar/quotations.png",
+        "selectedIconPath": "static/tabbar/quotations-active.png"
+      }
+    ]
+  },
+  "nvue": {
+    "pages": {
+      "pages/product/main.html": {
+        "window": {
+          "usingComponents": {},
+          "navigationBarTitleText": "进件"
+        },
+        "nvue": true
+      },
+      "pages/detail/detail.html": {
+        "window": {
+          "usingComponents": {}
+        },
+        "nvue": true
+      }
+    }
+  },
+  "nvueCompiler": "uni-app",
+  "renderer": "auto",
+  "splashscreen": {
+    "alwaysShowBeforeRender": true,
+    "autoclose": false
+  },
+  "appname": "脸刷刷纯支付代理商版",
+  "compilerVersion": "2.3.7",
+  "usingComponents": {}
+}

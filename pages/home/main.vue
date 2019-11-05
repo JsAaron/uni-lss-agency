@@ -206,7 +206,7 @@ export default {
 
 .qiun-bottom {
 	padding: 30rpx 20rpx;
-	font-size: 25px;
+	font-size: 12px;
 }
 
 .qiun-names{

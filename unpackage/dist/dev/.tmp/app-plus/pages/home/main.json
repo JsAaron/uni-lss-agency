@@ -1,0 +1,27 @@
+{
+  "navigationBarTitleText": "首页",
+  "titleNView": {
+    "tags": [
+      {
+        "tag": "img",
+        "src": "/static/img/home-icon.png",
+        "position": {
+          "left": "10px",
+          "top": "8px",
+          "width": "26px",
+          "height": "26px"
+        }
+      }
+    ],
+    "buttons": [
+      {
+        "text": "",
+        "fontSize": "15px",
+        "float": "left"
+      }
+    ]
+  },
+  "usingComponents": {
+    "m-header": "/pages/home/header"
+  }
+}
