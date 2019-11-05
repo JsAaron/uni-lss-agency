@@ -4,11 +4,12 @@
 		<scroll-view id="tab-bar" class="scroll-h" :scroll-x="true" :show-scrollbar="false" :scroll-into-view="scrollInto">
 			<view v-for="(tab, index) in tabBars" :key="tab.id" class="uni-tab-item" :id="tab.id" :data-current="index" @click="ontabtap">
 				<text class="uni-tab-item-title" :class="tabIndex == index ? 'uni-tab-item-title-active' : ''">{{ tab.name }}</text>
+				<view :class="tabIndex == index ? 'uni-tab-item-line uni-tab-item-line-active' : 'uni-tab-item-line'"></view>
 			</view>
 		</scroll-view>
-		
+
 		<view class="line-h"></view>
-		
+
 		<!-- 滑动列表 -->
 		<swiper :current="tabIndex" class="swiper-box" style="flex: 1;" :duration="300" @change="ontabchange" @transition="onswiperscroll">
 			<swiper-item class="swiper-item" v-for="(tab, index1) in newsList" :key="index1">
@@ -36,6 +37,7 @@
 					</cell>
 				</list>
 				<!-- #endif -->
+
 				<!-- #ifndef APP-NVUE -->
 				<scroll-view class="scroll-v list" enableBackToTop="true" scroll-y @scrolltolower="loadMore(index1)">
 					<view v-for="(newsitem, index2) in tab.data" :key="newsitem.id">
@@ -46,15 +48,14 @@
 					</view>
 				</scroll-view>
 				<!-- #endif -->
+
 				<no-data class="no-data" v-if="tab.isNoData" @retry="loadMore"></no-data>
 			</swiper-item>
 		</swiper>
 	</view>
-	
 </template>
 <script>
-import { friendlyDate } from '@/common/util.js';
-
+import { friendlyDate, gotoPage } from '@/utils';
 import noData from '@/components/nodata.nvue';
 import mediaItem from './list-item.nvue';
 
@@ -130,7 +131,7 @@ export default {
 				requestParams: {
 					columnId: tabBar.newsid,
 					minId: 0,
-					pageSize: 10,
+					pageSize: 20,
 					column: 'id,post_id,title,author_name,cover,published_at,comments_count'
 				}
 			});
@@ -199,14 +200,17 @@ export default {
 				}
 			});
 		},
+
+		/**
+		 * 详情
+		 * @param {Object} detail
+		 */
 		goDetail(detail) {
 			if (this.navigateFlag) {
 				return;
 			}
 			this.navigateFlag = true;
-			uni.navigateTo({
-				url: '/pages/detail/detail?query=' + encodeURIComponent(JSON.stringify(detail))
-			});
+			gotoPage('/pages/product/type-in');
 			setTimeout(() => {
 				this.navigateFlag = false;
 			}, 200);
@@ -401,6 +405,15 @@ page {
 	/* #ifndef APP-PLUS */
 	white-space: nowrap;
 	/* #endif */
+}
+
+.uni-tab-item-line {
+	top: -10rpx;
+	height: 5rpx;
+}
+
+.uni-tab-item-line-active {
+	background-color: #007aff;
 }
 
 .uni-tab-item-title-active {

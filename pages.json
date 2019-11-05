@@ -1,5 +1,8 @@
 {
 	"pages": [
+		
+		
+
 
 		{
 			"path": "pages/home/main",
@@ -27,12 +30,20 @@
 			}
 		},
 
-{
+
+		{
+			"path": "pages/product/type-in",
+			"style": {
+				"navigationBarTitleText": "录入资料"
+			}
+		},
+		{
 			"path": "pages/product/main",
 			"style": {
 				"navigationBarTitleText": "进件"
 			}
 		},
+
 
 		{
 			"path": "pages/detail/detail",

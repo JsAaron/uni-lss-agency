@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "进件",
-  "usingComponents": {
-    "no-data": "/components/nodata",
-    "media-item": "/pages/product/list-item"
-  }
-}
