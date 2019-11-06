@@ -1,8 +1,6 @@
 {
 	"pages": [
 
-
-
 		{
 			"path": "pages/home/main",
 			"style": {
@@ -28,12 +26,16 @@
 				}
 			}
 		},
+
+		
 		{
 			"path": "pages/product/type-in",
 			"style": {
-				"navigationBarTitleText": "录入资料"
+				"navigationBarTitleText": "录入资料",
+				"navigationStyle":"custom"
 			}
 		},
+
 		{
 			"path": "pages/product/main",
 			"style": {
@@ -57,7 +59,7 @@
 		"selectedColor": "#0f0f0f",
 		"list": [{
 				"pagePath": "pages/home/main",
-				"text": "首页",
+				"text": "首页", 
 				"iconPath": "static/tabbar/home.png",
 				"selectedIconPath": "static/tabbar/home-active.png"
 			},

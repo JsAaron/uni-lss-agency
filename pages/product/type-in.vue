@@ -1,7 +1,18 @@
 <template>
 	<view>
+		<uni-nav-bar
+			left-icon="arrowleft"
+			fixed
+			status-bar
+			:right-text="barText"
+			left-text="返回"
+			background-color="#2F85FC"
+			title="录入资料"
+			color="#ffffff"
+			@click-left="onBack"
+			@click-right="onStep"
+		/>
 		<view class="type-steps"><uni-steps :options="stepList" :active="stepActive" /></view>
-
 		<block v-if="stepActive == 0">
 			<view class="type-title">可上传照片图片识别</view>
 
@@ -150,7 +161,7 @@
 				placherhold="请选择"
 			/>
 
-			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="rgba(47, 133, 252, 0.5)" @click="getStep0">
+			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep0">
 				下一步
 			</QSWavesButton>
 		</block>
@@ -194,7 +205,7 @@
 				v-model="form1.account"
 			></QSInput>
 
-			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="rgba(47, 133, 252, 0.5)" @click="getStep1">
+			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep1">
 				下一步
 			</QSWavesButton>
 		</block>
@@ -286,7 +297,7 @@
 				v-model="form2.registrAddress"
 			></QSInput>
 
-			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="rgba(47, 133, 252, 0.5)" @click="getStep1">
+			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep1">
 				提交注册
 			</QSWavesButton>
 		</block>
@@ -298,10 +309,14 @@ import * as util from '@/utils';
 import { $$set, $$get } from '@/common/global';
 import QSApp from '@/components/QS-inputs-split/js/app.js';
 import uniSteps from '@/components/uni-steps/uni-steps.vue';
+import uniIcons from '@/components/uni-icons/uni-icons.vue';
+import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
 
 export default {
 	components: {
-		uniSteps
+		uniSteps,
+		uniIcons,
+		uniNavBar
 	},
 	data() {
 		return {
@@ -357,9 +372,32 @@ export default {
 
 	created() {},
 	onLoad() {},
+	computed: {
+		barText() {
+			if (this.stepActive == 1 || this.stepActive == 2) {
+				return '上一步';
+			} else {
+				return '';
+			}
+		}
+	},
 	methods: {
 		setPickerDataFc(name, data) {
 			this.$refs[name].setData(data);
+		},
+
+		/**
+		 * 返回
+		 */
+		onBack() {
+			util.gotoPage('back')
+		},
+
+		/**
+		 * 上一步
+		 */
+		onStep() {
+			this.stepActive -= 1;
 		},
 
 		/**
