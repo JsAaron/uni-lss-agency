@@ -1,7 +1,6 @@
 {
 	"pages": [
-		
-		
+
 
 
 		{
@@ -29,8 +28,6 @@
 				}
 			}
 		},
-
-
 		{
 			"path": "pages/product/type-in",
 			"style": {

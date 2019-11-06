@@ -22,6 +22,9 @@ import {
 from '@/common/global';
 
 
+import QSWavesButton from '@/components/QS-WavesButton/QS-WavesButton.vue';
+Vue.component('QSWavesButton',QSWavesButton);
+
 /* 全局注册QS-inputs-split组件 */
 import QSInput from './components/QS-inputs-split/elements/QS-input/index.vue';
 import QSRadio from './components/QS-inputs-split/elements/QS-radio/index.vue';
