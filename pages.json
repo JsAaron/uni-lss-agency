@@ -1,12 +1,7 @@
 {
 	"pages": [
 
-		{
-			"path": "pages/agency/main",
-			"style": {
-				"navigationBarTitleText": "代理/商户"
-			}
-		},
+
 
 		{
 			"path": "pages/home/main",
@@ -31,6 +26,13 @@
 						}]
 					}
 				}
+			}
+		},
+
+		{
+			"path": "pages/agency/main",
+			"style": {
+				"navigationBarTitleText": "代理/商户"
 			}
 		},
 
