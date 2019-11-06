@@ -1,5 +1,20 @@
 <template>
 	<view class="tabs">
+		<!-- 分段器 -->
+		<view class="segmented-layout">
+			<view class="segmented">
+				<view  @click="onToggleSegmented(0)" class="segmented-item" :class="segmentedIndex==0?'segmented-item-active':''">
+					<text class="segmented-text" :class="segmentedIndex==0?'segmented-text-active':''">二级代理商</text>
+				</view>
+				<view  @click="onToggleSegmented(1)" class="segmented-item" :class="segmentedIndex==1?'segmented-item-active':''">
+					<text class="segmented-text" :class="segmentedIndex==1?'segmented-text-active':''">三级代理商</text>
+				</view>
+				<view  @click="onToggleSegmented(2)" class="segmented-item" :class="segmentedIndex==2?'segmented-item-active':''">
+					<text class="segmented-text" :class="segmentedIndex==2?'segmented-text-active':''">商户</text>
+				</view>
+			</view>
+		</view>
+
 		<!-- 导航 -->
 		<scroll-view id="tab-bar" class="scroll-h" :scroll-x="true" :show-scrollbar="false" :scroll-into-view="scrollInto">
 			<view v-for="(tab, index) in tabBars" :key="tab.id" class="uni-tab-item" :id="tab.id" :data-current="index" @click="ontabtap">
@@ -8,14 +23,31 @@
 			</view>
 		</scroll-view>
 
-		<view class="line-h"></view>
 
 		<!-- 滑动列表 -->
-		<swiper :current="tabIndex" class="swiper-box" style="flex: 1;" :duration="300" @change="ontabchange" @transition="onswiperscroll">
+		<swiper
+			:current="tabIndex"
+			class="swiper-box"
+			style="flex: 1;"
+			:duration="300"
+			@change="ontabchange"
+			@transition="onswiperscroll"
+		>
 			<swiper-item class="swiper-item" v-for="(tab, index1) in newsList" :key="index1">
 				<!-- #ifdef APP-NVUE -->
-				<list class="scroll-v list" enableBackToTop="true" scroll-y loadmoreoffset="15" @loadmore="loadMore(index1)">
-					<refresh class="refresh" @refresh="onrefresh(index1)" @pullingdown="onpullingdown" :display="tab.refreshing ? 'show' : 'hide'">
+				<list
+					class="scroll-v list"
+					enableBackToTop="true"
+					scroll-y
+					loadmoreoffset="15"
+					@loadmore="loadMore(index1)"
+				>
+					<refresh
+						class="refresh"
+						@refresh="onrefresh(index1)"
+						@pullingdown="onpullingdown"
+						:display="tab.refreshing ? 'show' : 'hide'"
+					>
 						<div class="refresh-view">
 							<!-- <image class="refresh-icon" :src="refreshIcon"
 							:style="{width: (tab.refreshing || pulling) ? 0: '30px', transform: 'rotate(' + tab.angle + 'deg)'}"></image> -->
@@ -25,12 +57,20 @@
 								:style="{ width: tab.refreshing || tab.pulling ? 0 : '30px' }"
 								:class="{ 'refresh-icon-active': tab.refreshFlag }"
 							></image>
-							<loading-indicator class="loading-icon" animating="true" v-if="tab.refreshing"></loading-indicator>
+							<loading-indicator
+								class="loading-icon"
+								animating="true"
+								v-if="tab.refreshing"
+							></loading-indicator>
 							<text class="loading-text">{{ tab.refreshText }}</text>
 						</div>
 					</refresh>
 					<cell v-for="(newsitem, index2) in tab.data" :key="newsitem.id">
-						<media-item :options="newsitem" @close="dislike(index1, index2)" @click="goDetail(newsitem)"></media-item>
+						<media-item
+							:options="newsitem"
+							@close="dislike(index1, index2)"
+							@click="goDetail(newsitem)"
+						></media-item>
 					</cell>
 					<cell class="loading-more" v-if="tab.isLoading || tab.data.length > 4">
 						<text class="loading-more-text">{{ tab.loadingText }}</text>
@@ -41,7 +81,11 @@
 				<!-- #ifndef APP-NVUE -->
 				<scroll-view class="scroll-v list" enableBackToTop="true" scroll-y @scrolltolower="loadMore(index1)">
 					<view v-for="(newsitem, index2) in tab.data" :key="newsitem.id">
-						<media-item :options="newsitem" @close="dislike(index1, index2)" @click="goDetail(newsitem)"></media-item>
+						<media-item
+							:options="newsitem"
+							@close="dislike(index1, index2)"
+							@click="goDetail(newsitem)"
+						></media-item>
 					</view>
 					<view class="loading-more" v-if="tab.isLoading || tab.data.length > 4">
 						<text class="loading-more-text">{{ tab.loadingText }}</text>
@@ -75,6 +119,8 @@ export default {
 	},
 	data() {
 		return {
+			segmentedIndex:0,
+			
 			newsList: [],
 			cacheTab: [],
 			tabIndex: 0,
@@ -94,7 +140,7 @@ export default {
 					name: '待审核',
 					newsid: 223
 				},
-				{ 
+				{
 					id: 'tab04',
 					name: '已签约',
 					newsid: 221
@@ -103,7 +149,8 @@ export default {
 					id: 'tab05',
 					name: '驳回',
 					newsid: 225
-				},				{
+				},
+				{
 					id: 'tab06',
 					name: '禁用',
 					newsid: 221
@@ -147,7 +194,16 @@ export default {
 		});
 		this.getList(0);
 	},
+		
 	methods: {
+		
+		/**
+		 * 切换分段
+		 */
+		onToggleSegmented(index){
+			this.segmentedIndex = index
+		},
+		
 		getList(index, action = 1) {
 			let activeTab = this.newsList[index];
 			if (activeTab.isLoading) {
@@ -342,7 +398,20 @@ export default {
 			let s4 = function() {
 				return ((65536 * (1 + Math.random())) | 0).toString(16).substring(1);
 			};
-			return (s4() + s4() + '-' + s4() + '-4' + s4().substr(0, 3) + '-' + s4() + '-' + s4() + s4() + s4()).toUpperCase();
+			return (
+				s4() +
+				s4() +
+				'-' +
+				s4() +
+				'-4' +
+				s4().substr(0, 3) +
+				'-' +
+				s4() +
+				'-' +
+				s4() +
+				s4() +
+				s4()
+			).toUpperCase();
 		}
 	}
 };
@@ -368,9 +437,46 @@ page {
 	/* #endif */
 }
 
+.segmented-layout {
+	flex-direction: row;
+	width: 750rpx;
+	justify-content: center;
+	margin-top: 20rpx;
+}
+.segmented{
+	flex-direction: row;
+	width: 500rpx;
+	border-width:1rpx;
+	border-color: #007aff;
+	border-radius:10rpx;
+}
+.segmented-item{
+	flex: 1;
+	flex-direction: row;
+	justify-content: center;
+	text-align: center;
+	padding: 10rpx 0;
+	box-sizing: border-box;
+	border-left-width:1rpx;
+	border-color: #007aff;
+}
+.segmented-item:first-child {
+	border-left-width: 0;
+}
+.segmented-text{
+	font-size: 25rpx;
+} 
+.segmented-item-active{
+	background-color: #007aff;
+}
+.segmented-text-active{
+	color: #fff;
+}
+
 .scroll-h {
 	width: 750upx;
 	height: 80upx;
+	margin: 10rpx 0;
 	flex-direction: row;
 	/* #ifndef APP-PLUS */
 	white-space: nowrap;

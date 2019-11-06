@@ -8,7 +8,7 @@
 				<text class="info-text info-text-tel">13888888888</text>
 			</view>
 			<view class="max-close-view">
-				<text class="media-state-text">签约成功</text>
+				<text class="media-state-text">未签约</text>
 				<!-- #ifdef APP-PLUS -->
 				<vun-icon name="arrow" color="#c9c9c9" size="26" />
 				<!-- #endif -->
