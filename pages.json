@@ -2,6 +2,13 @@
 	"pages": [
 
 		{
+			"path": "pages/agency/main",
+			"style": {
+				"navigationBarTitleText": "代理/商户"
+			}
+		},
+
+		{
 			"path": "pages/home/main",
 			"style": {
 				"navigationBarTitleText": "首页",
@@ -27,12 +34,10 @@
 			}
 		},
 
-		
 		{
 			"path": "pages/product/type-in",
 			"style": {
-				"navigationBarTitleText": "录入资料",
-				"navigationStyle":"custom"
+				"navigationStyle": "custom"
 			}
 		},
 
@@ -41,12 +46,6 @@
 			"style": {
 				"navigationBarTitleText": "进件"
 			}
-		},
-
-
-		{
-			"path": "pages/detail/detail",
-			"style": {}
 		}
 	],
 	"globalStyle": {
@@ -59,15 +58,21 @@
 		"selectedColor": "#0f0f0f",
 		"list": [{
 				"pagePath": "pages/home/main",
-				"text": "首页", 
+				"text": "首页",
 				"iconPath": "static/tabbar/home.png",
 				"selectedIconPath": "static/tabbar/home-active.png"
 			},
 			{
 				"pagePath": "pages/product/main",
 				"text": "进件",
-				"iconPath": "static/tabbar/quotations.png",
-				"selectedIconPath": "static/tabbar/quotations-active.png"
+				"iconPath": "static/tabbar/product.png",
+				"selectedIconPath": "static/tabbar/product-active.png"
+			},
+			{
+				"pagePath": "pages/agency/main",
+				"text": "代理/商户",
+				"iconPath": "static/tabbar/agency.png",
+				"selectedIconPath": "static/tabbar/agency-active.png"
 			}
 		]
 	},

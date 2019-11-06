@@ -1,0 +1,125 @@
+<template>
+	<!-- remove list-cell layer fix android 4.x overflow limit error: 28 layers! -->
+	<!-- <view class="list-cell view" @click="click"></view> -->
+	<view class="media-item view" v-if="options.title" @click="click">
+		<view class="media-foot flex-row" style="flex-direction: row;">
+			<view class="media-info flex-row" style="flex-direction: column;">
+				<text class="info-text">脸刷刷测试</text>
+				<text class="info-text info-text-tel">13888888888</text>
+			</view>
+			<view class="max-close-view">
+				<text class="media-state-text">签约成功</text>
+				<!-- #ifdef APP-PLUS -->
+				<vun-icon name="arrow" color="#c9c9c9" size="26" />
+				<!-- #endif -->
+				<!-- #ifndef APP-PLUS -->
+				<uni-icon type="arrow" size="14" color="#c9c9c9"></uni-icon>
+				<!-- #endif -->
+			</view>
+		</view>
+		<view class="media-item-line" style="position: absolute;"></view>
+	</view>
+</template>
+
+<script>
+import vunIcon from '@/components/vun-icon/index.nvue';
+import uniIcon from '@/components/uni-icon/uni-icon';
+export default {
+	components: {
+		uniIcon,
+		vunIcon
+	},
+	props: {
+		options: {
+			type: Object,
+			default: function(e) {
+				return {};
+			}
+		}
+	},
+	onReady() {},
+	methods: {
+		click() {
+			this.$emit('click');
+		},
+		close(e) {
+			this.$emit('close');
+		}
+	}
+};
+</script>
+
+<style>
+.view {
+	flex-direction: column;
+}
+
+.flex-row {
+	flex-direction: row;
+}
+
+.flex-col {
+	flex-direction: column;
+}
+
+.list-cell {
+	width: 750upx;
+	padding: 0 30upx;
+}
+
+.uni-list-cell-hover {
+	background-color: #eeeeee;
+}
+
+.media-item {
+	position: relative;
+	flex: 1;
+	justify-content: center;
+	flex-direction: column;
+	/* border-bottom-width: 1upx;
+		border-bottom-style: solid;
+		border-bottom-color: #ebebeb; */
+	padding: 20upx 30upx 21upx 30upx;
+}
+
+.media-item-line {
+	position: absolute;
+	left: 30upx;
+	right: 30upx;
+	bottom: 0;
+	height: 1upx;
+	background-color: #ebebeb;
+}
+
+.media-info {
+	/* flex-direction: row; */
+	align-items: flex-start;
+}
+
+.info-text {
+	margin-right: 20upx;
+	font-size: 30rpx;
+}
+.info-text-tel {
+	margin-top: 10rpx;
+	color: #999999;
+}
+
+.media-foot {
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.max-close-view {
+	position: relative;
+	align-items: center;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.media-state-text {
+	font-size: 28rpx;
+	color: #007aff;
+}
+</style>
