@@ -22,17 +22,6 @@
 
 		<QSInput
 			:name="formName"
-			variableName="phone"
-			title="手机"
-			requiredSign
-			layout="row"
-			titleLayout="left"
-			v-model="form.phone"
-			inputType="digit"
-		></QSInput>
-
-		<QSInput
-			:name="formName"
 			requiredSign
 			variableName="address"
 			title="联系地址"
@@ -51,11 +40,8 @@
 		
 		{{test}}
 
-		<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onEnsure">确定</QSWavesButton>
+		<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onEnsure">确定修改</QSWavesButton>
 
-		<QSWavesButton btnStyle="margin-top:50rpx;width:700rpx;background:#2F85FC" @click="getStep1">
-			确定并提交审核
-		</QSWavesButton>
 	</view>
 </template>
 
@@ -71,7 +57,7 @@ export default {
 	components: {},
 	data() {
 		return {
-						test:'111',
+			test:'111',
 			formName: 'add',
 			form: {
 				company: '',

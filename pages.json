@@ -2,20 +2,6 @@
 	"pages": [
 
 		{
-			"path": "pages/agency/main",
-			"style": {
-				"navigationBarTitleText": "代理/商户"
-			}
-		},
-
-		{
-			"path": "pages/agency/add",
-			"style": {
-				"navigationBarTitleText": "新增代理"
-			}
-		},
-
-		{
 			"path": "pages/home/main",
 			"style": {
 				"navigationBarTitleText": "首页",
@@ -41,7 +27,33 @@
 			}
 		},
 
+		{
+			"path": "pages/agency/details",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
 
+		{
+			"path": "pages/agency/amend",
+			"style": {
+				"navigationBarTitleText": "编辑"
+			}
+		},
+
+		{
+			"path": "pages/agency/main",
+			"style": {
+				"navigationBarTitleText": "代理/商户"
+			}
+		},
+
+		{
+			"path": "pages/agency/add",
+			"style": {
+				"navigationBarTitleText": "新增代理"
+			}
+		},
 
 		{
 			"path": "pages/product/type-in",

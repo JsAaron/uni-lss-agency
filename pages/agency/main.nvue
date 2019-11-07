@@ -13,8 +13,8 @@
 					<text class="segmented-text" :class="segmentedIndex==2?'segmented-text-active':''">商户</text>
 				</view>
 			</view>
-			<view class="segmented-add" @click="onAddUser">
-				<text class="segmented-add-text">新增</text>
+			<view class="segmented-add">
+				<text @click="onAddUser" class="segmented-add-text">新增</text>
 			</view>
 		</view>
 
@@ -204,7 +204,7 @@ export default {
 		 * 新增代理用户
 		 */
 		onAddUser(){
-			gotoPage("/pages/agency/add")
+			 gotoPage('/pages/agency/add?data=12344444');
 		},
 		
 		/**
@@ -285,7 +285,7 @@ export default {
 				return;
 			}
 			this.navigateFlag = true;
-			gotoPage('/pages/product/type-in');
+			gotoPage('/pages/agency/details?data=12344444');
 			setTimeout(() => {
 				this.navigateFlag = false;
 			}, 200);
@@ -467,7 +467,7 @@ page {
 	justify-content: center;
 	text-align: center;
 	padding: 10rpx 0;
-	box-sizing: border-box;
+	/* box-sizing: border-box; */
 	border-left-width:1rpx;
 	border-color: #007aff;
 }
