@@ -1,7 +1,5 @@
 {
-	"pages": [
-
-		{
+	"pages": [{
 			"path": "pages/home/main",
 			"style": {
 				"navigationBarTitleText": "首页",
@@ -28,16 +26,15 @@
 		},
 
 		{
-			"path": "pages/agency/details",
+			"path": "pages/center/main",
 			"style": {
 				"navigationStyle": "custom"
 			}
 		},
-
 		{
-			"path": "pages/agency/amend",
+			"path": "pages/center/amend",
 			"style": {
-				"navigationBarTitleText": "编辑"
+				"navigationBarTitleText": "修改密码"
 			}
 		},
 
@@ -49,19 +46,29 @@
 		},
 
 		{
+			"path": "pages/agency/details",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/agency/amend",
+			"style": {
+				"navigationBarTitleText": "编辑"
+			}
+		},
+		{
 			"path": "pages/agency/add",
 			"style": {
 				"navigationBarTitleText": "新增代理"
 			}
 		},
-
 		{
 			"path": "pages/product/type-in",
 			"style": {
 				"navigationStyle": "custom"
 			}
 		},
-
 		{
 			"path": "pages/product/main",
 			"style": {
@@ -94,6 +101,12 @@
 				"text": "代理/商户",
 				"iconPath": "static/tabbar/agency.png",
 				"selectedIconPath": "static/tabbar/agency-active.png"
+			},
+			{
+				"pagePath": "pages/center/main",
+				"text": "我的",
+				"iconPath": "static/tabbar/center.png",
+				"selectedIconPath": "static/tabbar/center-active.png"
 			}
 		]
 	},
