@@ -1,7 +1,7 @@
 {
     "name" : "脸刷刷纯支付代理商版",
     "appid" : "__UNI__097F247",
-    "description" : "基于uni-app开发的新闻/资讯类App模板",
+    "description" : "跨平台脸刷刷纯支付代理商版",
     "versionName" : "1.0.5",
     "versionCode" : 105,
     "transformPx" : false,
@@ -33,7 +33,22 @@
             },
             "ios" : {},
             /* ios打包配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {},
+            "icons" : {
+                "android" : {
+                    "hdpi" : "C:/Users/Administrator/Desktop/logo.png",
+                    "xhdpi" : "C:/Users/Administrator/Desktop/logo.png",
+                    "xxhdpi" : "C:/Users/Administrator/Desktop/logo.png",
+                    "xxxhdpi" : "C:/Users/Administrator/Desktop/logo.png"
+                }
+            },
+            "splashscreen" : {
+                "android" : {
+                    "hdpi" : "C:/Users/Administrator/Desktop/微信图片_20191107151403.png",
+                    "xhdpi" : "C:/Users/Administrator/Desktop/微信图片_20191107151403.png",
+                    "xxhdpi" : "C:/Users/Administrator/Desktop/微信图片_20191107151403.png"
+                }
+            }
         }
     },
     /* SDK配置 */

@@ -49,8 +49,6 @@
 			placherhold="请选择"
 		/>
 		
-		{{test}}
-
 		<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onEnsure">确定</QSWavesButton>
 
 		<QSWavesButton btnStyle="margin-top:50rpx;width:700rpx;background:#2F85FC" @click="getStep1">

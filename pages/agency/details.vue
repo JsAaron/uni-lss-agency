@@ -5,6 +5,8 @@
 			left-icon="arrowleft"
 			fixed
 			status-bar
+			shadow="false"
+			border="false"
 			right-text="编辑"
 			left-text="返回"
 			background-color="#2F85FC"
@@ -15,35 +17,35 @@
 		/>
 		
 		<view class="content">
-			<view class="content__row">
+			<view class="content__row lss-hairline--bottom">
 				<text>联系人</text>
 				<text>士大夫撒发生的法律进</text>
 			</view>
-			<view class="content__row">
+			<view class="content__row lss-hairline--bottom">
 				<text>联系电话</text>
 				<text>134000000000</text>
 			</view>
-			<view class="content__row">
+			<view class="content__row lss-hairline--bottom">
 				<text>到期时间</text>
 				<text>2017-11-22 11:11:11</text>
 			</view>
-			<view class="content__row">
+			<view class="content__row lss-hairline--bottom">
 				<text>公司</text>
 				<text>脸刷刷科技</text>
 			</view>
-			<view class="content__row">
+			<view class="content__row lss-hairline--bottom">
 				<text>归属业务员</text>
 				<text>测试</text>
 			</view>
-			<view class="content__row">
+			<view class="content__row lss-hairline--bottom">
 				<text>加盟时间</text>
 				<text>2017-11-22 11:11:11</text>
 			</view>
-			<view class="content__row">
+			<view class="content__row lss-hairline--bottom">
 				<text>状态</text>
 				<text>未签约</text>
 			</view>
-			<view class="content__row">
+			<view class="content__row lss-hairline--bottom">
 				<text>联系地址</text>
 				<text>湖南长沙岳麓区</text>
 			</view>
@@ -105,7 +107,6 @@ export default {
 		&__row{
 			padding:30rpx 20rpx;
 			@include flex-h-between;
-			border-bottom: 1rpx solid #C8C7CC;
 		}
 	}
 </style>

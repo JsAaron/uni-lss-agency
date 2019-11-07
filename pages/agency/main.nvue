@@ -485,11 +485,11 @@ page {
 }
 .segmented-add{
 	position: absolute;
-	right:30rpx;
+	right:35rpx;
 	top: 15rpx;
 }
 .segmented-add-text{
-	font-size: 22rpx;
+	font-size: 25rpx;
 }
 .segmented-add-text:active{
 	color:  #007aff;

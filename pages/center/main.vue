@@ -22,14 +22,6 @@
 				<text>支付宝分润</text>
 				<text>100%</text>
 			</view>
-			<view class="list__row lss-hairline--bottom">
-				<text>随行付分润</text>
-				<text>100%</text>
-			</view>
-			<view class="list__row lss-hairline--bottom">
-				<text>富友分润</text>
-				<text>100%</text>
-			</view>
 		</view>
 		
 		<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onEnsure">退出登录</QSWavesButton>
