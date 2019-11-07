@@ -23,9 +23,10 @@
 				<text>100%</text>
 			</view>
 		</view>
-		
-		<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onEnsure">退出登录</QSWavesButton>
 
+		<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onExit">
+			退出登录
+		</QSWavesButton>
 	</view>
 </template>
 
@@ -41,8 +42,11 @@ export default {
 	created() {},
 	onLoad() {},
 	methods: {
-		onAmend(){
-			util.gotoPage('/pages/center/amend')
+		onAmend() {
+			util.gotoPage('/pages/center/amend');
+		},
+		onExit() {
+			util.gotoPage('/pages/login/index');
 		}
 	}
 };
@@ -71,12 +75,12 @@ export default {
 }
 
 .list {
-	background-color:#fff;
+	background-color: #fff;
 	&__row {
 		@include flex-h-between;
 		padding: 20rpx 30rpx;
 		font-size: 28rpx;
-		>text{
+		> text {
 			padding: 10rpx 0;
 		}
 	}

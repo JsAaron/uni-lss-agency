@@ -1,6 +1,12 @@
 {
 	"pages": [{
-			"path": "pages/home/main",
+			"path": "pages/login/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/home/index",
 			"style": {
 				"navigationBarTitleText": "首页",
 				"app-plus": {
@@ -26,7 +32,7 @@
 		},
 
 		{
-			"path": "pages/center/main",
+			"path": "pages/center/index",
 			"style": {
 				"navigationStyle": "custom"
 			}
@@ -39,7 +45,7 @@
 		},
 
 		{
-			"path": "pages/agency/main",
+			"path": "pages/agency/index",
 			"style": {
 				"navigationBarTitleText": "代理/商户"
 			}
@@ -70,7 +76,7 @@
 			}
 		},
 		{
-			"path": "pages/product/main",
+			"path": "pages/product/index",
 			"style": {
 				"navigationBarTitleText": "进件"
 			}
@@ -85,25 +91,25 @@
 		"color": "#130f13",
 		"selectedColor": "#0f0f0f",
 		"list": [{
-				"pagePath": "pages/home/main",
+				"pagePath": "pages/home/index",
 				"text": "首页",
 				"iconPath": "static/tabbar/home.png",
 				"selectedIconPath": "static/tabbar/home-active.png"
 			},
 			{
-				"pagePath": "pages/product/main",
+				"pagePath": "pages/product/index",
 				"text": "进件",
 				"iconPath": "static/tabbar/product.png",
 				"selectedIconPath": "static/tabbar/product-active.png"
 			},
 			{
-				"pagePath": "pages/agency/main",
+				"pagePath": "pages/agency/index",
 				"text": "代理/商户",
 				"iconPath": "static/tabbar/agency.png",
 				"selectedIconPath": "static/tabbar/agency-active.png"
 			},
 			{
-				"pagePath": "pages/center/main",
+				"pagePath": "pages/center/index",
 				"text": "我的",
 				"iconPath": "static/tabbar/center.png",
 				"selectedIconPath": "static/tabbar/center-active.png"
