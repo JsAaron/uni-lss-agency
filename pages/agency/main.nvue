@@ -13,6 +13,9 @@
 					<text class="segmented-text" :class="segmentedIndex==2?'segmented-text-active':''">商户</text>
 				</view>
 			</view>
+			<view class="segmented-add" @click="onAddUser">
+				<text class="segmented-add-text">新增</text>
+			</view>
 		</view>
 
 		<!-- 导航 -->
@@ -196,6 +199,13 @@ export default {
 	},
 		
 	methods: {
+		
+		/**
+		 * 新增代理用户
+		 */
+		onAddUser(){
+			gotoPage("/pages/agency/add")
+		},
 		
 		/**
 		 * 切换分段
@@ -438,6 +448,7 @@ page {
 }
 
 .segmented-layout {
+	position: relative;
 	flex-direction: row;
 	width: 750rpx;
 	justify-content: center;
@@ -445,7 +456,7 @@ page {
 }
 .segmented{
 	flex-direction: row;
-	width: 500rpx;
+	width: 450rpx;
 	border-width:1rpx;
 	border-color: #007aff;
 	border-radius:10rpx;
@@ -471,6 +482,17 @@ page {
 }
 .segmented-text-active{
 	color: #fff;
+}
+.segmented-add{
+	position: absolute;
+	right:30rpx;
+	top: 15rpx;
+}
+.segmented-add-text{
+	font-size: 22rpx;
+}
+.segmented-add-text:active{
+	color:  #007aff;
 }
 
 .scroll-h {
