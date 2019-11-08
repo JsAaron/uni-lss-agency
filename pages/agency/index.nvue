@@ -3,29 +3,55 @@
 		<!-- 分段器 -->
 		<view class="segmented-layout">
 			<view class="segmented">
-				<view  @click="onToggleSegmented(0)" class="segmented-item" :class="segmentedIndex==0?'segmented-item-active':''">
-					<text class="segmented-text" :class="segmentedIndex==0?'segmented-text-active':''">二级代理商</text>
+				<view
+					@click="onToggleSegmented(0)"
+					class="segmented-item"
+					:class="segmentedIndex == 0 ? 'segmented-item-active' : ''"
+				>
+					<text class="segmented-text" :class="segmentedIndex == 0 ? 'segmented-text-active' : ''">二级代理商</text>
 				</view>
-				<view  @click="onToggleSegmented(1)" class="segmented-item" :class="segmentedIndex==1?'segmented-item-active':''">
-					<text class="segmented-text" :class="segmentedIndex==1?'segmented-text-active':''">三级代理商</text>
+				<view
+					@click="onToggleSegmented(1)"
+					class="segmented-item"
+					:class="segmentedIndex == 1 ? 'segmented-item-active' : ''"
+				>
+					<text class="segmented-text" :class="segmentedIndex == 1 ? 'segmented-text-active' : ''">三级代理商</text>
 				</view>
-				<view  @click="onToggleSegmented(2)" class="segmented-item" :class="segmentedIndex==2?'segmented-item-active':''">
-					<text class="segmented-text" :class="segmentedIndex==2?'segmented-text-active':''">商户</text>
+				<view
+					@click="onToggleSegmented(2)"
+					class="segmented-item"
+					:class="segmentedIndex == 2 ? 'segmented-item-active' : ''"
+				>
+					<text class="segmented-text" :class="segmentedIndex == 2 ? 'segmented-text-active' : ''">商户</text>
 				</view>
 			</view>
 			<view class="segmented-add">
-				<text @click="onAddUser" class="segmented-add-text">新增</text>
+				<text @click="onAdd" class="segmented-add-text">{{ segmentedIndex == 2 ? '新增商户' : '新增代理' }}</text>
 			</view>
 		</view>
 
 		<!-- 导航 -->
-		<scroll-view id="tab-bar" class="scroll-h" :scroll-x="true" :show-scrollbar="false" :scroll-into-view="scrollInto">
-			<view v-for="(tab, index) in tabBars" :key="tab.id" class="uni-tab-item" :id="tab.id" :data-current="index" @click="ontabtap">
+		<scroll-view
+			id="tab-bar"
+			class="scroll-h"
+			:scroll-x="true"
+			:show-scrollbar="false"
+			:scroll-into-view="scrollInto"
+		>
+			<view
+				v-for="(tab, index) in tabBars"
+				:key="tab.id"
+				class="uni-tab-item"
+				:id="tab.id"
+				:data-current="index"
+				@click="ontabtap"
+			>
 				<text class="uni-tab-item-title" :class="tabIndex == index ? 'uni-tab-item-title-active' : ''">{{ tab.name }}</text>
-				<view :class="tabIndex == index ? 'uni-tab-item-line uni-tab-item-line-active' : 'uni-tab-item-line'"></view>
+				<view
+					:class="tabIndex == index ? 'uni-tab-item-line uni-tab-item-line-active' : 'uni-tab-item-line'"
+				></view>
 			</view>
 		</scroll-view>
-
 
 		<!-- 滑动列表 -->
 		<swiper
@@ -122,8 +148,8 @@ export default {
 	},
 	data() {
 		return {
-			segmentedIndex:0,
-			
+			segmentedIndex: 0,
+
 			newsList: [],
 			cacheTab: [],
 			tabIndex: 0,
@@ -197,23 +223,23 @@ export default {
 		});
 		this.getList(0);
 	},
-		
+
 	methods: {
-		
 		/**
 		 * 新增代理用户
 		 */
-		onAddUser(){
-			 gotoPage('/pages/agency/add?data=12344444');
+		onAdd() {
+			let pageType = this.segmentedIndex == 2 ? 'business' : 'agency';
+			gotoPage('/pages/agency/add?data=12344444&pageType='+pageType);
 		},
-		
+
 		/**
 		 * 切换分段
 		 */
-		onToggleSegmented(index){
-			this.segmentedIndex = index
+		onToggleSegmented(index) {
+			this.segmentedIndex = index;
 		},
-		
+
 		getList(index, action = 1) {
 			let activeTab = this.newsList[index];
 			if (activeTab.isLoading) {
@@ -285,7 +311,8 @@ export default {
 				return;
 			}
 			this.navigateFlag = true;
-			gotoPage('/pages/agency/details?data=12344444');
+			let pageType = this.segmentedIndex == 2 ? 'business' : 'agency';
+			gotoPage('/pages/agency/details?data=12344444&pageType=' + pageType);
 			setTimeout(() => {
 				this.navigateFlag = false;
 			}, 200);
@@ -454,41 +481,41 @@ page {
 	justify-content: center;
 	margin-top: 20rpx;
 }
-.segmented{
+.segmented {
 	flex-direction: row;
 	width: 450rpx;
-	border-width:1rpx;
+	border-width: 1rpx;
 	border-color: #007aff;
-	border-radius:10rpx;
+	border-radius: 10rpx;
 }
-.segmented-item{
+.segmented-item {
 	flex: 1;
 	flex-direction: row;
 	justify-content: center;
 	text-align: center;
 	padding: 10rpx 0;
 	/* box-sizing: border-box; */
-	border-left-width:1rpx;
+	border-left-width: 1rpx;
 	border-color: #007aff;
 }
 .segmented-item:first-child {
 	border-left-width: 0;
 }
-.segmented-text{
+.segmented-text {
 	font-size: 25rpx;
-} 
-.segmented-item-active{
+}
+.segmented-item-active {
 	background-color: #007aff;
 }
-.segmented-text-active{
+.segmented-text-active {
 	color: #fff;
 }
-.segmented-add{
+.segmented-add {
 	position: absolute;
-	right:35rpx;
+	right: 20rpx;
 	top: 15rpx;
 }
-.segmented-add-text{
+.segmented-add-text {
 	font-size: 25rpx;
 }
 

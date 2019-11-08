@@ -10,16 +10,18 @@
 		</view>
 
 		<view class="qiun-columns">
-			<view class="qiun-charts"><canvas canvas-id="canvasRing" id="canvasRing" class="charts"></canvas></view>
+			<view class="qiun-charts">
+				<canvas canvas-id="canvasRing" id="canvasRing" class="charts"></canvas>
+			</view>
 		</view>
 
 		<view class="qiun-bottom">
 			<view class="qiun-names">
-							<block v-for="(item, index) in serieNames" :key="index">
-				<view class="qiun-row">
-					<text class="qiun-dot"></text>
-					<text>{{item.name}}:{{item.data}}%</text>
-				</view>
+				<block v-for="(item, index) in serieNames" :key="index">
+					<view class="qiun-row">
+						<text class="qiun-dot"></text>
+						<text>{{item.name}}:{{item.data}}%</text>
+					</view>
 				</block>
 			</view>
 		</view>
