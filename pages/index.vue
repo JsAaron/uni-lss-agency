@@ -14,14 +14,13 @@ export default {
 	props: {},
 	created() {},
 	onLoad() {
-			util.gotoPage('/pages/login/index');
-		// this.APP_CHECKLOGIN()
-		// 	.then(state => {
-		// 		util.gotoPage('switchTab', '/pages/home/index');
-		// 	})
-		// 	.catch(() => {
-		// 		util.gotoPage('/pages/login/index');
-		// 	});
+		this.APP_CHECKLOGIN()
+			.then(state => {
+				util.gotoPage('switchTab', '/pages/home/index');
+			})
+			.catch(() => {
+				util.gotoPage('/pages/login/index');
+			});
 	},
 	methods: {
 		...mapActions(['APP_CHECKLOGIN'])
