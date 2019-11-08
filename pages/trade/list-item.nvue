@@ -9,12 +9,12 @@
 			</view>
 
 			<view class="flex-col" style="flex-direction: column;">
-				<text class="info-text-large info-text-margin">¥ 0.01</text>
+				<text class="info-text-large info-text-margin">¥0.01</text>
 				<text class="info-text-small">会员+微信</text>
 			</view>
 
 			<view class="flex-col flex-col-right" style="flex-direction: column;">
-				<text class="info-text-large info-text-margin">¥ 0.000018</text>
+				<text class="info-text-large info-text-margin">¥0.000018</text>
 				<text class="info-text-small">2019-12-11</text>
 				<text class="info-text-small">11:11:11</text>
 			</view>

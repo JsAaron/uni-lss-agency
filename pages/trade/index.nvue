@@ -1,69 +1,59 @@
 <template>
 	<view class="tabs">
-		<!-- 滑动列表 -->
-		<swiper
-			:current="tabIndex"
-			class="swiper-box"
-			style="flex: 1;"
-			:duration="300"
-			@change="ontabchange"
-			@transition="onswiperscroll"
-		>
-			<swiper-item class="swiper-item" v-for="(tab, index1) in newsList" :key="index1">
-				<!-- #ifdef APP-NVUE -->
-				<list
-					class="scroll-v list"
-					enableBackToTop="true"
-					scroll-y
-					loadmoreoffset="15"
-					@loadmore="loadMore(index1)"
+		<block class="swiper-item" v-for="(tab, index1) in newsList" :key="index1">
+			<!-- #ifdef APP-NVUE -->
+			<list
+				class="scroll-v list"
+				enableBackToTop="true"
+				scroll-y
+				loadmoreoffset="15"
+				@loadmore="loadMore(index1)"
+			>
+				<refresh
+					class="refresh"
+					@refresh="onrefresh(index1)"
+					@pullingdown="onpullingdown"
+					:display="tab.refreshing ? 'show' : 'hide'"
 				>
-					<refresh
-						class="refresh"
-						@refresh="onrefresh(index1)"
-						@pullingdown="onpullingdown"
-						:display="tab.refreshing ? 'show' : 'hide'"
-					>
-						<div class="refresh-view">
-							<!-- <image class="refresh-icon" :src="refreshIcon"
+					<div class="refresh-view">
+						<!-- <image class="refresh-icon" :src="refreshIcon"
 							:style="{width: (tab.refreshing || pulling) ? 0: '30px', transform: 'rotate(' + tab.angle + 'deg)'}"></image> -->
-							<image
-								class="refresh-icon"
-								:src="refreshIcon"
-								:style="{ width: tab.refreshing || tab.pulling ? 0 : '30px' }"
-								:class="{ 'refresh-icon-active': tab.refreshFlag }"
-							></image>
-							<loading-indicator
-								class="loading-icon"
-								animating="true"
-								v-if="tab.refreshing"
-							></loading-indicator>
-							<text class="loading-text">{{ tab.refreshText }}</text>
-						</div>
-					</refresh>
-					<cell v-for="(newsitem, index2) in tab.data" :key="newsitem.id">
-						<media-item :options="newsitem"></media-item>
-					</cell>
-					<cell class="loading-more" v-if="tab.isLoading || tab.data.length > 4">
-						<text class="loading-more-text">{{ tab.loadingText }}</text>
-					</cell>
-				</list>
-				<!-- #endif -->
+						<image
+							class="refresh-icon"
+							:src="refreshIcon"
+							:style="{ width: tab.refreshing || tab.pulling ? 0 : '30px' }"
+							:class="{ 'refresh-icon-active': tab.refreshFlag }"
+						></image>
+						<loading-indicator
+							class="loading-icon"
+							animating="true"
+							v-if="tab.refreshing"
+						></loading-indicator>
+						<text class="loading-text">{{ tab.refreshText }}</text>
+					</div>
+				</refresh>
+				<cell v-for="(newsitem, index2) in tab.data" :key="newsitem.id">
+					<media-item :options="newsitem"></media-item>
+				</cell>
+				<cell class="loading-more" v-if="tab.isLoading || tab.data.length > 4">
+					<text class="loading-more-text">{{ tab.loadingText }}</text>
+				</cell>
+			</list>
+			<!-- #endif -->
 
-				<!-- #ifndef APP-NVUE -->
-				<scroll-view class="scroll-v list" enableBackToTop="true" scroll-y @scrolltolower="loadMore(index1)">
-					<view v-for="(newsitem, index2) in tab.data" :key="newsitem.id">
-						<media-item :options="newsitem"></media-item>
-					</view>
-					<view class="loading-more" v-if="tab.isLoading || tab.data.length > 4">
-						<text class="loading-more-text">{{ tab.loadingText }}</text>
-					</view>
-				</scroll-view>
-				<!-- #endif -->
+			<!-- #ifndef APP-NVUE -->
+			<scroll-view class="scroll-v list" enableBackToTop="true" scroll-y @scrolltolower="loadMore(index1)">
+				<view v-for="(newsitem, index2) in tab.data" :key="newsitem.id">
+					<media-item :options="newsitem"></media-item>
+				</view>
+				<view class="loading-more" v-if="tab.isLoading || tab.data.length > 4">
+					<text class="loading-more-text">{{ tab.loadingText }}</text>
+				</view>
+			</scroll-view>
+			<!-- #endif -->
 
-				<no-data class="no-data" v-if="tab.isNoData" @retry="loadMore"></no-data>
-			</swiper-item>
-		</swiper>
+			<no-data class="no-data" v-if="tab.isNoData" @retry="loadMore"></no-data>
+		</block>
 	</view>
 </template>
 <script>
