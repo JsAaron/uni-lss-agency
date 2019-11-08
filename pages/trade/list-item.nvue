@@ -1,0 +1,108 @@
+<template>
+	<!-- remove list-cell layer fix android 4.x overflow limit error: 28 layers! -->
+	<!-- <view class="list-cell view" @click="click"></view> -->
+	<view class="media-item view" v-if="options.title">
+		<view class="media-foot flex-row" style="flex-direction: row;">
+			<view class="flex-col flex-col-left" style="flex-direction: column;">
+				<text class="info-text-large info-text-margin">深圳市脸刷刷科技有限公司</text>
+				<text class="info-text-small">杨跃鹏</text>
+			</view>
+
+			<view class="flex-col" style="flex-direction: column;">
+				<text class="info-text-large info-text-margin">¥ 0.01</text>
+				<text class="info-text-small">会员+微信</text>
+			</view>
+
+			<view class="flex-col flex-col-right" style="flex-direction: column;">
+				<text class="info-text-large info-text-margin">¥ 0.000018</text>
+				<text class="info-text-small">2019-12-11</text>
+				<text class="info-text-small">11:11:11</text>
+			</view>
+		</view>
+		<view class="media-item-line" style="position: absolute;"></view>
+	</view>
+</template>
+
+<script>
+export default {
+	props: {
+		options: {
+			type: Object,
+			default: function(e) {
+				return {};
+			}
+		}
+	}
+};
+</script>
+
+<style>
+.view {
+	flex-direction: column;
+}
+
+.flex-row {
+	flex-direction: row;
+}
+
+.flex-col {
+	flex-direction: column;
+}
+
+.list-cell {
+	width: 750upx;
+	padding: 0 30upx;
+}
+
+.uni-list-cell-hover {
+	background-color: #eeeeee;
+}
+
+.media-item {
+	position: relative;
+	flex: 1;
+	justify-content: center;
+	flex-direction: column;
+	/* border-bottom-width: 1upx;
+		border-bottom-style: solid;
+		border-bottom-color: #ebebeb; */
+	padding: 20upx 30upx 21upx 30upx;
+}
+
+.media-item-line {
+	position: absolute;
+	left: 30upx;
+	right: 30upx;
+	bottom: 0;
+	height: 1upx;
+	background-color: #ebebeb;
+}
+
+.flex-row {
+	justify-content: space-around;
+}
+.flex-col {
+	flex: 1;
+	justify-content: flex-start;
+	align-items: center;
+	flex-direction: column;
+}
+.flex-col-left {
+	align-items: flex-start;
+}
+.flex-col-right {
+	align-items: flex-end;
+}
+
+.info-text-margin{
+	margin-bottom:15rpx;;
+}
+
+.info-text-large {
+	font-size: 28rpx;
+}
+.info-text-small {
+	font-size: 25rpx;
+	color: #909399;
+}
+</style>

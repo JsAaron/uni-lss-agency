@@ -16,9 +16,11 @@ export default {
 	onLoad() {
 		this.APP_CHECKLOGIN()
 			.then(state => {
+				console.log(44444444)
 				util.gotoPage('switchTab', '/pages/home/index');
-			})
+			}) 
 			.catch(() => {
+				console.log(555555555)
 				util.gotoPage('/pages/login/index');
 			});
 	},

@@ -45,16 +45,25 @@ const app = {
 		 */
 		[APP_CHECKLOGIN]({ commit }) {
 			return new Promise((resolve, reject) => {
-				uni.getStorage({
-					key: 'loginInfo',
-					success: function(res) {
-						if (res.data.user && res.data.password) {
-							commit(APP_SAVELOGIN, res.data)
+				let userInfo = uni.getStorageInfoSync('loginInfo') || '';
+				if (userInfo) {
+					uni.getStorage({
+						key: 'loginInfo',
+						success: function(res) {
+							if (res.data.user && res.data.password) {
+								commit(APP_SAVELOGIN, res.data)
+								resolve()
+							} else {
+								reject()
+							}
+						},
+						fail: function(err) {
+							reject()
 						}
-						resolve()
-					},
-					fail: reject
-				});
+					});
+				} else {
+					reject()
+				}
 			})
 		}
 	}

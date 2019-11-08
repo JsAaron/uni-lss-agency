@@ -1,5 +1,13 @@
 {
-	"pages": [{
+	"pages": [
+		{
+			"path": "pages/trade/index",
+			"style": {
+				"navigationBarTitleText": "交易流水"
+			}
+		},
+
+		{
 			"path": "pages/index",
 			"style": {
 				"navigationStyle": "custom"
@@ -51,6 +59,7 @@
 				"navigationStyle": "custom"
 			}
 		},
+
 		{
 			"path": "pages/center/amend",
 			"style": {
@@ -121,6 +130,12 @@
 				"text": "代理/商户",
 				"iconPath": "static/tabbar/agency.png",
 				"selectedIconPath": "static/tabbar/agency-active.png"
+			},
+			{
+				"pagePath": "pages/trade/index",
+				"text": "交易流水",
+				"iconPath": "static/tabbar/trade.png",
+				"selectedIconPath": "static/tabbar/trade-active.png"
 			},
 			{
 				"pagePath": "pages/center/index",
