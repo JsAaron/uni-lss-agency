@@ -1,8 +1,22 @@
 {
 	"pages": [{
+			"path": "pages/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/login/index",
 			"style": {
 				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/login/check",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "找回密码"
 			}
 		},
 		{
@@ -111,8 +125,8 @@
 			{
 				"pagePath": "pages/center/index",
 				"text": "我的",
-				"iconPath": "static/tabbar/center.png",
-				"selectedIconPath": "static/tabbar/center-active.png"
+				"iconPath": "static/tabbar/my.png",
+				"selectedIconPath": "static/tabbar/my-active.png"
 			}
 		]
 	},

@@ -80,7 +80,7 @@ export default {
 		height: 300rpx;
 		width: 100%;
 		background-image: url('~@/static/img/logo.jpg');
-		background-size: 100% 100%;
+		background-size: cover;
 		color: #ffffff;
 	}
 	&__top-content {

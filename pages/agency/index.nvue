@@ -491,9 +491,6 @@ page {
 .segmented-add-text{
 	font-size: 25rpx;
 }
-.segmented-add-text:active{
-	color:  #007aff;
-}
 
 .scroll-h {
 	width: 750upx;

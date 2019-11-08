@@ -1,11 +1,24 @@
 <template>
 	<view class="zai-box">
-		<image src="../../static/img/login.png" mode='aspectFit' class="zai-logo"></image>
+		<image src="../../static/img/login.png" mode="aspectFit" class="zai-logo"></image>
 		<view class="zai-title">LOGO区域</view>
 		<view class="zai-form">
-			<input class="zai-input" placeholder-class placeholder="请输入用户名" />
-			<input class="zai-input" placeholder-class password placeholder="请输入密码"/>
-			<view class="zai-label">忘记密码？</view>
+			<input
+				class="zai-input"
+				:value="user"
+				@input="onUserChange($event)"
+				placeholder-class
+				placeholder="请输入用户名"
+			/>
+			<input
+				class="zai-input"
+				:value="password"
+				@input="onPasswordChange($event)"
+				placeholder-class
+				password
+				placeholder="请输入密码"
+			/>
+			<view class="zai-label" @click="onFindPasswrod">忘记密码？</view>
 			<button class="zai-btn" @click="onLogin">立即登录</button>
 		</view>
 	</view>
@@ -13,74 +26,92 @@
 
 <script>
 import * as util from '@/utils';
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex';
 import { $$set, $$get } from '@/common/global';
 export default {
-	components: {},
 	data() {
-		return {};
+		return {
+			user: '脸刷刷测试',
+			password: '123456'
+		};
 	},
 	props: {},
 	created() {},
 	onLoad() {},
 	methods: {
-		onLogin(){
-			util.gotoPage('switchTab','/pages/home/index')
+		...mapActions(['APP_SAVELOGIN']),
+		onUserChange({ detail: { value } } = {}) {
+			this.user = value;
+		},
+		onPasswordChange({ detail: { value } } = {}) {
+			this.password = value;
+		},
+		onLogin() {
+			this.APP_SAVELOGIN({
+				user: this.user,
+				password: this.password
+			});
+			util.gotoPage('switchTab', '/pages/home/index');
+		},
+		onFindPasswrod() {
+			util.gotoPage('/pages/login/check');
 		}
 	}
 };
 </script>
 
 <style>
-	.zai-box{
-		padding: 0 100upx;
-		position: relative;
-	}
-	.zai-logo{
-		width: 100%;
-		width: 100%;
-		height: 310upx;
-	}
-	.zai-title{
-		position: absolute;
-		top: 0;
-		line-height: 360upx;
-		font-size: 68upx;
-		color: #fff;
-		text-align: center;
-		width: 100%;
-		margin-left: -100upx;
-	}
-	.zai-form{
-		margin-top: 300upx;
-	}
-	.zai-input{
-		background: #e2f5fc;
-		margin-top: 30upx;
-		border-radius: 100upx;
-		padding: 20upx 40upx;
-		font-size: 36upx;
-	}
-	.input-placeholder, .zai-input{
-		color: #94afce;
-	}
-	.zai-label{
-		padding: 60upx 0;
-		text-align: center;
-		font-size: 30upx;
-		color: #a7b6d0;
-	}
-	.zai-btn{
-		background: #2F85FC;
-		color: #fff;
-		border: 0;
-		border-radius: 100upx;
-		font-size: 36upx;
-	}
-	.zai-btn:after{
-		border: 0;
-	}
-	/*按钮点击效果*/
-	.zai-btn.button-hover{
-		transform: translate(1upx, 1upx);
-	}
+.zai-box {
+	padding: 0 100upx;
+	position: relative;
+}
+.zai-logo {
+	width: 100%;
+	width: 100%;
+	height: 310upx;
+}
+.zai-title {
+	position: absolute;
+	top: 0;
+	line-height: 360upx;
+	font-size: 68upx;
+	color: #fff;
+	text-align: center;
+	width: 100%;
+	margin-left: -100upx;
+}
+.zai-form {
+	margin-top: 300upx;
+}
+.zai-input {
+	background: #e2f5fc;
+	margin-top: 30upx;
+	border-radius: 100upx;
+	padding: 20upx 40upx;
+	font-size: 36upx;
+}
+.input-placeholder,
+.zai-input {
+	color: #94afce;
+}
+.zai-label {
+	padding: 60upx 0;
+	text-align: center;
+	font-size: 30upx;
+	color: #a7b6d0;
+}
+.zai-btn {
+	background: #2f85fc;
+	color: #fff;
+	border: 0;
+	border-radius: 100upx;
+	font-size: 36upx;
+}
+.zai-btn:after {
+	border: 0;
+}
+/*按钮点击效果*/
+.zai-btn.button-hover {
+	transform: translate(1upx, 1upx);
+}
 </style>

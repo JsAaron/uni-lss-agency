@@ -1,39 +1,62 @@
+import { APP_SAVELOGIN, APP_CHECKLOGIN, APP_LOGOUT } from './mutation-types'
+
 const app = {
 	state: {
-		//获取用户信息
-		userInfo: {},
-
-		//微信认证
-		device: {
-			agentid: "", //商户ID
-			openid: "", //注册最后一步需要，用来判断登录
-			code: "", //登录凭证
-			//zheng
-			appid: "wx3ae92fa03906e0f7",
-			secret: ""
-		},
+		user: '',
+		password: '',
+		hasLogin: false
 	},
 	mutations: {
-		/**
-		 * 设置用户信息数据
-		 */
-		["SET_USERINFO"](state, data) {
-			state.userInfo = data
+		[APP_SAVELOGIN](state, value) {
+			state.user = value.user
+			state.password = value.password
+			state.hasLogin = true
 		},
-
-		/**
-		 * 设备数据
-		 */
-		["SET_CODE"](state, data) {
-			state.device.code = data
+		[APP_LOGOUT](state) {
+			state.user = ''
+			state.password = ''
+			state.hasLogin = false
 		},
-		["SET_OPENID"](state, data) {
-			state.device.openid = data
-		},
-
 	},
 	actions: {
+		/**
+		 * 保存登录数据
+		 */
+		[APP_SAVELOGIN]({ commit }, value) {
+			commit(APP_SAVELOGIN, value)
+			uni.setStorage({
+				key: 'loginInfo',
+				data: value
+			})
+		},
 
+		/**
+		 * 登出
+		 */
+		[APP_LOGOUT]({ commit }, value) {
+			commit(APP_LOGOUT)
+			uni.removeStorage({
+				key: 'loginInfo'
+			})
+		},
+
+		/**
+		 * 检测登录
+		 */
+		[APP_CHECKLOGIN]({ commit }) {
+			return new Promise((resolve, reject) => {
+				uni.getStorage({
+					key: 'loginInfo',
+					success: function(res) {
+						if (res.data.user && res.data.password) {
+							commit(APP_SAVELOGIN, res.data)
+						}
+						resolve()
+					},
+					fail: reject
+				});
+			})
+		}
 	}
 };
 

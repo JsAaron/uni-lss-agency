@@ -52,7 +52,6 @@ Vue.component('QSwitch',QSwitch);
 
 
 Vue.config.productionTip = false
-Vue.prototype.$host = 'https://unidemo.dcloud.net.cn/';
 
 Vue.prototype.$store = store;
 Vue.prototype.$api = {

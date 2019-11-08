@@ -32,7 +32,9 @@
 
 <script>
 import * as util from '@/utils';
+import { mapActions } from 'vuex';
 import { $$set, $$get } from '@/common/global';
+
 export default {
 	components: {},
 	data() {
@@ -42,10 +44,12 @@ export default {
 	created() {},
 	onLoad() {},
 	methods: {
+		...mapActions(['APP_LOGOUT']),
 		onAmend() {
 			util.gotoPage('/pages/center/amend');
 		},
 		onExit() {
+			this.APP_LOGOUT()
 			util.gotoPage('/pages/login/index');
 		}
 	}

@@ -1,4 +1,5 @@
 <script>
+
 export default {
 	globalData: {
 		route: {}, //路由页面
@@ -29,6 +30,7 @@ export default {
 
 	onLaunch: function() {
 		console.log('App Launch');
+		
 		// #ifdef APP-NVUE
 		plus.screen.lockOrientation('portrait-primary');
 

@@ -1,7 +1,7 @@
 const getters = {
-
 	//app
-	$appid: state => state.app.device.appid,
-	$code: state => state.app.device.code,
+   hasLogin: state => {
+     return state.app.hasLogin
+   }
 };
 export default getters;
