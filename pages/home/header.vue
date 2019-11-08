@@ -14,7 +14,7 @@
 				</view>
 				<view class="header__col">
 					<view>1</view>
-					<view>三级代理商总数</view>
+					<view>二级代理商总数</view>
 				</view>
 			</view>
 			<view class="header__row">
@@ -23,14 +23,14 @@
 					<view>佣金总额</view>
 				</view>
 				<view class="header__col">
-					<view>113</view>
-					<view>商户总数</view>
+					<view>3</view>
+					<view>三级代理商总数</view>
 				</view>
 			</view>
 			<view class="header__row">
 				<view class="header__col">
-					<view>3</view>
-					<view>二级代理商总数</view>
+					<view>113</view>
+					<view>商户总数</view>
 				</view>
 				<view class="header__col">
 					<view>2016</view>

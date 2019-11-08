@@ -147,7 +147,7 @@ export default {
 			util.gotoPage('back');
 		},
 		onAmend() {
-			util.gotoPage('/pages/agency/amend-agency');
+			util.gotoPage('/pages/agency/amend?pageType='+this.pageType);
 		}
 	}
 };

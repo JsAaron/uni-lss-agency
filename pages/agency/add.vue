@@ -43,13 +43,25 @@
 				v-model="form.address"
 			></QSInput>
 
-			<QSPickerCity
+			<QSPickerCustom
 				:name="formName"
-				variableName="city"
-				title="经营省市区"
-				:value="form.city"
-				placherhold="请选择"
+				ref="refProvince"
+				layout="row"
+				titleLayout="left"
+				required
+				variableName="province"
+				title="省"
 			/>
+			<QSPickerCustom
+				:name="formName"
+				titleLayout="left"
+				layout="row"
+				ref="refCity"
+				required
+				variableName="city"
+				title="市"
+			/>
+
 
 			<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onEnsure">
 				确定
@@ -179,6 +191,9 @@ export default {
 
 	created() {},
 	onLoad(optopns) {
+		uni.setNavigationBarTitle({
+		    title: optopns.pageType === 'agency' ?'新增代理商':'新增商户'
+		});
 		this.pageType = optopns.pageType;
 	},
 	computed: {},

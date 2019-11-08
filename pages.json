@@ -85,7 +85,7 @@
 		{
 			"path": "pages/agency/add",
 			"style": {
-				"navigationBarTitleText": "新增代理"
+				"navigationBarTitleText": ""
 			}
 		},
 		{
