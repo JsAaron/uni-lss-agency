@@ -1,7 +1,8 @@
 <template>
 	<view class="zai-box">
+		<view class="status_bar"></view>
 		<image src="../../static/img/login.png" mode="aspectFit" class="zai-logo"></image>
-		<view class="zai-title">LOGO区域</view>
+		<view class="zai-title">脸刷刷APP代理商版</view>
 		<view class="zai-form">
 			<input
 				class="zai-input"
@@ -61,6 +62,11 @@ export default {
 </script>
 
 <style>
+.status_bar {
+	height: var(--status-bar-height);
+	width: 100%;
+}
+
 .zai-box {
 	padding: 0 100upx;
 	position: relative;
@@ -68,20 +74,20 @@ export default {
 .zai-logo {
 	width: 100%;
 	width: 100%;
-	height: 310upx;
+	height: 510upx;
 }
 .zai-title {
 	position: absolute;
 	top: 0;
-	line-height: 360upx;
-	font-size: 68upx;
+	line-height: 650upx;
+	font-size: 50upx;
 	color: #fff;
 	text-align: center;
 	width: 100%;
 	margin-left: -100upx;
 }
 .zai-form {
-	margin-top: 300upx;
+	margin-top: 100upx;
 }
 .zai-input {
 	background: #e2f5fc;

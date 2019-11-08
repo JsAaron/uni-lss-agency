@@ -14,7 +14,7 @@
 		{
 			"path": "pages/login/check",
 			"style": {
-				"navigationBarBackgroundColor": "#fff",
+				"navigationBarBackgroundColor": "#F9F8FD",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "找回密码"
 			}

@@ -87,7 +87,7 @@ page {
 	// font-family: "PingFang SC", Helvetica, "STHeiti STXihei", "Microsoft YaHei",
 	//   Tohoma, Arial, sans-serif;
 	font-family: Arial;
-	background-color: rgb(249, 248, 253);
+	background-color: #F9F8FD;
 	position: relative;
 	font-size: 16px;
 	font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
