@@ -15,7 +15,6 @@ export default {
 	props: {},
 	created() {},
 	onLoad() {
-		
 		//跳过广告
 		let testUrl = simulate();
 		if (testUrl) {
@@ -25,11 +24,15 @@ export default {
 
 		this.APP_CHECKLOGIN()
 			.then(state => {
-				console.log(44444444);
+				//#ifdef APP-PLUS-NVUE
+				plus.navigator.closeSplashscreen();
+				//#endif
 				util.gotoPage('switchTab', '/pages/home/index');
 			})
 			.catch(() => {
-				console.log(555555555);
+				//#ifdef APP-PLUS-NVUE
+				plus.navigator.closeSplashscreen();
+				//#endif
 				util.gotoPage('/pages/login/index');
 			});
 	},
