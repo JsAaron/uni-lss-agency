@@ -1,24 +1,12 @@
 <template>
 	<view class="zai-box">
+		<message ref="Message"></message>
 		<view class="status_bar"></view>
 		<image src="../../static/img/login.png" mode="aspectFit" class="zai-logo"></image>
 		<view class="zai-title">脸刷刷APP代理商版</view>
 		<view class="zai-form">
-			<input
-				class="zai-input"
-				:value="username"
-				@input="onUserChange($event)"
-				placeholder-class
-				placeholder="请输入用户名"
-			/>
-			<input
-				class="zai-input"
-				:value="password"
-				@input="onPasswordChange($event)"
-				placeholder-class
-				password
-				placeholder="请输入密码"
-			/>
+			<input class="zai-input" :value="username" @input="onUserChange($event)" placeholder-class placeholder="请输入用户名" />
+			<input class="zai-input" :value="password" @input="onPasswordChange($event)" placeholder-class password placeholder="请输入密码" />
 			<view class="zai-label" @click="onFindPasswrod">忘记密码？</view>
 			<button class="zai-btn" @click="onLogin">立即登录</button>
 		</view>
@@ -40,7 +28,7 @@ export default {
 	created() {},
 	onLoad() {},
 	methods: {
-		...mapActions("account", ["login"]),
+		...mapActions('account', ['login']),
 		onUserChange({ detail: { value } } = {}) {
 			this.username = value;
 		},
@@ -51,8 +39,16 @@ export default {
 			this.login({
 				username: this.username,
 				password: this.password
-			});
-			// util.gotoPage('switchTab', '/pages/home/index');
+			})
+				.then(() => {
+					this.$refs['Message'].success('登录成功');
+					setTimeout(() => {
+						util.gotoPage('switchTab', '/pages/home/index');
+					}, 2000);
+				})
+				.catch(err => {
+					this.$refs['Message'].error(err);
+				});
 		},
 		onFindPasswrod() {
 			util.gotoPage('/pages/login/check');

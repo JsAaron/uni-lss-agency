@@ -21,6 +21,9 @@ import {
 }
 from '@/common/global';
 
+// 使用自定义消息提示
+import boboMessage from './components/bobo-message/bobo-message.vue'
+Vue.component('message', boboMessage)
 
 import QSWavesButton from '@/components/QS-WavesButton/QS-WavesButton.vue';
 Vue.component('QSWavesButton',QSWavesButton);

@@ -1,4 +1,3 @@
-
 import axios from '@/js_sdk/gangdiedao-uni-axios'
 
 /**
@@ -36,11 +35,18 @@ const service = axios.create({
 // 拦截器 在请求之前拦截
 service.interceptors.request.use(config => {
 	// code...
-	// _reqlog(config)
+
+	// 在请求发送之前做一些处理
+	// if (!(/^https:\/\/|http:\/\//.test(config.url))) {
+	// 	const token = util.cookies.get('token')
+	// 	if (token && token !== 'undefined') {
+	// 		// 让每个请求携带token-- ['Authorization']为自定义key 请根据实际情况自行修改
+	// 		config.headers['Authorization'] = 'Bearer ' + token
+	// 	}
+	// }
 	return config
 }, error => {
 	// 发送失败
-	console.log(error)
 	Promise.reject(error)
 })
 
@@ -48,14 +54,12 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(response => {
 	const res = response.data;
 	if (res.code !== 200) {
-		console.log(1111)
 		return Promise.reject(res.msg);
 	} else {
-		console.log(response.config)
 		return res.data;
 	}
 }, error => {
-	console.log(error)
+	return Promise.reject(error)
 })
 
 export default service

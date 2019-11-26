@@ -1,6 +1,7 @@
 import {
 	AccountLogin
 } from '@/api/login'
+import * as util from '@/utils';
 
 export default {
 	namespaced: true,
@@ -26,30 +27,36 @@ export default {
 		 * 登录
 		 */
 		login({
-			commit
+			commit,
+			dispatch
 		}, {
 			username,
 			password
 		}) {
-			// 开始请求登录接口
-			AccountLogin({
-					username,
-					password
-				})
-				.then(async res => {
-					console.log(res)
-				})
-				.catch(err => {
-					console.log('err: ', err)
-				})
+			return new Promise((resolve, reject) => {
+				// 开始请求登录接口
+				AccountLogin({
+						username,
+						password
+					})
+					.then(async res => {
+						util.cookies.set('uuid', res.id)
+						util.cookies.set('agentid', res.agentid)
+						util.cookies.set('dl_type', res.dl_type)
+						util.cookies.set('xt_id', res.xt_id)
+						util.cookies.set('token', res.accessToken)
 
+						// 设置 vuex 用户信息
+						await dispatch('user/set', {
+							name: res.name
+						}, {
+							root: true
+						})
 
-
-			// commit(APP_SAVELOGIN, value)
-			// uni.setStorage({
-			// 	key: 'loginInfo',
-			// 	data: value
-			// })
+						resolve()
+					})
+					.catch(reject)
+			})
 		},
 
 		/**
@@ -71,7 +78,6 @@ export default {
 			commit
 		}) {
 			return new Promise((resolve, reject) => {
-				console.log(11111)
 				let userInfo = uni.getStorageInfoSync('loginInfo') || '';
 				if (userInfo) {
 					uni.getStorage({

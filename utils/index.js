@@ -10,3 +10,4 @@ export * from './state';
 export * from './count-down'
 export * from './pay'
 export * from './file'
+export * from './cookies'
