@@ -6,7 +6,7 @@
 		<view class="zai-form">
 			<input
 				class="zai-input"
-				:value="user"
+				:value="username"
 				@input="onUserChange($event)"
 				placeholder-class
 				placeholder="请输入用户名"
@@ -32,27 +32,27 @@ import { $$set, $$get } from '@/common/global';
 export default {
 	data() {
 		return {
-			user: '脸刷刷测试',
-			password: '123456'
+			username: 'admin',
+			password: 'lianshuashua1234'
 		};
 	},
 	props: {},
 	created() {},
 	onLoad() {},
 	methods: {
-		...mapActions(['APP_SAVELOGIN']),
+		...mapActions("account", ["login"]),
 		onUserChange({ detail: { value } } = {}) {
-			this.user = value;
+			this.username = value;
 		},
 		onPasswordChange({ detail: { value } } = {}) {
 			this.password = value;
 		},
 		onLogin() {
-			this.APP_SAVELOGIN({
-				user: this.user,
+			this.login({
+				username: this.username,
 				password: this.password
 			});
-			util.gotoPage('switchTab', '/pages/home/index');
+			// util.gotoPage('switchTab', '/pages/home/index');
 		},
 		onFindPasswrod() {
 			util.gotoPage('/pages/login/check');

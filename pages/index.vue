@@ -22,7 +22,7 @@ export default {
 			return;
 		}
 
-		this.APP_CHECKLOGIN()
+		this.checklogin()
 			.then(state => {
 				//#ifdef APP-PLUS-NVUE
 				plus.navigator.closeSplashscreen();
@@ -37,7 +37,7 @@ export default {
 			});
 	},
 	methods: {
-		...mapActions(['APP_CHECKLOGIN'])
+		...mapActions("account", ["checklogin"])
 	}
 };
 </script>

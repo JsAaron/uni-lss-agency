@@ -49,6 +49,10 @@
                     "xxhdpi" : "C:/Users/Administrator/Desktop/微信图片_20191107151403.png"
                 }
             }
+        },
+        "splashscreen" : {
+            "waiting" : false,
+            "alwaysShowBeforeRender" : false
         }
     },
     /* SDK配置 */
