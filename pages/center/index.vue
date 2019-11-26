@@ -24,9 +24,7 @@
 			</view>
 		</view>
 
-		<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onExit">
-			退出登录
-		</QSWavesButton>
+		<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onExit">退出登录</QSWavesButton>
 	</view>
 </template>
 
@@ -44,13 +42,20 @@ export default {
 	created() {},
 	onLoad() {},
 	methods: {
-		...mapActions(['APP_LOGOUT']),
+		...mapActions('account', ['logout']),
 		onAmend() {
 			util.gotoPage('/pages/center/amend');
 		},
 		onExit() {
-			this.APP_LOGOUT()
-			util.gotoPage('/pages/login/index');
+			uni.showModal({
+				content: '退出登录?',
+				success: res => {
+					if (res.confirm) {
+						this.logout();
+						util.gotoPage('/pages/login/index');
+					}
+				}
+			});
 		}
 	}
 };

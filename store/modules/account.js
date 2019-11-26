@@ -10,18 +10,6 @@ export default {
 		password: '',
 		hasLogin: false
 	},
-	mutations: {
-		// [SAVELOGIN](state, value) {
-		// 	state.user = value.user
-		// 	state.password = value.password
-		// 	state.hasLogin = true
-		// },
-		// [LOGOUT](state) {
-		// 	state.user = ''
-		// 	state.password = ''
-		// 	state.hasLogin = false
-		// },
-	},
 	actions: {
 		/**
 		 * 登录
@@ -60,15 +48,19 @@ export default {
 		},
 
 		/**
-		 * 登出
+		 * @description 注销用户并返回登录页面
+		 * @param {Object} param context
+		 * @param {Object} param vm {Object} vue 实例
+		 * @param {Object} param confirm {Boolean} 是否需要确认
 		 */
 		logout({
 			commit
-		}, value) {
-			commit(LOGOUT)
-			uni.removeStorage({
-				key: 'loginInfo'
-			})
+		}) {
+			util.cookies.remove('token')
+			util.cookies.remove('uuid')
+			util.cookies.remove('agentid')
+			util.cookies.remove('dl_type')
+			util.cookies.remove('xt_id')
 		},
 
 		/**
@@ -78,22 +70,9 @@ export default {
 			commit
 		}) {
 			return new Promise((resolve, reject) => {
-				let userInfo = uni.getStorageInfoSync('loginInfo') || '';
-				if (userInfo) {
-					uni.getStorage({
-						key: 'loginInfo',
-						success: function(res) {
-							if (res.data.user && res.data.password) {
-								commit(APP_SAVELOGIN, res.data)
-								resolve()
-							} else {
-								reject()
-							}
-						},
-						fail: function(err) {
-							reject()
-						}
-					});
+				const token = util.cookies.get('token')
+				if (token) {
+					resolve()
 				} else {
 					reject()
 				}
