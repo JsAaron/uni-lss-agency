@@ -36,17 +36,17 @@
             "sdkConfigs" : {},
             "icons" : {
                 "android" : {
-                    "hdpi" : "C:/Users/Administrator/Desktop/笑脸.png",
-                    "xhdpi" : "C:/Users/Administrator/Desktop/笑脸.png",
-                    "xxhdpi" : "C:/Users/Administrator/Desktop/笑脸.png",
-                    "xxxhdpi" : "C:/Users/Administrator/Desktop/笑脸.png"
+                    "hdpi" : "",
+                    "xhdpi" : "",
+                    "xxhdpi" : "",
+                    "xxxhdpi" : ""
                 }
             },
             "splashscreen" : {
                 "android" : {
-                    "hdpi" : "C:/Users/Administrator/Desktop/微信图片_20191107151403.png",
-                    "xhdpi" : "C:/Users/Administrator/Desktop/微信图片_20191107151403.png",
-                    "xxhdpi" : "C:/Users/Administrator/Desktop/微信图片_20191107151403.png"
+                    "hdpi" : "",
+                    "xhdpi" : "",
+                    "xxhdpi" : ""
                 }
             }
         },

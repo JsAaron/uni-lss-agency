@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import json from './json';
 import * as util from '@/utils';
 import uniIcon from '@/components/uni-icon/uni-icon';
 import { getAgentPagedList } from '@/api/agent';
@@ -60,6 +59,30 @@ import mixLoadMore from '@/components/mix-load-more/mix-load-more';
 let windowWidth = 0,
 	scrollTimer = false,
 	tabBar;
+
+let tabList = [
+	{
+		name: '全部',
+		pass: ''
+	},
+	{
+		name: '未开通',
+		pass: '3'
+	},
+	{
+		name: '待审核',
+		pass: '2'
+	},
+	{
+		name: '已签约',
+		pass: '0'
+	},
+	{
+		name: '签约失败',
+		pass: '4'
+	}
+];
+
 export default {
 	components: {
 		uniIcon,
@@ -76,9 +99,12 @@ export default {
 	},
 	computed: {},
 	async onLoad() {
+		this.agentid = util.cookies.get('agentid');
+		this.dl_type = util.cookies.get('dl_type');
+		this.xt_id = util.cookies.get('xt_id');
 		// 获取屏幕宽度
 		windowWidth = uni.getSystemInfoSync().windowWidth;
-		this.loadTabbars();
+		this.initTabbars();
 	},
 	methods: {
 		/**
@@ -87,8 +113,7 @@ export default {
 		 * mixin使用方法看index.nuve
 		 */
 		//获取分类
-		loadTabbars() {
-			let tabList = json.tabList;
+		initTabbars() {
 			tabList.forEach(item => {
 				item.pageIndex = 0; //页码索引
 				item.totalPages = 0; //总数码数
@@ -109,24 +134,25 @@ export default {
 					return;
 				}
 				tabItem.loadMoreStatus = 1;
-			}
-			// #ifdef APP-PLUS
-			else if (type === 'refresh') {
+			} else if (type === 'refresh') {
+				tabItem.pageIndex = 0;
+				// #ifdef APP-PLUS
 				tabItem.refreshing = true;
+				// #endif
 			}
-			// #endif
 
 			//获取指定列表数据
 			let query = {
-				pageIndex: tabItem.pageIndex,
-				pageSize: '15',
+				pageIndex: ++tabItem.pageIndex,
+				pageSize: 50,
 				sortBy: '',
-				agentid: util.cookies.get('agentid'),
-				dl_type: util.cookies.get('dl_type'),
-				xt_id: util.cookies.get('xt_id'),
+				agentid: this.agentid,
+				dl_type: this.dl_type,
+				xt_id: this.xt_id,
 				dl_type2: '4',
 				descending: false,
 				filter: {
+					pass: tabItem.pass,
 					userName: '',
 					userCode: ''
 				}
@@ -146,7 +172,7 @@ export default {
 					tabItem.newsList.push(item);
 				});
 				tabItem.totalPages = res.totalCount;
-				console.log(res.rows);
+
 				//下拉刷新 关闭刷新动画
 				if (type === 'refresh') {
 					this.$refs.mixPulldownRefresh && this.$refs.mixPulldownRefresh.endPulldownRefresh();
@@ -155,12 +181,27 @@ export default {
 					// #endif
 					tabItem.loadMoreStatus = 0;
 				}
+
 				//上滑加载 处理状态
 				if (type === 'add') {
-					tabItem.loadMoreStatus = tabItem.newsList.length > 40 ? 2 : 0;
+					console.log(tabItem.pageIndex, tabItem.totalPages);
+					tabItem.loadMoreStatus = tabItem.pageIndex >= tabItem.totalPages ? 2 : 0;
 				}
 			});
 		},
+
+		//下拉刷新
+		onPulldownReresh() {
+			this.loadNewsList('refresh');
+		},
+
+		//上滑加载
+		loadMore() {
+			this.loadNewsList('add');
+		},
+
+		//================================
+
 		//新闻详情
 		navToDetails(item) {
 			let data = {
@@ -176,14 +217,6 @@ export default {
 			});
 		},
 
-		//下拉刷新
-		onPulldownReresh() {
-			this.loadNewsList('refresh');
-		},
-		//上滑加载
-		loadMore() {
-			this.loadNewsList('add');
-		},
 		//设置scroll-view是否允许滚动，在小程序里下拉刷新时避免列表可以滑动
 		setEnableScroll(enable) {
 			if (this.enableScroll !== enable) {
@@ -326,19 +359,21 @@ page,
 	&__row {
 		// width: calc('100% - 40rpx');
 		@include flex-h-between;
-		padding: 15rpx 20rpx;
+		padding: 20rpx 20rpx;
 	}
-	&__left{
+	&__row:nth-of-type(odd) {
+		background-color: rgb(252, 252, 252);
+	}
+	&__left {
 		font-size: 30rpx;
 	}
-	&__name{
-		
+	&__name {
 	}
-	&__code{
+	&__code {
 		color: #999999;
-		margin-top:5rpx;
+		margin-top: 5rpx;
 	}
-	&__right{
+	&__right {
 		@include flex-h-left;
 		font-size: 28rpx;
 		color: #007aff;
