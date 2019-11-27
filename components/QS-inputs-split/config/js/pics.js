@@ -15,7 +15,6 @@ export function UpLoadFile(customId, filePath, picsUpLoadData) { // 上传文件
 			data: replacePath
 		});
 	}
-	
 	let _this = this;
 	let url = '';
 	let formData = {};
@@ -27,7 +26,7 @@ export function UpLoadFile(customId, filePath, picsUpLoadData) { // 上传文件
 			name = '';
 			break;
 		default: //若无判断需求可直接写在这里
-			url = '11111111111111'
+			url = interfaces.upLoadImg;
 			formData = {};
 			name = '';
 			break;

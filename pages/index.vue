@@ -5,7 +5,7 @@
 <script>
 import * as util from '@/utils';
 import { $$set, $$get } from '@/common/global';
-import simulate from '@/common/simulate';
+import simulate from '@/simulate';
 import { mapActions } from 'vuex';
 export default {
 	components: {},
