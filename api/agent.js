@@ -7,3 +7,11 @@ export function getAgentPagedList(query) {
 		params: query
 	})
 }
+
+export function getPerfectAgent(query) {
+	return request({
+		url: '/moblieapp/getPerfectAgent',
+		method: 'post',
+		params: query
+	})
+}

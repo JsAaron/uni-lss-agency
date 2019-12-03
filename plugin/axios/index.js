@@ -26,10 +26,10 @@ const service = axios.create({
 	// #ifdef H5
 	withCredentials: true,
 	// #endif
-	// headers: {
-	// 	'Content-Type': 'application/json',
-	// 	//'X-Requested-With': 'XMLHttpRequest',
-	// },
+	headers: {
+		'Content-Type': 'application/json',
+		//'X-Requested-With': 'XMLHttpRequest',
+	},
 })
 
 // 拦截器 在请求之前拦截

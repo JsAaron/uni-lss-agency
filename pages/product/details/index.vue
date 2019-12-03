@@ -14,39 +14,17 @@
 			</view>
 		</scroll-view>
 
-		<!-- 下拉刷新组件 -->
-		<mix-pulldown-refresh
-			ref="mixPulldownRefresh"
-			class="panel-content"
-			:top="90"
-			@refresh="onPulldownReresh"
-			@setEnableScroll="setEnableScroll"
-		>
-			<!-- 内容部分 -->
-			<swiper id="swiper" class="swiper-box" :duration="300" :current="tabCurrentIndex" @change="changeTab">
-				<swiper-item v-for="tabItem in tabBars" :key="tabItem.id">
-					<scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadMore">
-						<view
-							v-for="(item, index) in tabItem.newsList"
-							:key="index"
-							class="content__row lss-hairline--bottom"
-							@click="navToDetails(index)"
-						>
-							<view class="content__left">
-								<view class="content__name">{{ item.agentname }}</view>
-								<view class="content__code">{{ item.userCode }}</view>
-							</view>
-							<view v-if="item.passName" class="content__right">
-								<view>{{ item.passName }}</view>
-								<uni-icon type="arrow" size="14" color="#c9c9c9"></uni-icon>
-							</view>
-						</view>
-						<!-- 上滑加载更多组件 -->
-						<mix-load-more :status="tabItem.loadMoreStatus"></mix-load-more>
-					</scroll-view>
-				</swiper-item>
-			</swiper>
-		</mix-pulldown-refresh>
+		<swiper id="swiper" class="swiper-box" :duration="300" :current="tabCurrentIndex" @change="changeTab">
+			<swiper-item v-for="(item, index) in tabBars" :key="index">
+				<scroll-view class="panel-scroll-box" scroll-y="true" >
+					<child1 :agentid="agentid" v-if="index == 0"></child1>
+					<child2 :agentid="agentid" v-if="index == 1"></child2>
+					<child3 v-if="index == 2"></child3>
+					<child4 v-if="index == 3"></child4>
+					<child5 v-if="index == 4"></child5>
+				</scroll-view>
+			</swiper-item>
+		</swiper>
 	</view>
 </template>
 
@@ -56,51 +34,165 @@ import uniIcon from '@/components/uni-icon/uni-icon';
 import { getAgentPagedList } from '@/api/agent';
 import mixPulldownRefresh from '@/components/mix-pulldown-refresh/mix-pulldown-refresh';
 import mixLoadMore from '@/components/mix-load-more/mix-load-more';
+import child1 from './child1';
+import child2 from './child2';
+import child3 from './child3';
+import child4 from './child4';
+import child5 from './child5';
+
 let windowWidth = 0,
 	scrollTimer = false,
 	tabBar;
 
 let tabList = [
 	{
-		name: '基本材料',
-		pass: ''
+		name: '基本材料'
 	},
 	{
-		name: '微信',
-		pass: '3'
+		name: '微信'
 	},
 	{
-		name: '支付宝',
-		pass: '2'
+		name: '支付宝'
 	},
 	{
-		name: '随行付',
-		pass: '0'
+		name: '随行付'
 	},
 	{
-		name: '银盛',
-		pass: '4'
+		name: '银盛'
 	}
 ];
 
 export default {
 	components: {
+		child1,
+		child2,
+		child3,
+		child4,
+		child5,
 		uniIcon,
 		mixPulldownRefresh,
 		mixLoadMore
 	},
 	data() {
 		return {
+			agentid: '',
 			tabCurrentIndex: 0, //当前选项卡索引
 			scrollLeft: 0, //顶部选项卡左滑距离
 			enableScroll: true,
 			tabBars: []
 		};
 	},
-	onLoad(options){
-		let data = {"appid":"","city":"","mch_id":"","fws_type":"","sinaOpenId":"","is_sole":"","businessid_two":"","agentchanneltype":1,"roleId":"","gm_wx_agentid":"","three_type_name":"图书音像/文具乐器","agent_shop":"","prize_pz_id":"","municipal_agent":"","tjagentid":"70800072265474","sumAmt":0,"sub_mch_id":"","join_time":"","qy_agent":"","agenttype":0,"latitude":"","xt_id":"5f88e268-aa9a-47d7-bd76-6e31da8694f3","accPasswd":"","freezeAmt":0,"user_level":"","shop_tel":"","type_agentid":"","tradingareaid":"","agent_face":"","face_device":"","is_signing":"","one_type_name":"个体工商户","lastLoginTime":null,"create_times":"2019-12-02 14:35:16","qqOpenId":"","contractendate":"2020-12-24","areaid":"","idcards_back":"","identitynum":"","type_id":0,"businessid":"","three_type":"35","is_fws":"","usertypeId":0,"accessIp":"","prov_cd":"430000","mobileNo":"13787166275","contractno":"","areaname":"","two_type_name":"线下零售","roleName":"","type":"","password":"","agentlogo":"","pay_type":"","wx_appid":"","userId":4184,"avatarUrl":"","idcards_hand":"","province":"","userName":"Derek文具店","actUrl":"","compaddress":"岳麓区新民路403号","longitude":"","openid":"","headimgurl":"","lm_agent":"","one_type":"1","isfact":0,"userCode":"13787166274","isAdd":"0","iszt":"","agentid":"70800072265475","salesman":"","industry_license":"","business_number":"","email":"1773219087@qq.com","open_payment":"","legal":"黎康","desc_content":"","provincial_agent":"","sex":0,"zmImage":"","dl_type":"4","fws_agentid":"","is_signingimg":"","gm_wx_appid":"","contractstdate":"2019-12-31","app_auth_token":"","cashing":0,"packType":0,"qrcodeid":"","agentname":"Derek文具店","qq_amt":0,"real_shop":"","two_type":"6","pass":"0","pagentid":"易惠易购","wx_key":"","faceid":"","cityname":"","parts_no":"","idcards_front":"","disabled":0,"passName":"已签约"}
-		this.options = data
-		console.log(this.options)
+	onLoad(options) {
+		let data = {
+			appid: '',
+			city: '',
+			mch_id: '',
+			fws_type: '',
+			sinaOpenId: '',
+			is_sole: '',
+			businessid_two: '',
+			agentchanneltype: 1,
+			roleId: '',
+			gm_wx_agentid: '',
+			three_type_name: '图书音像/文具乐器',
+			agent_shop: '',
+			prize_pz_id: '',
+			municipal_agent: '',
+			tjagentid: '70800072265474',
+			sumAmt: 0,
+			sub_mch_id: '',
+			join_time: '',
+			qy_agent: '',
+			agenttype: 0,
+			latitude: '',
+			xt_id: '5f88e268-aa9a-47d7-bd76-6e31da8694f3',
+			accPasswd: '',
+			freezeAmt: 0,
+			user_level: '',
+			shop_tel: '',
+			type_agentid: '',
+			tradingareaid: '',
+			agent_face: '',
+			face_device: '',
+			is_signing: '',
+			one_type_name: '个体工商户',
+			lastLoginTime: null,
+			create_times: '2019-12-02 14:35:16',
+			qqOpenId: '',
+			contractendate: '2020-12-24',
+			areaid: '',
+			idcards_back: '',
+			identitynum: '',
+			type_id: 0,
+			businessid: '',
+			three_type: '35',
+			is_fws: '',
+			usertypeId: 0,
+			accessIp: '',
+			prov_cd: '430000',
+			mobileNo: '13787166275',
+			contractno: '',
+			areaname: '',
+			two_type_name: '线下零售',
+			roleName: '',
+			type: '',
+			password: '',
+			agentlogo: '',
+			pay_type: '',
+			wx_appid: '',
+			userId: 4184,
+			avatarUrl: '',
+			idcards_hand: '',
+			province: '',
+			userName: 'Derek文具店',
+			actUrl: '',
+			compaddress: '岳麓区新民路403号',
+			longitude: '',
+			openid: '',
+			headimgurl: '',
+			lm_agent: '',
+			one_type: '1',
+			isfact: 0,
+			userCode: '13787166274',
+			isAdd: '0',
+			iszt: '',
+			agentid: '70800072265475',
+			salesman: '',
+			industry_license: '',
+			business_number: '',
+			email: '1773219087@qq.com',
+			open_payment: '',
+			legal: '黎康',
+			desc_content: '',
+			provincial_agent: '',
+			sex: 0,
+			zmImage: '',
+			dl_type: '4',
+			fws_agentid: '',
+			is_signingimg: '',
+			gm_wx_appid: '',
+			contractstdate: '2019-12-31',
+			app_auth_token: '',
+			cashing: 0,
+			packType: 0,
+			qrcodeid: '',
+			agentname: 'Derek文具店',
+			qq_amt: 0,
+			real_shop: '',
+			two_type: '6',
+			pass: '0',
+			pagentid: '易惠易购',
+			wx_key: '',
+			faceid: '',
+			cityname: '',
+			parts_no: '',
+			idcards_front: '',
+			disabled: 0,
+			passName: '已签约'
+		};
+		this.options = data;
+		this.agentid = this.options.agentid;
+		this.initTabbars();
 	},
 	computed: {},
 	methods: {
@@ -112,105 +204,13 @@ export default {
 		//获取分类
 		initTabbars() {
 			tabList.forEach(item => {
-				item.pageIndex = 0; //页码索引
-				item.totalPages = 0; //总数码数
 				item.newsList = [];
 				item.loadMoreStatus = 0; //加载更多 0加载前，1加载中，2没有更多了
-				item.refreshing = 0;
 			});
 			this.tabBars = tabList;
-			this.loadNewsList('add');
-		},
-		//列表数据
-		loadNewsList(type) {
-			let tabItem = this.tabBars[this.tabCurrentIndex];
-
-			//type add 加载更多 refresh下拉刷新
-			if (type === 'add') {
-				if (tabItem.loadMoreStatus === 2) {
-					return;
-				}
-				tabItem.loadMoreStatus = 1;
-			} else if (type === 'refresh') {
-				tabItem.pageIndex = 0;
-				// #ifdef APP-PLUS
-				tabItem.refreshing = true;
-				// #endif
-			}
-
-			//获取指定列表数据
-			let query = {
-				pageIndex: ++tabItem.pageIndex,
-				pageSize: 50,
-				sortBy: '',
-				agentid: this.agentid,
-				dl_type: this.dl_type,
-				xt_id: this.xt_id,
-				dl_type2: '4',
-				descending: false,
-				filter: {
-					pass: tabItem.pass,
-					userName: '',
-					userCode: ''
-				}
-			};
-			getAgentPagedList(query).then(async res => {
-				if (type === 'refresh') {
-					tabItem.newsList = []; //刷新前清空数组
-				}
-				res.rows.forEach(item => {
-					if (item.pass == '0') {
-						item.passName = '已签约';
-					} else if (item.pass == '1' || item.pass == '3') {
-						item.passName = '未开通';
-					} else if (item.pass == '2') {
-						item.passName = '待审核';
-					}
-					tabItem.newsList.push(item);
-				});
-				tabItem.totalPages = res.totalpage;
-
-				//下拉刷新 关闭刷新动画
-				if (type === 'refresh') {
-					this.$refs.mixPulldownRefresh && this.$refs.mixPulldownRefresh.endPulldownRefresh();
-					// #ifdef APP-PLUS
-					tabItem.refreshing = false;
-					// #endif
-					tabItem.loadMoreStatus = 0;
-				}
-
-				//上滑加载 处理状态
-				if (type === 'add') {
-					tabItem.loadMoreStatus = tabItem.pageIndex >= tabItem.totalPages ? 2 : 0;
-				}
-			});
-		},
-
-		//下拉刷新
-		onPulldownReresh() {
-			this.loadNewsList('refresh');
-		},
-
-		//上滑加载
-		loadMore() {
-			this.loadNewsList('add');
 		},
 
 		//================================
-
-		//新闻详情
-		navToDetails(index) {
-			let tabItem = this.tabBars[this.tabCurrentIndex];
-			let data = tabItem.newsList[index];
-			util.gotoPage(`/pages/product/details?data=${JSON.stringify(data)}`);
-		},
-
-		//设置scroll-view是否允许滚动，在小程序里下拉刷新时避免列表可以滑动
-		setEnableScroll(enable) {
-			if (this.enableScroll !== enable) {
-				this.enableScroll = enable;
-			}
-		},
 
 		//tab切换
 		async changeTab(e) {
@@ -259,7 +259,7 @@ export default {
 				//第一次切换tab，动画结束后需要加载数据
 				let tabItem = this.tabBars[this.tabCurrentIndex];
 				if (this.tabCurrentIndex !== 0 && tabItem.loaded !== true) {
-					this.loadNewsList('add');
+					// this.loadNewsList('add');
 					tabItem.loaded = true;
 				}
 			}, 300);
@@ -330,17 +330,11 @@ page,
 }
 
 .swiper-box {
-	height: 100%;
+	height: calc(100% - 90rpx);
 }
 
 .panel-scroll-box {
-	height: 100%;
-
-	.panel-item {
-		background: #fff;
-		padding: 30px 0;
-		border-bottom: 2px solid #000;
-	}
+	height:100%;
 }
 
 .content {
