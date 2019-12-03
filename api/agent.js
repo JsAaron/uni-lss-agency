@@ -15,3 +15,13 @@ export function getPerfectAgent(query) {
 		params: query
 	})
 }
+
+
+export function getShopsType(data) {
+	return request({
+		url: '/moblieapp/getShopsType',
+		method: 'post',
+		params: data
+	})
+}
+

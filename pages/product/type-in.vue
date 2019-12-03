@@ -13,25 +13,63 @@
 			@click-right="onStep"
 		/>
 		<view class="type-steps"><uni-steps :options="stepList" :active="stepActive" /></view>
-		<block v-if="stepActive == 0">
-			<view class="type-title">可上传照片图片识别</view>
 
-			<QSPics
-				layout="column"
-				:name="formName0"
-				variableName="pics_id"
-				title="请上传身份证照片"
-				v-model="form0.pics_id"
-			></QSPics>
+		<block v-if="stepActive == 0">
+			<view class="type-title">联系信息</view>
+
+			<QSInput :name="formName0" variableName="legal" title="联系人姓名" required v-model="fromValue0.legal"></QSInput>
 
 			<QSInput
 				:name="formName0"
-				variableName="name"
-				title="姓名"
+				variableName="mobileNo"
 				required
+				verifyType="Tel"
+				inputType="number"
+				leftIcon="phone"
+				title="手机号码"
+				v-model="fromValue0.mobileNo"
+			></QSInput>
+
+			<QSInput
+				:name="formName0"
+				variableName="email"
+				required
+				title="常用邮箱"
+				verifyType="Email"
+				v-model="fromValue0.email"
+			></QSInput>
+
+			<view class="type-title">经营信息</view>
+
+			<QSInput
+				:name="formName0"
+				variableName="shortername"
+				required
+				title="商户简称"
+				v-model="fromValue0.shortername"
+			></QSInput>
+
+			<QSPickerCustom
+				ref="pickerCustom3"
+				:name="formName0"
+				required
+				variableName="custom_2"
+				title="经营类别"
+				:steps="steps2"
+				linkage
+				linkageNum="3"
+				pickerTitle="picker-custom"
+			/>
+
+			<QSInput
+				:name="formName0"
+				variableName="idcard"
+				required
+				inputType="idcard"
 				layout="row"
 				titleLayout="left"
-				v-model="form0.name"
+				title="商户名称"
+				v-model="form0.idcard"
 			></QSInput>
 
 			<QSInput
@@ -41,125 +79,34 @@
 				inputType="idcard"
 				layout="row"
 				titleLayout="left"
-				title="身份证号码"
+				title="注册地址"
 				v-model="form0.idcard"
 			></QSInput>
 
-			<QSPickerDate
+			<QSCheckbox
 				:name="formName0"
-				variableName="startData"
 				required
-				layout="row"
-				titleLayout="left"
-				title="身份证有效期开始"
-				v-model="form0.startData"
-				placherhold="请选择"
-			/>
-
-			<QSPickerDate
-				:name="formName0"
-				variableName="endData"
-				required
-				layout="row"
-				titleLayout="left"
-				title="身份证有效期结束"
-				v-model="form0.endData"
-				placherhold="请选择"
-			/>
-
-			<QSInput
-				:name="formName0"
-				variableName="phone"
-				required
-				layout="row"
-				titleLayout="left"
-				title="法人手机号"
-				inputType="digit"
-				v-model="form0.phone"
-			></QSInput>
-
-			<view class="type-title">营业执照(小微商户请忽略)</view>
-
-			<QSPics
-				:name="formName0"
+				variableName="checkbox"
 				layout="column"
-				required
-				variableName="pic_shops"
-				title="请上传店铺营业执照"
-				v-model="form0.pic_shops"
-			></QSPics>
+				title="售卖商品场景"
+				v-model="form.checkbox"
+				:itemArray="checkbox_itemArray"
+			></QSCheckbox>
 
 			<QSInput
 				:name="formName0"
+				variableName="idcard"
 				required
-				variableName="registrId"
-				title="注册号"
+				inputType="idcard"
 				layout="row"
 				titleLayout="left"
-				v-model="form0.registrId"
+				title="客服电话"
+				v-model="form0.idcard"
 			></QSInput>
 
-			<QSInput
-				:name="formName0"
-				required
-				variableName="registrName"
-				title="名称"
-				layout="row"
-				titleLayout="left"
-				v-model="form0.registrName"
-			></QSInput>
+			<QSPics :name="formName0" required variableName="pic_shops" title="特殊资质" v-model="form0.pic_shops"></QSPics>
 
-			<QSPickerCustom
-				:name="formName0"
-				ref="pickerType"
-				required
-				layout="row"
-				titleLayout="left"
-				variableName="pickerType"
-				title="类型"
-			/>
-
-			<QSInput
-				:name="formName0"
-				required
-				variableName="registrAddress"
-				title="地址"
-				layout="row"
-				titleLayout="left"
-				v-model="form0.registrAddress"
-			></QSInput>
-
-			<QSInput
-				:name="formName0"
-				required
-				layout="column"
-				variableName="registrOperator"
-				title="法定代表人/经营者"
-				contentLayout="center"
-				v-model="form0.registrOperator"
-			></QSInput>
-
-			<QSPickerDate
-				:name="formName0"
-				required
-				variableName="startData"
-				layout="row"
-				titleLayout="left"
-				title="营业期限开始"
-				v-model="form0.registrStartData"
-				placherhold="请选择"
-			/>
-
-			<QSPickerDate
-				:name="formName0"
-				required
-				variableName="startData"
-				layout="row"
-				titleLayout="left"
-				title="营业期限结束"
-				v-model="form0.registrEndData"
-				placherhold="请选择"
-			/>
+			<QSPics :name="formName0" required variableName="pic_shops" title="补充材料" v-model="form0.pic_shops"></QSPics>
 
 			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep0">
 				下一步
@@ -229,13 +176,7 @@
 				v-model="form2.pic"
 			></QSPics>
 
-			<QSPickerCity
-				:name="formName2"
-				variableName="city"
-				title="经营省市区"
-				:value="form2.city"
-				placherhold="请选择"
-			/>
+			<QSPickerCity :name="formName2" variableName="city" title="经营省市区" :value="form2.city" placherhold="请选择" />
 
 			<QSInput
 				:name="formName2"
@@ -311,6 +252,7 @@ import QSApp from '@/components/QS-inputs-split/js/app.js';
 import uniSteps from '@/components/uni-steps/uni-steps.vue';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
+import { getShopsType } from '@/api/agent';
 
 export default {
 	components: {
@@ -320,21 +262,63 @@ export default {
 	},
 	data() {
 		return {
+			shopOptions: {},
+			checkbox_itemArray: [
+				{
+					name: '线下',
+					value: '哈利波特',
+					color: '#f5105c'
+				},
+				{
+					name: '公众号',
+					value: '魔戒',
+					color: '#888'
+				},
+				{
+					name: '小程序',
+					value: '玩具总动员'
+				},
+				{
+					name: '网站',
+					value: '硬核亨利'
+				},
+				{
+					name: 'APP',
+					value: '硬核亨利'
+				}
+			],
+
 			stepActive: 0,
 			stepList: [
+				{
+					title: '经营信息'
+				},
 				{
 					title: '商户信息'
 				},
 				{
-					title: '结算信息'
+					title: '结算账户'
 				},
 				{
-					title: '基本信息'
+					title: '组织机构'
 				}
 			],
 
 			//商铺数据
 			formName0: 'step0',
+			fromValue0: {
+				legal: '',
+				mobileNo: '',
+				email: '',
+				shortername: ''
+			},
+			steps2: {
+				step_1_value: 'value_1',
+				step_2_value: 'value_2',
+				step_2_item: 'item_2',
+				step_3_item: 'item_3'
+			},
+
 			form0: {
 				pics_id: [{ title: '正面' }, { title: '反面' }],
 				name: '',
@@ -366,12 +350,11 @@ export default {
 	},
 	props: {},
 
-	onReady() {
-		this.setPickerDataFc('pickerType', [['企业', '个体商户']]);
+	onLoad() {
+		this.setPickerData();
+		this.setShopsType()
 	},
 
-	created() {},
-	onLoad() {},
 	computed: {
 		barText() {
 			if (this.stepActive == 1 || this.stepActive == 2) {
@@ -382,6 +365,49 @@ export default {
 		}
 	},
 	methods: {
+		setShopsType(){
+			getShopsType().then(data => {
+				this.shopOptions = data;
+			});
+		},
+		
+		setPickerData() {
+			const data3 = [
+				{
+					value_1: '浙江', //value_1变量名需与下方steps.step_1_value相同
+					item_2: [
+						{
+							//item_2变量名需与下方steps.step_2_item相同
+							value_2: '金华', //value_2变量名需与下方steps.step_2_value相同
+							/*
+						可添加多项自定义想要的数据
+						*/
+							item_3: ['婺城区'] //item_3变量名需与下方steps.step_3_item相同
+						},
+						{
+							value_2: '绍兴',
+							item_3: ['越城区']
+						}
+					]
+				},
+				{
+					value_1: '江苏',
+					item_2: [
+						{
+							value_2: '南京',
+							item_3: ['玄武区']
+						},
+						{
+							value_2: '无锡',
+							item_3: ['锡山区']
+						}
+					]
+				}
+			];
+
+			this.setPickerDataFc('pickerCustom3', data3);
+		},
+
 		setPickerDataFc(name, data) {
 			this.$refs[name].setData(data);
 		},
@@ -390,7 +416,7 @@ export default {
 		 * 返回
 		 */
 		onBack() {
-			util.gotoPage('back')
+			util.gotoPage('back');
 		},
 
 		/**
@@ -406,11 +432,12 @@ export default {
 		getStep0() {
 			QSApp.getForm(this.formName0)
 				.then(res => {
-					uni.showToast({
-						title: '获取表单数据成功'
-					});
-					console.log(res.data);
-					this.stepActive = 1;
+					console.log(res);
+					// uni.showToast({
+					// 	title: '获取表单数据成功'
+					// });
+					// console.log(res.data);
+					// this.stepActive = 1;
 				})
 				.catch(err => {
 					uni.showToast({
@@ -443,8 +470,9 @@ export default {
 	color: #464e52;
 	padding: 20upx 30upx 20upx 50upx;
 	position: relative;
-	background-color: rgb(248, 249, 253);
+	// background-color: rgb(248, 249, 253);
 	border-bottom: 1px #f5f5f5 solid;
+	background-color: #e5e9f6;
 	&:after {
 		content: '';
 		position: absolute;

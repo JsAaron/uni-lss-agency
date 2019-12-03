@@ -205,9 +205,10 @@ export default {
 		navToDetails(index) {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
 			let data = tabItem.newsList[index];
-
 			if (data.pass == '0' || data.pass == '2') {
 				util.gotoPage(`/pages/product/details/index?agentid=${data.agentid}`);
+			} else {
+				util.gotoPage(`/pages/product/type-in?agentid=${data.agentid}`);
 			}
 		},
 
