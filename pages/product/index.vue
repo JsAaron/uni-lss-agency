@@ -205,7 +205,10 @@ export default {
 		navToDetails(index) {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
 			let data = tabItem.newsList[index];
-			util.gotoPage(`/pages/product/details/index?data=${JSON.stringify(data)}`);
+
+			if (data.pass == '0' || data.pass == '2') {
+				util.gotoPage(`/pages/product/details/index?agentid=${data.agentid}`);
+			}
 		},
 
 		//设置scroll-view是否允许滚动，在小程序里下拉刷新时避免列表可以滑动

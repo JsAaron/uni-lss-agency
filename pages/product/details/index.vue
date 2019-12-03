@@ -16,12 +16,12 @@
 
 		<swiper id="swiper" class="swiper-box" :duration="300" :current="tabCurrentIndex" @change="changeTab">
 			<swiper-item v-for="(item, index) in tabBars" :key="index">
-				<scroll-view class="panel-scroll-box" scroll-y="true" >
-					<child1 :agentid="agentid" v-if="index == 0"></child1>
-					<child2 :agentid="agentid" v-if="index == 1"></child2>
-					<child3 v-if="index == 2"></child3>
-					<child4 v-if="index == 3"></child4>
-					<child5 v-if="index == 4"></child5>
+				<scroll-view class="panel-scroll-box" scroll-y="true">
+					<child1 :agentData="agentData" v-if="index == 0"></child1>
+					<child2 :agentData="agentData" v-if="index == 1"></child2>
+					<child3 :agentData="agentData" v-if="index == 2"></child3>
+					<child4 :agentData="agentData" v-if="index == 3"></child4>
+					<child5 :agentData="agentData" v-if="index == 4"></child5>
 				</scroll-view>
 			</swiper-item>
 		</swiper>
@@ -31,7 +31,7 @@
 <script>
 import * as util from '@/utils';
 import uniIcon from '@/components/uni-icon/uni-icon';
-import { getAgentPagedList } from '@/api/agent';
+import { getAgentPagedList, getPerfectAgent } from '@/api/agent';
 import mixPulldownRefresh from '@/components/mix-pulldown-refresh/mix-pulldown-refresh';
 import mixLoadMore from '@/components/mix-load-more/mix-load-more';
 import child1 from './child1';
@@ -76,6 +76,7 @@ export default {
 	data() {
 		return {
 			agentid: '',
+			agentData: {},
 			tabCurrentIndex: 0, //当前选项卡索引
 			scrollLeft: 0, //顶部选项卡左滑距离
 			enableScroll: true,
@@ -83,115 +84,7 @@ export default {
 		};
 	},
 	onLoad(options) {
-		let data = {
-			appid: '',
-			city: '',
-			mch_id: '',
-			fws_type: '',
-			sinaOpenId: '',
-			is_sole: '',
-			businessid_two: '',
-			agentchanneltype: 1,
-			roleId: '',
-			gm_wx_agentid: '',
-			three_type_name: '图书音像/文具乐器',
-			agent_shop: '',
-			prize_pz_id: '',
-			municipal_agent: '',
-			tjagentid: '70800072265474',
-			sumAmt: 0,
-			sub_mch_id: '',
-			join_time: '',
-			qy_agent: '',
-			agenttype: 0,
-			latitude: '',
-			xt_id: '5f88e268-aa9a-47d7-bd76-6e31da8694f3',
-			accPasswd: '',
-			freezeAmt: 0,
-			user_level: '',
-			shop_tel: '',
-			type_agentid: '',
-			tradingareaid: '',
-			agent_face: '',
-			face_device: '',
-			is_signing: '',
-			one_type_name: '个体工商户',
-			lastLoginTime: null,
-			create_times: '2019-12-02 14:35:16',
-			qqOpenId: '',
-			contractendate: '2020-12-24',
-			areaid: '',
-			idcards_back: '',
-			identitynum: '',
-			type_id: 0,
-			businessid: '',
-			three_type: '35',
-			is_fws: '',
-			usertypeId: 0,
-			accessIp: '',
-			prov_cd: '430000',
-			mobileNo: '13787166275',
-			contractno: '',
-			areaname: '',
-			two_type_name: '线下零售',
-			roleName: '',
-			type: '',
-			password: '',
-			agentlogo: '',
-			pay_type: '',
-			wx_appid: '',
-			userId: 4184,
-			avatarUrl: '',
-			idcards_hand: '',
-			province: '',
-			userName: 'Derek文具店',
-			actUrl: '',
-			compaddress: '岳麓区新民路403号',
-			longitude: '',
-			openid: '',
-			headimgurl: '',
-			lm_agent: '',
-			one_type: '1',
-			isfact: 0,
-			userCode: '13787166274',
-			isAdd: '0',
-			iszt: '',
-			agentid: '70800072265475',
-			salesman: '',
-			industry_license: '',
-			business_number: '',
-			email: '1773219087@qq.com',
-			open_payment: '',
-			legal: '黎康',
-			desc_content: '',
-			provincial_agent: '',
-			sex: 0,
-			zmImage: '',
-			dl_type: '4',
-			fws_agentid: '',
-			is_signingimg: '',
-			gm_wx_appid: '',
-			contractstdate: '2019-12-31',
-			app_auth_token: '',
-			cashing: 0,
-			packType: 0,
-			qrcodeid: '',
-			agentname: 'Derek文具店',
-			qq_amt: 0,
-			real_shop: '',
-			two_type: '6',
-			pass: '0',
-			pagentid: '易惠易购',
-			wx_key: '',
-			faceid: '',
-			cityname: '',
-			parts_no: '',
-			idcards_front: '',
-			disabled: 0,
-			passName: '已签约'
-		};
-		this.options = data;
-		this.agentid = this.options.agentid;
+		this.agentid = options.agentid;
 		this.initTabbars();
 	},
 	computed: {},
@@ -208,9 +101,18 @@ export default {
 				item.loadMoreStatus = 0; //加载更多 0加载前，1加载中，2没有更多了
 			});
 			this.tabBars = tabList;
+			this.getTableData()
 		},
 
-		//================================
+		getTableData() {
+			getPerfectAgent({
+				agentid: this.agentid
+			}).then(data => {
+				if (data != null && data != '') {
+					this.agentData = data;
+				}
+			});
+		},
 
 		//tab切换
 		async changeTab(e) {
@@ -334,7 +236,7 @@ page,
 }
 
 .panel-scroll-box {
-	height:100%;
+	height: 100%;
 }
 
 .content {

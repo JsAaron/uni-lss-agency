@@ -123,28 +123,12 @@ import { getPerfectAgent } from '@/api/agent';
 export default {
 	components: {},
 	props: {
-		agentid: String
+		agentData: Object
 	},
 	data() {
 		return {
-			imgUrl: 'https://img.facess.net/',
-			agentData: {}
+			imgUrl: 'https://img.facess.net/'
 		};
-	},
-	mounted() {
-		this.getTableData();
-	},
-
-	methods: {
-		getTableData() {
-			getPerfectAgent({
-				agentid: this.agentid
-			}).then(data => {
-				if (data != null && data != '') {
-					this.agentData = data;
-				}
-			});
-		}
 	}
 };
 </script>
