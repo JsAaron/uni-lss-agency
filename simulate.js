@@ -8,12 +8,13 @@
 function simulate() {
 
 	const pages = {
-		"product":"/pages/product/index",
-		"center":"/pages/center/index",
-		"agency":"/pages/agency/index",
-		"add-business":"/pages/agency/add-business"
+		"product": "/pages/product/index",
+		"product-details": "/pages/product/details/index",
+		"center": "/pages/center/index",
+		"agency": "/pages/agency/index",
+		"add-business": "/pages/agency/add-business"
 	}
-	return pages["product"]
+	return pages["product-details"]
 	// return pages["center"]
 	// return pages["add-business"]
 	// return pages["agency"]

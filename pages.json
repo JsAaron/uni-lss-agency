@@ -99,6 +99,12 @@
 			"style": {
 				"navigationBarTitleText": "进件"
 			}
+		},
+		{
+			"path": "pages/product/details/index",
+			"style": {
+				"navigationBarTitleText": "进件详情"
+			}
 		}
 	],
 	"globalStyle": {
