@@ -16,12 +16,25 @@
 
 		<block v-if="stepActive == 0">
 			<view class="type-title">联系信息</view>
-			<QSInput :name="formName0" variableName="legal" title="联系人姓名" required v-model="fromValue0.legal"></QSInput>
-			<QSInput :name="formName0" variableName="mobileNo" required verifyType="Tel" inputType="number" leftIcon="phone" title="手机号码" v-model="fromValue0.mobileNo"></QSInput>
-			<QSInput :name="formName0" variableName="email" required title="常用邮箱" verifyType="Email" v-model="fromValue0.email"></QSInput>
+			<QSInput ref="inputlegal" :name="formName0" variableName="legal" title="联系人姓名" required v-model="fromValue0.legal"></QSInput>
+			<QSInput ref="inputmobileNo" :name="formName0" variableName="mobileNo" required verifyType="Tel" inputType="number" title="手机号码" v-model="fromValue0.mobileNo"></QSInput>
+			<QSInput ref="inputemail" :name="formName0" variableName="email" required title="常用邮箱" verifyType="Email" v-model="fromValue0.email"></QSInput>
+
 			<view class="type-title">经营信息</view>
-			<QSInput :name="formName0" variableName="shortername" required title="商户简称" v-model="fromValue0.shortername"></QSInput>
-			<QSPickerCustom :name="formName0" ref="pickerCustom3" required variableName="custom_2" title="经营类别" :steps="steps2" linkage linkageNum="3" pickerTitle="picker-custom" />
+			<QSInput ref="inputshortername" :name="formName0" variableName="shortername" required title="商户简称" v-model="fromValue0.shortername"></QSInput>
+		
+			<QSPickerCustom2
+				ref="pickerType1"
+				:steps="steps"
+				:name="formName0"
+				@change="onPickerType1"
+				required
+				variableName="pickerType1"
+				v-model="fromValue0.picker1"
+				title="一级经营类型"
+			/>
+			<QSPickerCustom2 ref="pickerType2" :steps="steps" :name="formName0" @change="onPickerType2" required variableName="pickerType2" title="二级经营类型" />
+			<QSPickerCustom2 ref="pickerType3" :steps="steps" :name="formName0" @change="onPickerType3" required variableName="pickerType3" title="三级经营类型" />
 			<QSInput :name="formName0" variableName="idcard" required inputType="idcard" layout="row" titleLayout="left" title="商户名称" v-model="form0.idcard"></QSInput>
 			<QSInput :name="formName0" variableName="idcard" required inputType="idcard" layout="row" titleLayout="left" title="注册地址" v-model="form0.idcard"></QSInput>
 			<QSCheckbox :name="formName0" required variableName="checkbox" layout="column" title="售卖商品场景" v-model="form.checkbox" :itemArray="checkbox_itemArray"></QSCheckbox>
@@ -73,26 +86,19 @@ export default {
 			shopOptions: {},
 			checkbox_itemArray: [
 				{
-					name: '线下',
-					value: '哈利波特',
-					color: '#f5105c'
+					name: '线下'
 				},
 				{
-					name: '公众号',
-					value: '魔戒',
-					color: '#888'
+					name: '公众号'
 				},
 				{
-					name: '小程序',
-					value: '玩具总动员'
+					name: '小程序'
 				},
 				{
-					name: '网站',
-					value: '硬核亨利'
+					name: '网站'
 				},
 				{
-					name: 'APP',
-					value: '硬核亨利'
+					name: 'APP'
 				}
 			],
 
@@ -118,13 +124,11 @@ export default {
 				legal: '',
 				mobileNo: '',
 				email: '',
-				shortername: ''
+				shortername: '',
+				picker1: ''
 			},
-			steps2: {
-				step_1_value: 'value_1',
-				step_2_value: 'value_2',
-				step_2_item: 'item_2',
-				step_3_item: 'item_3'
+			steps: {
+				step_1_value: 'name'
 			},
 
 			form0: {
@@ -156,11 +160,124 @@ export default {
 			}
 		};
 	},
-	props: {},
 
-	onLoad() {
+	onLoad(options) {
+		let data = {
+			appid: '',
+			city: '430200',
+			mch_id: '',
+			fws_type: '',
+			sinaOpenId: '',
+			is_sole: '',
+			businessid_two: '',
+			agentchanneltype: 1,
+			roleId: '',
+			gm_wx_agentid: '',
+			three_type_name: '其他行业',
+			agent_shop: '',
+			prize_pz_id: '',
+			municipal_agent: '',
+			tjagentid: '70800072265439',
+			sumAmt: 0,
+			sub_mch_id: '',
+			join_time: '',
+			qy_agent: '',
+			agenttype: 0,
+			latitude: '',
+			xt_id: '',
+			accPasswd: '',
+			freezeAmt: 0,
+			user_level: '',
+			shop_tel: '',
+			type_agentid: '',
+			tradingareaid: '',
+			agent_face: '',
+			face_device: '',
+			is_signing: '',
+			one_type_name: '个体工商户',
+			lastLoginTime: null,
+			create_times: '2019-11-25 13:58:42',
+			qqOpenId: '',
+			contractendate: '2021-03-31',
+			areaid: '430203',
+			idcards_back: '',
+			identitynum: '',
+			type_id: 0,
+			businessid: '',
+			three_type: '72',
+			is_fws: '',
+			usertypeId: 0,
+			accessIp: '',
+			prov_cd: '430000',
+			mobileNo: '13997412928',
+			contractno: '',
+			areaname: '',
+			two_type_name: '其他',
+			roleName: '',
+			type: '',
+			password: '',
+			agentlogo: '',
+			pay_type: '',
+			wx_appid: '',
+			userId: 4149,
+			avatarUrl: '',
+			idcards_hand: '',
+			province: '',
+			userName: '凌轩服饰有限公司',
+			actUrl: '',
+			compaddress: '新天地服装大市场',
+			longitude: '',
+			openid: '',
+			headimgurl: '',
+			lm_agent: '',
+			one_type: '1',
+			isfact: 0,
+			userCode: '13997412928',
+			isAdd: '0',
+			iszt: '',
+			agentid: '70800072265440',
+			salesman: '',
+			industry_license: '',
+			business_number: '',
+			email: '',
+			open_payment: '',
+			legal: '颜金雨',
+			desc_content: '',
+			provincial_agent: '',
+			sex: 0,
+			zmImage: '',
+			dl_type: '4',
+			fws_agentid: '',
+			is_signingimg: '',
+			gm_wx_appid: '',
+			contractstdate: '2019-11-25',
+			app_auth_token: '',
+			cashing: 0,
+			packType: 0,
+			qrcodeid: '',
+			agentname: '凌轩服饰有限公司',
+			qq_amt: 0,
+			real_shop: '',
+			two_type: '15',
+			pass: '3',
+			pagentid: '王小亮',
+			wx_key: '',
+			faceid: '',
+			cityname: '',
+			parts_no: '',
+			idcards_front: '',
+			disabled: 0,
+			passName: '未开通'
+		};
+		this.options = data;
+	},
+
+	onReady() {
 		this.setPickerData();
-		this.setShopsType();
+		this.setIntputValueFc('inputlegal', this.options.legal);
+		this.setIntputValueFc('inputmobileNo', this.options.mobileNo);
+		this.setIntputValueFc('inputemail', this.options.email);
+		this.setIntputValueFc('inputshortername', this.options.shortername);
 	},
 
 	computed: {
@@ -173,53 +290,35 @@ export default {
 		}
 	},
 	methods: {
-		setShopsType() {
-			getShopsType().then(data => {
-				this.shopOptions = data;
-			});
+		onPickerType1(data) {
+			console.log(data);
 		},
 
-		setPickerData() {
-			const data3 = [
-				{
-					value_1: '浙江', //value_1变量名需与下方steps.step_1_value相同
-					item_2: [
-						{
-							//item_2变量名需与下方steps.step_2_item相同
-							value_2: '金华', //value_2变量名需与下方steps.step_2_value相同
-							/*
-						可添加多项自定义想要的数据
-						*/
-							item_3: ['婺城区'] //item_3变量名需与下方steps.step_3_item相同
-						},
-						{
-							value_2: '绍兴',
-							item_3: ['越城区']
-						}
-					]
-				},
-				{
-					value_1: '江苏',
-					item_2: [
-						{
-							value_2: '南京',
-							item_3: ['玄武区']
-						},
-						{
-							value_2: '无锡',
-							item_3: ['锡山区']
-						}
-					]
-				}
-			];
-
-			this.setPickerDataFc('pickerCustom3', data3);
+		setIntputValueFc(name, data) {
+			this.$refs[name].setValue(data);
 		},
 
 		setPickerDataFc(name, data) {
 			this.$refs[name].setData(data);
 		},
 
+		setPickerData() {
+			getShopsType().then(data => {
+				this.shopOptions = data;
+				let shopNames = [];
+				data.map(item => {
+					if (item.typeid == this.options.one_type) {
+				
+					}
+					shopNames.push({
+						name: item.typename,
+						value: item.typeid
+					});
+				});
+				this.setPickerDataFc('pickerType1', [shopNames]);
+			});
+		},
+ 
 		/**
 		 * 返回
 		 */

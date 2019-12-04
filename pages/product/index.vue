@@ -190,7 +190,7 @@ export default {
 			if (data.pass == '0' || data.pass == '2') {
 				util.gotoPage(`/pages/product/details/index?agentid=${data.agentid}`);
 			} else {
-				util.gotoPage(`/pages/product/type-in?agentid=${data.agentid}`);
+				util.gotoPage(`/pages/product/type-in?data=${JSON.stringify(data)}`);
 			}
 		},
 
