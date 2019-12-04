@@ -25,3 +25,11 @@ export function getShopsType(data) {
 	})
 }
 
+
+export function getStatisticsHomedl(data) {
+	return request({
+		url: '/moblieapp/getStatisticsHomedl',
+		method: 'post',
+		params: data
+	})
+}

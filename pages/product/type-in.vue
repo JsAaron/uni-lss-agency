@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="container">
 		<uni-nav-bar
 			left-icon="arrowleft"
 			fixed
@@ -16,238 +16,46 @@
 
 		<block v-if="stepActive == 0">
 			<view class="type-title">联系信息</view>
-
 			<QSInput :name="formName0" variableName="legal" title="联系人姓名" required v-model="fromValue0.legal"></QSInput>
-
-			<QSInput
-				:name="formName0"
-				variableName="mobileNo"
-				required
-				verifyType="Tel"
-				inputType="number"
-				leftIcon="phone"
-				title="手机号码"
-				v-model="fromValue0.mobileNo"
-			></QSInput>
-
-			<QSInput
-				:name="formName0"
-				variableName="email"
-				required
-				title="常用邮箱"
-				verifyType="Email"
-				v-model="fromValue0.email"
-			></QSInput>
-
+			<QSInput :name="formName0" variableName="mobileNo" required verifyType="Tel" inputType="number" leftIcon="phone" title="手机号码" v-model="fromValue0.mobileNo"></QSInput>
+			<QSInput :name="formName0" variableName="email" required title="常用邮箱" verifyType="Email" v-model="fromValue0.email"></QSInput>
 			<view class="type-title">经营信息</view>
-
-			<QSInput
-				:name="formName0"
-				variableName="shortername"
-				required
-				title="商户简称"
-				v-model="fromValue0.shortername"
-			></QSInput>
-
-			<QSPickerCustom
-				ref="pickerCustom3"
-				:name="formName0"
-				required
-				variableName="custom_2"
-				title="经营类别"
-				:steps="steps2"
-				linkage
-				linkageNum="3"
-				pickerTitle="picker-custom"
-			/>
-
-			<QSInput
-				:name="formName0"
-				variableName="idcard"
-				required
-				inputType="idcard"
-				layout="row"
-				titleLayout="left"
-				title="商户名称"
-				v-model="form0.idcard"
-			></QSInput>
-
-			<QSInput
-				:name="formName0"
-				variableName="idcard"
-				required
-				inputType="idcard"
-				layout="row"
-				titleLayout="left"
-				title="注册地址"
-				v-model="form0.idcard"
-			></QSInput>
-
-			<QSCheckbox
-				:name="formName0"
-				required
-				variableName="checkbox"
-				layout="column"
-				title="售卖商品场景"
-				v-model="form.checkbox"
-				:itemArray="checkbox_itemArray"
-			></QSCheckbox>
-
-			<QSInput
-				:name="formName0"
-				variableName="idcard"
-				required
-				inputType="idcard"
-				layout="row"
-				titleLayout="left"
-				title="客服电话"
-				v-model="form0.idcard"
-			></QSInput>
-
+			<QSInput :name="formName0" variableName="shortername" required title="商户简称" v-model="fromValue0.shortername"></QSInput>
+			<QSPickerCustom :name="formName0" ref="pickerCustom3" required variableName="custom_2" title="经营类别" :steps="steps2" linkage linkageNum="3" pickerTitle="picker-custom" />
+			<QSInput :name="formName0" variableName="idcard" required inputType="idcard" layout="row" titleLayout="left" title="商户名称" v-model="form0.idcard"></QSInput>
+			<QSInput :name="formName0" variableName="idcard" required inputType="idcard" layout="row" titleLayout="left" title="注册地址" v-model="form0.idcard"></QSInput>
+			<QSCheckbox :name="formName0" required variableName="checkbox" layout="column" title="售卖商品场景" v-model="form.checkbox" :itemArray="checkbox_itemArray"></QSCheckbox>
+			<QSInput :name="formName0" variableName="idcard" required inputType="idcard" layout="row" titleLayout="left" title="客服电话" v-model="form0.idcard"></QSInput>
 			<QSPics :name="formName0" required variableName="pic_shops" title="特殊资质" v-model="form0.pic_shops"></QSPics>
-
 			<QSPics :name="formName0" required variableName="pic_shops" title="补充材料" v-model="form0.pic_shops"></QSPics>
-
-			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep0">
-				下一步
-			</QSWavesButton>
+			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep0">下一步</QSWavesButton>
 		</block>
 
 		<block v-if="stepActive == 1">
-			<QSPics
-				:name="formName1"
-				required
-				layout="column"
-				variableName="pic"
-				title="请上传经营者银行卡"
-				v-model="form1.pic"
-			></QSPics>
-
-			<QSPickerCustom
-				:name="formName1"
-				required
-				layout="row"
-				titleLayout="left"
-				variableName="pickerType"
-				title="开户总行银行"
-			/>
-
-			<QSInput
-				:name="formName1"
-				required
-				variableName="name"
-				title="开户名称"
-				layout="row"
-				titleLayout="left"
-				v-model="form1.name"
-			></QSInput>
-
-			<QSInput
-				:name="formName1"
-				required
-				variableName="account"
-				title="开户账号"
-				layout="row"
-				titleLayout="left"
-				v-model="form1.account"
-			></QSInput>
-
-			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep1">
-				下一步
-			</QSWavesButton>
+			<QSPics :name="formName1" required layout="column" variableName="pic" title="请上传经营者银行卡" v-model="form1.pic"></QSPics>
+			<QSPickerCustom :name="formName1" required layout="row" titleLayout="left" variableName="pickerType" title="开户总行银行" />
+			<QSInput :name="formName1" required variableName="name" title="开户名称" layout="row" titleLayout="left" v-model="form1.name"></QSInput>
+			<QSInput :name="formName1" required variableName="account" title="开户账号" layout="row" titleLayout="left" v-model="form1.account"></QSInput>
+			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep1">下一步</QSWavesButton>
 		</block>
 
 		<block v-if="stepActive == 2">
-			<QSPics
-				:name="formName2"
-				required
-				layout="column"
-				variableName="pic"
-				title="请上传店门头照片"
-				v-model="form2.pic"
-			></QSPics>
-
-			<QSPics
-				:name="formName2"
-				required
-				layout="column"
-				variableName="pic"
-				title="请上传店内环境照片"
-				v-model="form2.pic"
-			></QSPics>
-
+			<QSPics :name="formName2" required layout="column" variableName="pic" title="请上传店门头照片" v-model="form2.pic"></QSPics>
+			<QSPics :name="formName2" required layout="column" variableName="pic" title="请上传店内环境照片" v-model="form2.pic"></QSPics>
 			<QSPickerCity :name="formName2" variableName="city" title="经营省市区" :value="form2.city" placherhold="请选择" />
-
-			<QSInput
-				:name="formName2"
-				required
-				variableName="registrAddress"
-				title="经营地址"
-				layout="row"
-				titleLayout="left"
-				v-model="form2.registrAddress"
-			></QSInput>
-
-			<QSInput
-				:name="formName2"
-				required
-				variableName="registrAddress"
-				title="联系人"
-				layout="row"
-				titleLayout="left"
-				v-model="form2.registrAddress"
-			></QSInput>
-
-			<QSInput
-				:name="formName2"
-				required
-				variableName="registrAddress"
-				title="手机号码"
-				layout="row"
-				titleLayout="left"
-				v-model="form2.registrAddress"
-			></QSInput>
-
-			<QSInput
-				:name="formName2"
-				required
-				variableName="registrAddress"
-				title="常用邮箱"
-				layout="row"
-				titleLayout="left"
-				v-model="form2.registrAddress"
-			></QSInput>
-
-			<QSInput
-				:name="formName2"
-				required
-				variableName="registrAddress"
-				title="客服电话"
-				layout="row"
-				titleLayout="left"
-				v-model="form2.registrAddress"
-			></QSInput>
-
-			<QSInput
-				:name="formName2"
-				required
-				variableName="registrAddress"
-				title="用户简称"
-				layout="row"
-				titleLayout="left"
-				v-model="form2.registrAddress"
-			></QSInput>
-
-			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep1">
-				提交注册
-			</QSWavesButton>
+			<QSInput :name="formName2" required variableName="registrAddress" title="经营地址" layout="row" titleLayout="left" v-model="form2.registrAddress"></QSInput>
+			<QSInput :name="formName2" required variableName="registrAddress" title="联系人" layout="row" titleLayout="left" v-model="form2.registrAddress"></QSInput>
+			<QSInput :name="formName2" required variableName="registrAddress" title="手机号码" layout="row" titleLayout="left" v-model="form2.registrAddress"></QSInput>
+			<QSInput :name="formName2" required variableName="registrAddress" title="常用邮箱" layout="row" titleLayout="left" v-model="form2.registrAddress"></QSInput>
+			<QSInput :name="formName2" required variableName="registrAddress" title="客服电话" layout="row" titleLayout="left" v-model="form2.registrAddress"></QSInput>
+			<QSInput :name="formName2" required variableName="registrAddress" title="用户简称" layout="row" titleLayout="left" v-model="form2.registrAddress"></QSInput>
+			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep1">提交注册</QSWavesButton>
 		</block>
 	</view>
 </template>
 
 <script>
-import * as util from '@/utils';
-import { $$set, $$get } from '@/common/global';
+import { gotoPage } from '@/utils';
 import QSApp from '@/components/QS-inputs-split/js/app.js';
 import uniSteps from '@/components/uni-steps/uni-steps.vue';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
@@ -352,7 +160,7 @@ export default {
 
 	onLoad() {
 		this.setPickerData();
-		this.setShopsType()
+		this.setShopsType();
 	},
 
 	computed: {
@@ -365,12 +173,12 @@ export default {
 		}
 	},
 	methods: {
-		setShopsType(){
+		setShopsType() {
 			getShopsType().then(data => {
 				this.shopOptions = data;
 			});
 		},
-		
+
 		setPickerData() {
 			const data3 = [
 				{
@@ -416,7 +224,7 @@ export default {
 		 * 返回
 		 */
 		onBack() {
-			util.gotoPage('back');
+			gotoPage('back');
 		},
 
 		/**
@@ -458,6 +266,12 @@ export default {
 </script>
 
 <style lang="scss">
+page,
+.container {
+	background-color: #fff;
+	height: 100%;
+}
+
 .type-steps {
 	padding: 20rpx;
 }

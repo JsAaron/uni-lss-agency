@@ -9,12 +9,12 @@
 		<view class="header__data">
 			<view class="header__row">
 				<view class="header__col">
-					<view><text>¥1399.49</text></view>
+					<view><text>¥{{order_amt}}</text></view>
 					<view>总交易额</view>
 				</view>
 				<view class="header__col">
-					<view>1</view>
-					<view>二级代理商总数</view>
+					<view>{{one_agent_num}}</view>
+					<view>一级代理商总数</view>
 				</view>
 			</view>
 			<view class="header__row">
@@ -23,18 +23,18 @@
 					<view>佣金总额</view>
 				</view>
 				<view class="header__col">
-					<view>3</view>
-					<view>三级代理商总数</view>
+					<view>{{two_agent_num}}</view>
+					<view>二级代理商总数</view>
 				</view>
 			</view>
 			<view class="header__row">
 				<view class="header__col">
-					<view>113</view>
+					<view>{{agent_num}}</view>
 					<view>商户总数</view>
 				</view>
 				<view class="header__col">
-					<view>2016</view>
-					<view>总交易笔数</view>
+					<view>{{three_agent_num}}</view>
+					<view>三级代理商总数</view>
 				</view>
 			</view>
 		</view>
@@ -42,26 +42,36 @@
 </template>
 
 <script>
+import * as util from '@/utils';
+import { getStatisticsHomedl } from '@/api/agent';
 export default {
 	components: {},
 	data() {
-		return {};
+		return {
+			one_agent_num:"",
+			two_agent_num:"",
+			three_agent_num:"",
+			agent_num:"",
+			order_amt:"",
+		};
 	},
-	props: {
-		list: {
-			type: Array,
-			default: () => {
-				return [];
-			}
-		}
-	},
-	computed: {
-		list_() {
-			return this.list;
-		}
+	mounted() {
+		this.getTableData();
 	},
 	methods: {
-		onClick(e) {}
+		getTableData() {
+			getStatisticsHomedl({
+				agentid: util.cookies.get('agentid')
+			}).then(data => {
+				if (data != null && data != '') {
+					this.one_agent_num = data.one_agent_num;
+					this.two_agent_num = data.two_agent_num;
+					this.three_agent_num = data.three_agent_num;
+					this.agent_num = data.agent_num;
+					this.order_amt = data.order_amt;
+				}
+			});
+		}
 	}
 };
 </script>

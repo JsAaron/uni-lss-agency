@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+		
 		<m-header></m-header>
 
 		<view class="content">
@@ -10,9 +11,7 @@
 		</view>
 
 		<view class="qiun-columns">
-			<view class="qiun-charts">
-				<canvas canvas-id="canvasRing" id="canvasRing" class="charts"></canvas>
-			</view>
+			<view class="qiun-charts"><canvas canvas-id="canvasRing" id="canvasRing" class="charts"></canvas></view>
 		</view>
 
 		<view class="qiun-bottom">
@@ -20,7 +19,7 @@
 				<block v-for="(item, index) in serieNames" :key="index">
 					<view class="qiun-row">
 						<text class="qiun-dot"></text>
-						<text>{{item.name}}:{{item.data}}%</text>
+						<text>{{ item.name }}:{{ item.data }}%</text>
 					</view>
 				</block>
 			</view>
@@ -29,7 +28,9 @@
 </template>
 
 <script>
+import * as util from '@/utils';
 import { mapState, mapActions } from 'vuex';
+import { getStatisticsHomedl } from '@/api/agent';
 import mHeader from './header.vue';
 import uCharts from '@/components/u-charts/u-charts.js';
 var _self;
@@ -211,14 +212,14 @@ export default {
 	font-size: 12px;
 }
 
-.qiun-names{
+.qiun-names {
 	@include flex-h-left;
 	flex-wrap: wrap;
 }
 .qiun-row {
 	@include flex-h;
 	width: 25%;
-	padding:10rpx 0;
+	padding: 10rpx 0;
 }
 .qiun-dot {
 	width: 20rpx;

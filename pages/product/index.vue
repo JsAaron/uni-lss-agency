@@ -2,36 +2,18 @@
 	<view class="container">
 		<!-- 顶部选项卡 -->
 		<scroll-view id="nav-bar" class="nav-bar" scroll-x scroll-with-animation :scroll-left="scrollLeft">
-			<view
-				v-for="(item, index) in tabBars"
-				:key="item.id"
-				class="nav-item"
-				:class="{ current: index === tabCurrentIndex }"
-				:id="'tab' + index"
-				@click="changeTab(index)"
-			>
+			<view v-for="(item, index) in tabBars" :key="item.id" class="nav-item" :class="{ current: index === tabCurrentIndex }" :id="'tab' + index" @click="changeTab(index)">
 				{{ item.name }}
 			</view>
 		</scroll-view>
 
 		<!-- 下拉刷新组件 -->
-		<mix-pulldown-refresh
-			ref="mixPulldownRefresh"
-			class="panel-content"
-			:top="90"
-			@refresh="onPulldownReresh"
-			@setEnableScroll="setEnableScroll"
-		>
+		<mix-pulldown-refresh ref="mixPulldownRefresh" class="panel-content" :top="90" @refresh="onPulldownReresh" @setEnableScroll="setEnableScroll">
 			<!-- 内容部分 -->
 			<swiper id="swiper" class="swiper-box" :duration="300" :current="tabCurrentIndex" @change="changeTab">
 				<swiper-item v-for="tabItem in tabBars" :key="tabItem.id">
 					<scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadMore">
-						<view
-							v-for="(item, index) in tabItem.newsList"
-							:key="index"
-							class="content__row lss-hairline--bottom"
-							@click="navToDetails(index)"
-						>
+						<view v-for="(item, index) in tabItem.newsList" :key="index" class="content__row lss-hairline--bottom" @click="navToDetails(index)">
 							<view class="content__left">
 								<view class="content__name">{{ item.agentname }}</view>
 								<view class="content__code">{{ item.userCode }}</view>
