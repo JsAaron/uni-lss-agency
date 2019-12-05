@@ -187,7 +187,6 @@
 				variableName="contractstdate"
 				ref="ref_contractstdate"
 				title="营业期限开始"
-				:value="fromValue1.contractstdateDefault"
 				v-model="fromValue1.contractstdate"
 				placherhold="请选择"
 			/>
@@ -258,7 +257,6 @@
 				variableName="holder_type"
 				ref="ref_holder_type"
 				required
-				:steps="fromValue1.steps"
 				v-model="fromValue1.holder_type"
 				title="证件持有人类型"
 			/>
@@ -277,7 +275,6 @@
 				variableName="document_type"
 				ref="ref_document_type"
 				required
-				:steps="fromValue1.steps"
 				v-model="fromValue1.document_type"
 				title="证件类型"
 			/>
@@ -294,8 +291,8 @@
 			<QSPickerDate
 				:name="formName1"
 				variableName="identification_start"
+				ref="ref_identification_start"
 				title="证件有效期开始"
-				:value="dateValue"
 				v-model="fromValue1.identification_start"
 				placherhold="请选择"
 			/>
@@ -303,8 +300,8 @@
 			<QSPickerDate
 				:name="formName1"
 				variableName="identification_end"
+				ref="ref_identification_end"
 				title="证件有效期结束"
-				:value="dateValue"
 				v-model="fromValue1.identification_end"
 				placherhold="请选择"
 			/>
@@ -333,10 +330,18 @@
 				:name="formName1"
 				variableName="electronic_invoice"
 				title="是否开通电子发票"
+				ref="ref_electronic_invoice"
 				required
 				v-model="fromValue1.electronic_invoice"
-				:itemArray="electronic_invoice_itemArray"
+				:itemArray="fromValue1.electronic_invoice_itemArray"
 			></QSRadio>
+			
+			<WButton
+				text="下一步"
+				:rotate="fromValue1.isRotate"
+				@click.native="getStep1()"
+				bgColor="rgb(47, 133, 252)"
+			></WButton>
 		</block>
 
 		<block v-if="stepActive == 2"></block>
@@ -431,10 +436,10 @@ export default {
 			// ============ 商户信息 ==============
 			formName1: 'step1',
 			fromValue1: {
+				isRotate: false,
 				business_number: '',
 				business_scope: '',
 				contractstdate: '',
-				contractstdateDefault: '',
 				contractendate: '',
 				business_img: [{ required: true, path: '' }],
 				business_license: '',
@@ -453,17 +458,17 @@ export default {
 				identification_number: '',
 				identification_start: '',
 				identification_end: '',
-				idcards_front: '',
-				idcards_back: '',
+				idcards_front: [{ required: true, path: '' }],
+				idcards_back: [{ required: true, path: '' }],
 				electronic_invoice: '',
 				electronic_invoice_itemArray: [
 					{
-						name: '男',
-						value: '男'
+						name: '是',
+						value: '是'
 					},
 					{
-						name: '女',
-						value: '女'
+						name: '否',
+						value: '否'
 					}
 				]
 			}
@@ -536,6 +541,36 @@ export default {
 			this.setIntputValueFc('ref_business_number', data.business_number);
 			this.setIntputValueFc('ref_business_scope', data.business_scope);
 			this.setIntputValueFc('ref_business_license', data.business_license);
+			this.setIntputValueFc('ref_holder_name', data.holder_name);
+			this.setIntputValueFc('ref_identification_number', data.identification_number);
+
+			this.setInputDataFc('ref_holder_type', [['法人', '经办人']]);
+			this.$refs['ref_holder_type'].confirm({
+				data: [data.holder_type]
+			});
+
+			this.setInputDataFc('ref_document_type', [['身份证', '护照']]);
+			this.$refs['ref_document_type'].confirm({
+				data: [data.document_type]
+			});
+
+			if (data.identification_start) {
+				this.$refs['ref_identification_start'].confirm({
+					data: [data.identification_start]
+				});
+			}
+
+			if (data.identification_start) {
+				this.$refs['ref_identification_end'].confirm({
+					data: [data.identification_end]
+				});
+			}
+
+			if (data.contractendate) {
+				this.$refs['ref_contractendate'].confirm({
+					data: [data.contractendate]
+				});
+			}
 
 			if (data.contractstdate) {
 				this.$refs['ref_contractstdate'].confirm({
@@ -553,6 +588,20 @@ export default {
 					{ required: true, path: 'https://img.facess.net/' + data.business_img }
 				]);
 			}
+
+			if (data.idcards_front != null && data.idcards_front != '') {
+				this.setInputDataFc('ref_idcards_front', [
+					{ required: true, path: 'https://img.facess.net/' + data.idcards_front }
+				]);
+			}
+
+			if (data.idcards_back != null && data.idcards_back != '') {
+				this.setInputDataFc('ref_idcards_back', [
+					{ required: true, path: 'https://img.facess.net/' + data.idcards_back }
+				]);
+			}
+
+			this.fromValue1.electronic_invoice = data.electronic_invoice
 		},
 
 		//==================== 商户信息 ====================
@@ -816,6 +865,26 @@ export default {
 				});
 		},
 
+
+		/**
+		 * 注册第二步
+		 */
+		getStep1() {
+			QSApp.getForm(this.formName1)
+				.then(res => {
+					console.log(res)
+					if (res.verifyErr.length > 0) {
+						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
+						return;
+					}
+					// this.saveRequest1(res.data);
+				})
+				.catch(err => {
+					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
+				});
+		},
+
+
 		/**
 		 * 获取上传图片的url
 		 */
@@ -864,10 +933,10 @@ export default {
 
 		/**
 		 * 注册第二步
-		 */
-		getStep1() {
-			this.stepActive = 2;
-		}
+		//  */
+		// getStep1() {
+		// 	this.stepActive = 2;
+		// }
 	}
 };
 </script>
