@@ -65,6 +65,7 @@
 				required
 				:steps="fromValue0.steps"
 				v-model="fromValue0.picker1"
+				@change="onChangePicker1"
 				title="一级经营类型"
 			/>
 			<QSPickerCustom
@@ -72,7 +73,7 @@
 				variableName="picker2"
 				ref="ref_picker2"
 				:steps="fromValue0.steps"
-				@change="onPickerType2"
+				@change="onChangePicker2"
 				required
 				autoHide
 				v-model="fromValue0.picker2"
@@ -83,7 +84,6 @@
 				variableName="picker3"
 				ref="ref_picker3"
 				:steps="fromValue0.steps"
-				@change="onPickerType3"
 				required
 				v-model="fromValue0.picker3"
 				title="三级经营类型"
@@ -127,8 +127,22 @@
 				v-model="fromValue0.shop_tel"
 			></QSInput>
 
-			<!-- 			<QSPics :name="formName0" required variableName="pic_shops" title="特殊资质" v-model="form0.pic_shops"></QSPics>
-			<QSPics :name="formName0" required variableName="pic_shops" title="补充材料" v-model="form0.pic_shops"></QSPics> -->
+			<QSPics
+				:name="formName0"
+				variableName="pic_1"
+				required
+				title="特殊资质"
+				v-model="fromValue0.pic_1"
+			></QSPics>
+
+			<QSPics
+				:name="formName0"
+				variableName="pic_2"
+				required
+				title="补充材料"
+				v-model="fromValue0.pic_2"
+			></QSPics>
+
 			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep0">
 				下一步
 			</QSWavesButton>
@@ -154,7 +168,7 @@ import QSApp from '@/components/QS-inputs-split/js/app.js';
 import uniSteps from '@/components/uni-steps/uni-steps.vue';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
-import { getShopsType } from '@/api/agent';
+import { getShopsType, getPerfectAgent } from '@/api/agent';
 
 export default {
 	components: {
@@ -164,6 +178,8 @@ export default {
 	},
 	data() {
 		return {
+			agentData: {},
+
 			// ============ 步骤条 ==============
 			stepActive: 0,
 			stepList: [
@@ -191,6 +207,8 @@ export default {
 				picker1: '',
 				picker2: '',
 				picker3: '',
+				picker1Init: false,
+				picker2Init: false,
 				agentname: '',
 				compaddress: '',
 				checkbox: [1],
@@ -219,131 +237,30 @@ export default {
 				shop_tel: '',
 				steps: {
 					step_1_value: 'name'
-				}
+				},
+				pic_1: [{ required: true, path: '' }],
+				pic_2: [{ required: true, path: '' }]
 			}
 		};
 	},
 
 	onLoad(options) {
-		let data = {
-			appid: '',
-			city: '430200',
-			mch_id: '',
-			fws_type: '',
-			sinaOpenId: '',
-			is_sole: '',
-			businessid_two: '',
-			agentchanneltype: 1,
-			roleId: '',
-			gm_wx_agentid: '',
-			three_type_name: '其他行业',
-			agent_shop: '',
-			prize_pz_id: '',
-			municipal_agent: '',
-			tjagentid: '70800072265439',
-			sumAmt: 0,
-			sub_mch_id: '',
-			join_time: '',
-			qy_agent: '',
-			agenttype: 0,
-			latitude: '',
-			xt_id: '',
-			accPasswd: '',
-			freezeAmt: 0,
-			user_level: '',
-			shop_tel: '',
-			type_agentid: '',
-			tradingareaid: '',
-			agent_face: '',
-			face_device: '',
-			is_signing: '',
-			one_type_name: '个体工商户',
-			lastLoginTime: null,
-			create_times: '2019-11-25 13:58:42',
-			qqOpenId: '',
-			contractendate: '2021-03-31',
-			areaid: '430203',
-			idcards_back: '',
-			identitynum: '',
-			type_id: 0,
-			businessid: '',
-			three_type: '72',
-			is_fws: '',
-			usertypeId: 0,
-			accessIp: '',
-			prov_cd: '430000',
-			mobileNo: '13997412928',
-			contractno: '',
-			areaname: '',
-			two_type_name: '其他',
-			roleName: '',
-			type: '',
-			password: '',
-			agentlogo: '',
-			pay_type: '',
-			wx_appid: '',
-			userId: 4149,
-			avatarUrl: '',
-			idcards_hand: '',
-			province: '',
-			userName: '凌轩服饰有限公司',
-			actUrl: '',
-			compaddress: '新天地服装大市场',
-			longitude: '',
-			openid: '',
-			headimgurl: '',
-			lm_agent: '',
-			one_type: '1',
-			isfact: 0,
-			userCode: '13997412928',
-			isAdd: '0',
-			iszt: '',
-			agentid: '70800072265440',
-			salesman: '',
-			industry_license: '',
-			business_number: '',
-			email: '',
-			open_payment: '',
-			legal: '颜金雨',
-			desc_content: '',
-			provincial_agent: '',
-			sex: 0,
-			zmImage: '',
-			dl_type: '4',
-			fws_agentid: '',
-			is_signingimg: '',
-			gm_wx_appid: '',
-			contractstdate: '2019-11-25',
-			app_auth_token: '',
-			cashing: 0,
-			packType: 0,
-			qrcodeid: '',
-			agentname: '凌轩服饰有限公司',
-			qq_amt: 0,
-			real_shop: '',
-			two_type: '15',
-			pass: '3',
-			pagentid: '王小亮',
-			wx_key: '',
-			faceid: '',
-			cityname: '',
-			parts_no: '',
-			idcards_front: '',
-			disabled: 0,
-			passName: '未开通'
-		};
-		this.options = data;
+		// console.log(options.agentid)
+		this.agentid = '70800072265457';
 	},
 
 	onReady() {
-		this.initPickerData();
-		this.setIntputValueFc('ref_legal', this.options.legal);
-		this.setIntputValueFc('ref_mobileNo', this.options.mobileNo);
-		this.setIntputValueFc('ref_email', this.options.email);
-		this.setIntputValueFc('ref_shortername', this.options.shortername);
-		this.setIntputValueFc('ref_agentname', this.options.agentname);
-		this.setIntputValueFc('ref_compaddress', this.options.compaddress);
-		this.setIntputValueFc('ref_shop_tel', this.options.shop_tel);
+		this.getTableData().then(data => {
+			this.agentData = data;
+			this.initPickerData();
+			this.setIntputValueFc('ref_legal', this.agentData.legal);
+			this.setIntputValueFc('ref_mobileNo', this.agentData.mobileNo);
+			this.setIntputValueFc('ref_email', this.agentData.email);
+			this.setIntputValueFc('ref_shortername', this.agentData.shortername);
+			this.setIntputValueFc('ref_agentname', this.agentData.agentname);
+			this.setIntputValueFc('ref_compaddress', this.agentData.compaddress);
+			this.setIntputValueFc('ref_shop_tel', this.agentData.shop_tel);
+		});
 	},
 
 	computed: {
@@ -356,24 +273,28 @@ export default {
 		}
 	},
 	methods: {
-		onPickerType1(data) {
-			// let item = data.data[0].item;
-			// this.fromValue0.picker1 = item;
-			// this.fromValue0.picker2.typename = '请选择';
-			// this.fromValue0.picker3.typename = '请选择';
-			// this.updateTwoType(item.typeid);
+		getTableData() {
+			return getPerfectAgent({
+				agentid: this.agentid
+			});
 		},
 
-		onPickerType2(data) {
-			// this.fromValue0.picker2 = data.data[0].item;
-			// this.fromValue0.picker3 = {
-			// 	typename: '请选择'
-			// };
-			// this.updateThreeType(this.fromValue0.picker2.typeid);
+		onChangePicker1(item) {
+			if (this.fromValue0.picker1Init) {
+				this.fromValue0.picker1Init = false;
+				return;
+			}
+			this.updateTwoType(item.data[0].value.typeid, '', true).then(item => {
+				this.updateThreeType(this.fromValue0.picker2.data[0].value.typeid, '', true);
+			});
 		},
 
-		onPickerType3(data) {
-			// this.fromValue0.picker3 = data.data[0].item;
+		onChangePicker2(data) {
+			if (this.fromValue0.picker2Init) {
+				this.fromValue0.picker2Init = false;
+				return;
+			}
+			this.updateThreeType(this.fromValue0.picker2.data[0].value.typeid, '', true);
 		},
 
 		setIntputValueFc(name, data) {
@@ -386,10 +307,13 @@ export default {
 
 		//类型一
 		updateOneType(one_type) {
-			getShopsType().then(data => {
+			return getShopsType().then(data => {
 				let arr = [];
 				data.map(item => {
 					if (item.typeid == one_type) {
+						// 强制初始化赋值，所以updateOneType在change会调用一次
+						//覆盖初始化的值，这里用给一个变量跳过
+						this.fromValue0.picker1Init = true;
 						this.$refs['ref_picker1'].confirm({
 							data: [
 								{
@@ -409,14 +333,17 @@ export default {
 		},
 
 		// 更新二级类型
-		updateTwoType(one_type, two_type) {
-			getShopsType({
+		updateTwoType(one_type, two_type, change) {
+			return getShopsType({
 				type: 'twotype',
 				typeid: one_type
 			}).then(data => {
 				let arr = [];
 				data.map(item => {
 					if (two_type && item.typeid == two_type) {
+						// 强制初始化赋值，所以updateOneType在change会调用一次
+						//覆盖初始化的值，这里用给一个变量跳过
+						this.fromValue0.picker2Init = true;
 						this.$refs['ref_picker2'].confirm({
 							data: [
 								{
@@ -428,15 +355,22 @@ export default {
 					}
 					arr.push({
 						name: item.typename,
-						item: item
+						value: item
 					});
 				});
+
+				// 如果是改变的处理，默认赋第一个值
+				if (change) {
+					this.$refs['ref_picker2'].confirm({
+						data: [arr[0]]
+					});
+				}
 				this.setPickerDataFc('ref_picker2', [arr]);
 			});
 		},
 
 		// 更新三级
-		updateThreeType(two_type, three_type) {
+		updateThreeType(two_type, three_type, change) {
 			getShopsType({
 				type: 'threetype',
 				typeid: two_type
@@ -455,25 +389,35 @@ export default {
 					}
 					arr.push({
 						name: item.typename,
-						item: item
+						value: item
 					});
 				});
+
+				// 如果是改变的处理，默认赋第一个值
+				if (change) {
+					this.$refs['ref_picker3'].confirm({
+						data: [arr[0]]
+					});
+				}
+
 				this.setPickerDataFc('ref_picker3', [arr]);
 			});
 		},
 
 		initPickerData() {
 			// 类型一
-			if (this.options.one_type) {
-				this.updateOneType(this.options.one_type);
-			}
-			//类型二
-			if (this.options.two_type) {
-				this.updateTwoType(this.options.one_type, this.options.two_type);
-			}
-			// 类型三
-			if (this.options.three_type) {
-				this.updateThreeType(this.options.two_type, this.options.three_type);
+			if (this.agentData.one_type) {
+				this.updateOneType(this.agentData.one_type).then(() => {
+					//类型二
+					if (this.agentData.two_type) {
+						this.updateTwoType(this.agentData.one_type, this.agentData.two_type).then(() => {
+							// 类型三
+							if (this.agentData.three_type) {
+								this.updateThreeType(this.agentData.two_type, this.agentData.three_type);
+							}
+						});
+					}
+				});
 			}
 		},
 
