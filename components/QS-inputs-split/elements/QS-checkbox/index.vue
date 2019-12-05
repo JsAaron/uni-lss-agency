@@ -25,7 +25,7 @@
 					<checkbox
 						:value="checkboxItem.value"
 						:checked="getStatus[checkboxIndex]"
-						:disabled="disabled"
+						:disabled="checkboxItem.disabled || disabled"
 						:color="checkboxItem.color || color"
 						:style="'transform: scale(' + (scale || '.8') + ');'"
 					/>

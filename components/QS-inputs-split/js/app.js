@@ -275,17 +275,18 @@ const _app = {
 			}
 			return new Promise((resolve, reject)=>{
 				const newArr = [...itemArray];
-				uni.showLoading({
-					title: '上传文件中'
-				})
+				// uni.showLoading({
+				// 	title: '上传文件中'
+				// })
 				Promise.all(promiseArr).then(res=>{
-					uni.hideLoading();
+					// console.log('reress',res)
+					// uni.hideLoading();
 					for(let i = 0; i < newArr.length; i++) {
 						newArr[i].upLoadResult = res[i];
 					}
 					resolve(newArr);
 				}).catch(err=>{
-					uni.hideLoading();
+					// uni.hideLoading();
 					reject(err);
 				})
 			});

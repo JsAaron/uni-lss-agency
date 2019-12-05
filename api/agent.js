@@ -33,3 +33,12 @@ export function getStatisticsHomedl(data) {
 		params: data
 	})
 }
+
+export function saveAgentJjOne(data) {
+	console.log(data)
+	return request({
+		url: '/moblieapp/AgentSaveJjOne',
+		method: 'post',
+		data: data
+	})
+}

@@ -110,11 +110,12 @@
 
 			<QSCheckbox
 				:name="formName0"
-				variableName="checkbox"
+				variableName="shop_scene"
 				required
+				ref="ref_shop_scene"
 				layout="column"
 				title="售卖商品场景"
-				v-model="fromValue0.checkbox"
+				v-model="fromValue0.shop_scene"
 				:itemArray="fromValue0.itemArray"
 			></QSCheckbox>
 
@@ -124,6 +125,7 @@
 				ref="ref_shop_tel"
 				required
 				title="客服电话"
+				verifyType="Tel"
 				v-model="fromValue0.shop_tel"
 			></QSInput>
 
@@ -131,7 +133,7 @@
 				:name="formName0"
 				variableName="pic_1"
 				ref="ref_pic_1"
-				customId="pic_1"
+				customId="typein"
 				required
 				title="特殊资质"
 				v-model="fromValue0.pic_1"
@@ -141,7 +143,7 @@
 				:name="formName0"
 				variableName="pic_2"
 				ref="ref_pic_2"
-				customId="pic_1"
+				customId="typein"
 				required
 				title="补充材料"
 				v-model="fromValue0.pic_2"
@@ -172,7 +174,7 @@ import QSApp from '@/components/QS-inputs-split/js/app.js';
 import uniSteps from '@/components/uni-steps/uni-steps.vue';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
-import { getShopsType, getPerfectAgent } from '@/api/agent';
+import { getShopsType, getPerfectAgent, saveAgentJjOne } from '@/api/agent';
 
 export default {
 	components: {
@@ -215,27 +217,28 @@ export default {
 				picker2Init: false,
 				agentname: '',
 				compaddress: '',
-				checkbox: [1],
+				shop_scene: [],
 				itemArray: [
 					{
 						name: '线下',
-						value: 1
+						value: '线下',
+						disabled: true
 					},
 					{
 						name: '公众号',
-						value: 2
+						value: '公众号'
 					},
 					{
 						name: '小程序',
-						value: 3
+						value: '小程序'
 					},
 					{
 						name: '网站',
-						value: 4
+						value: '网站'
 					},
 					{
 						name: 'APP',
-						value: 5
+						value: 'APP'
 					}
 				],
 				shop_tel: '',
@@ -255,6 +258,7 @@ export default {
 
 	onReady() {
 		this.getTableData().then(data => {
+			// console.log('init',data,data.shop_scene.split(","))
 			this.agentData = data;
 			this.initPickerData();
 			this.setIntputValueFc('ref_legal', data.legal);
@@ -264,6 +268,7 @@ export default {
 			this.setIntputValueFc('ref_agentname', data.agentname);
 			this.setIntputValueFc('ref_compaddress', data.compaddress);
 			this.setIntputValueFc('ref_shop_tel', data.shop_tel);
+			this.setIntputValueFc('ref_shop_scene', data.shop_scene.split(','));
 			if (data.special_qualification != null && data.special_qualification != '') {
 				this.setInputDataFc('ref_pic_1', [
 					{ required: true, path: 'https://img.facess.net/' + data.special_qualification }
@@ -274,7 +279,7 @@ export default {
 					{ required: true, path: 'https://img.facess.net/' + data.supple_materials }
 				]);
 			}
-		}); 
+		});
 	},
 
 	computed: {
@@ -455,13 +460,12 @@ export default {
 		getStep0() {
 			QSApp.getForm(this.formName0)
 				.then(res => {
-					console.log(res);
-
+					console.log('form', res);
 					if (res.verifyErr.length > 0) {
 						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
 						return;
 					}
-					// console.log(res.data);
+					this.saveRequest1(res.data);
 					// this.stepActive = 1;
 				})
 				.catch(err => {
@@ -470,6 +474,46 @@ export default {
 					// });
 					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
 				});
+		},
+
+		/**
+		 * 获取上传图片的url
+		 */
+		getUploadUrl(key, data) {
+			let upLoadResult = data[key][0].upLoadResult;
+			//是新上传
+			if (upLoadResult.length > 0) {
+				let data1 = JSON.parse(upLoadResult[1].data);
+				return data1.url;
+			} else {
+				//已存在
+				return upLoadResult.data;
+			}
+		},
+
+		saveRequest1(data) {
+			let query = {
+				agentid: this.agentid,
+				agentname: data.agentname,
+				areaid: '',
+				city: '',
+				compaddress: data.compaddress,
+				email: data.email,
+				legal: data.legal,
+				mobileNo: data.mobileNo,
+				shop_scene: data.shop_scene,
+				shop_tel: data.shop_tel,
+				shortername: data.shortername,
+				special_qualification: this.getUploadUrl('pic_1', data),
+				supple_materials: this.getUploadUrl('pic_2', data),
+				one_type: this.fromValue0.picker1.data[0].value.typeid,
+				two_type: this.fromValue0.picker2.data[0].value.typeid,
+				three_type: this.fromValue0.picker3.data[0].value.typeid,
+				userId: this.agentData.userId
+			};
+			saveAgentJjOne(query).then(data=>{
+				console.log(111,data)
+			})
 		},
 
 		/**

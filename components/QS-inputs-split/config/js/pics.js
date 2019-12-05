@@ -20,7 +20,7 @@ export function UpLoadFile(customId, filePath, picsUpLoadData) { // 上传文件
 	let formData = {};
 	let name = '';
 	switch (customId) { //判断该项pics类型自带的UpLoadFileType, 根据此值来确定不同的url、formData、name
-		case 'pic_1': //自定义的标识
+		case 'typein': //自定义的标识
 			url = interfaces.upLoadImg;
 			formData = {};
 			name = 'file';
@@ -54,7 +54,7 @@ export function UpLoadFile(customId, filePath, picsUpLoadData) { // 上传文件
 	// #ifndef APP-PLUS
 	obj.formData = formData;
 	// #endif
-	console.log(obj)
+	// console.log('上传',obj)
 	return uni.uploadFile(obj);
 }
 
