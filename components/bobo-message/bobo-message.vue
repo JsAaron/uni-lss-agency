@@ -176,6 +176,7 @@
 		align-items: center;
 		// 透明层允许点击穿透
 		pointer-events: none;
+		background: none;
 
 		.message {
 			display: flex;
