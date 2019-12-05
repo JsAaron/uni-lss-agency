@@ -149,9 +149,12 @@
 				v-model="fromValue0.pic_2"
 			></QSPics>
 
-			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep0">
-				下一步
-			</QSWavesButton>
+			<wButton
+				text="下一步"
+				:rotate="fromValue0.isRotate"
+				@click.native="getStep0()"
+				bgColor="rgb(47, 133, 252)"
+			></wButton>
 		</block>
 
 		<block v-if="stepActive == 1">
@@ -174,10 +177,12 @@ import QSApp from '@/components/QS-inputs-split/js/app.js';
 import uniSteps from '@/components/uni-steps/uni-steps.vue';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
+import wButton from '@/components/watch-login/watch-button.vue'; //button
 import { getShopsType, getPerfectAgent, saveAgentJjOne } from '@/api/agent';
 
 export default {
 	components: {
+		wButton,
 		uniSteps,
 		uniIcons,
 		uniNavBar
@@ -246,7 +251,8 @@ export default {
 					step_1_value: 'name'
 				},
 				pic_1: [{ required: true, path: '' }],
-				pic_2: [{ required: true, path: '' }]
+				pic_2: [{ required: true, path: '' }],
+				isRotate: false
 			}
 		};
 	},
@@ -460,7 +466,6 @@ export default {
 		getStep0() {
 			QSApp.getForm(this.formName0)
 				.then(res => {
-					console.log('form', res);
 					if (res.verifyErr.length > 0) {
 						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
 						return;
@@ -492,6 +497,7 @@ export default {
 		},
 
 		saveRequest1(data) {
+			this.fromValue0.isRotate = true
 			let query = {
 				agentid: this.agentid,
 				agentname: data.agentname,
@@ -511,9 +517,12 @@ export default {
 				three_type: this.fromValue0.picker3.data[0].value.typeid,
 				userId: this.agentData.userId
 			};
-			saveAgentJjOne(query).then(data=>{
-				console.log(111,data)
-			})
+			// saveAgentJjOne(query).then(data => {
+			// 	this.fromValue0.isRotate = false
+			// 	console.log(111, data);
+			// }).catch(()=>{
+			// 	this.fromValue0.isRotate = false
+			// })
 		},
 
 		/**
