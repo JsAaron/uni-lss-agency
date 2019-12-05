@@ -131,6 +131,7 @@
 				:name="formName0"
 				variableName="pic_1"
 				ref="ref_pic_1"
+				customId="pic_1"
 				required
 				title="特殊资质"
 				v-model="fromValue0.pic_1"
@@ -140,6 +141,7 @@
 				:name="formName0"
 				variableName="pic_2"
 				ref="ref_pic_2"
+				customId="pic_1"
 				required
 				title="补充材料"
 				v-model="fromValue0.pic_2"
@@ -310,7 +312,7 @@ export default {
 		},
 
 		setIntputValueFc(name, data) {
-			this.$refs[name].setForm(data);
+			this.$refs[name].setValue(data);
 		},
 
 		setInputDataFc(name, data) {
@@ -463,9 +465,9 @@ export default {
 					// this.stepActive = 1;
 				})
 				.catch(err => {
-					uni.showToast({
-						title: '获取表单数据失败'
-					});
+					// uni.showToast({
+					// 	title: '获取表单数据失败'
+					// });
 					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
 				});
 		},

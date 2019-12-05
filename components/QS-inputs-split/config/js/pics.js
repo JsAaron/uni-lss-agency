@@ -8,7 +8,7 @@ import { errObj } from '../../js/Msg.js';
  * @param {Object} picsUpLoadData
  */
 export function UpLoadFile(customId, filePath, picsUpLoadData) { // 上传文件方法: (自定义上传标识, 文件路径, 自定义上传数据)
-	log('自定义上传图片携带数据:' + JSON.stringify(picsUpLoadData));
+	// log('自定义上传图片携带数据:' + JSON.stringify(picsUpLoadData));
 	if (interfaces.baseUrl && filePath.indexOf(interfaces.baseUrl) != -1) { //域名替换机制: 判断是否是从后端获取的图片路径, 若是 替换域名字符串为空后resolve. 也可以根据customId动态控制, 不需要则删除此代码
 		const replacePath = filePath.replace(interfaces.baseUrl, '');
 		return Promise.resolve({
@@ -20,10 +20,10 @@ export function UpLoadFile(customId, filePath, picsUpLoadData) { // 上传文件
 	let formData = {};
 	let name = '';
 	switch (customId) { //判断该项pics类型自带的UpLoadFileType, 根据此值来确定不同的url、formData、name
-		case 'UpLoadImage_1': //自定义的标识
-			url = '';
+		case 'pic_1': //自定义的标识
+			url = interfaces.upLoadImg;
 			formData = {};
-			name = '';
+			name = 'file';
 			break;
 		default: //若无判断需求可直接写在这里
 			url = interfaces.upLoadImg;
@@ -54,6 +54,7 @@ export function UpLoadFile(customId, filePath, picsUpLoadData) { // 上传文件
 	// #ifndef APP-PLUS
 	obj.formData = formData;
 	// #endif
+	console.log(obj)
 	return uni.uploadFile(obj);
 }
 
