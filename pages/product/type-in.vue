@@ -18,12 +18,19 @@
 		<block v-if="stepActive == 0">
 			<view class="type-title">联系信息</view>
 
-			<QSInput ref="inputlegal" :name="formName0" variableName="legal" title="联系人姓名" required v-model="fromValue0.legal"></QSInput>
+			<QSInput
+				:name="formName0"
+				variableName="legal"
+				ref="ref_legal"
+				title="联系人姓名"
+				required
+				v-model="fromValue0.legal"
+			></QSInput>
 
 			<QSInput
-				ref="inputmobileNo"
 				:name="formName0"
 				variableName="mobileNo"
+				ref="ref_mobileNo"
 				required
 				verifyType="Tel"
 				inputType="number"
@@ -32,9 +39,9 @@
 			></QSInput>
 
 			<QSInput
-				ref="inputemail"
 				:name="formName0"
 				variableName="email"
+				ref="ref_email"
 				required
 				title="常用邮箱"
 				verifyType="Email"
@@ -43,46 +50,58 @@
 
 			<view class="type-title">经营信息</view>
 			<QSInput
-				ref="inputshortername"
 				:name="formName0"
 				variableName="shortername"
+				ref="ref_shortername"
 				required
 				title="商户简称"
 				v-model="fromValue0.shortername"
 			></QSInput>
 
 			<QSPickerCustom
-				ref="pickerType1"
-				:steps="fromValue0.steps"
-				@change="onPickerType1"
+				:name="formName0"
+				variableName="picker1"
+				ref="ref_picker1"
 				required
-				:placherhold="fromValue0.pickerValue1.typename"
+				:steps="fromValue0.steps"
+				v-model="fromValue0.picker1"
 				title="一级经营类型"
 			/>
 			<QSPickerCustom
-				ref="pickerType2"
+				:name="formName0"
+				variableName="picker2"
+				ref="ref_picker2"
 				:steps="fromValue0.steps"
 				@change="onPickerType2"
 				required
 				autoHide
-				:placherhold="fromValue0.pickerValue2.typename"
+				v-model="fromValue0.picker2"
 				title="二级经营类型"
 			/>
 			<QSPickerCustom
-				ref="pickerType3"
+				:name="formName0"
+				variableName="picker3"
+				ref="ref_picker3"
 				:steps="fromValue0.steps"
 				@change="onPickerType3"
 				required
-				:placherhold="fromValue0.pickerValue3.typename"
+				v-model="fromValue0.picker3"
 				title="三级经营类型"
 			/>
 
-			<QSInput :name="formName0" variableName="agentname" ref="inputagentname" required title="商户名称" v-model="fromValue0.agentname"></QSInput>
+			<QSInput
+				:name="formName0"
+				variableName="agentname"
+				ref="ref_agentname"
+				required
+				title="商户名称"
+				v-model="fromValue0.agentname"
+			></QSInput>
 
 			<QSInput
 				:name="formName0"
 				variableName="compaddress"
-				ref="inputcompaddress"
+				ref="ref_compaddress"
 				required
 				titleLayout="left"
 				title="注册地址"
@@ -99,80 +118,32 @@
 				:itemArray="fromValue0.itemArray"
 			></QSCheckbox>
 
-			<QSInput :name="formName0" variableName="shop_tel" ref="inputshop_tel" required title="客服电话" v-model="fromValue0.shop_tel"></QSInput>
+			<QSInput
+				:name="formName0"
+				variableName="shop_tel"
+				ref="ref_shop_tel"
+				required
+				title="客服电话"
+				v-model="fromValue0.shop_tel"
+			></QSInput>
 
 			<!-- 			<QSPics :name="formName0" required variableName="pic_shops" title="特殊资质" v-model="form0.pic_shops"></QSPics>
 			<QSPics :name="formName0" required variableName="pic_shops" title="补充材料" v-model="form0.pic_shops"></QSPics> -->
-			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep0">下一步</QSWavesButton>
+			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep0">
+				下一步
+			</QSWavesButton>
 		</block>
 
 		<block v-if="stepActive == 1">
-			<QSPics :name="formName1" required layout="column" variableName="pic" title="请上传经营者银行卡" v-model="form1.pic"></QSPics>
-			<QSPickerCustom :name="formName1" required layout="row" titleLayout="left" variableName="pickerType" title="开户总行银行" />
-			<QSInput :name="formName1" required variableName="name" title="开户名称" layout="row" titleLayout="left" v-model="form1.name"></QSInput>
-			<QSInput :name="formName1" required variableName="account" title="开户账号" layout="row" titleLayout="left" v-model="form1.account"></QSInput>
-			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep1">下一步</QSWavesButton>
+			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep1">
+				下一步
+			</QSWavesButton>
 		</block>
 
 		<block v-if="stepActive == 2">
-			<QSPics :name="formName2" required layout="column" variableName="pic" title="请上传店门头照片" v-model="form2.pic"></QSPics>
-			<QSPics :name="formName2" required layout="column" variableName="pic" title="请上传店内环境照片" v-model="form2.pic"></QSPics>
-			<QSPickerCity :name="formName2" variableName="city" title="经营省市区" :value="form2.city" placherhold="请选择" />
-			<QSInput
-				:name="formName2"
-				required
-				variableName="registrAddress"
-				title="经营地址"
-				layout="row"
-				titleLayout="left"
-				v-model="form2.registrAddress"
-			></QSInput>
-			<QSInput
-				:name="formName2"
-				required
-				variableName="registrAddress"
-				title="联系人"
-				layout="row"
-				titleLayout="left"
-				v-model="form2.registrAddress"
-			></QSInput>
-			<QSInput
-				:name="formName2"
-				required
-				variableName="registrAddress"
-				title="手机号码"
-				layout="row"
-				titleLayout="left"
-				v-model="form2.registrAddress"
-			></QSInput>
-			<QSInput
-				:name="formName2"
-				required
-				variableName="registrAddress"
-				title="常用邮箱"
-				layout="row"
-				titleLayout="left"
-				v-model="form2.registrAddress"
-			></QSInput>
-			<QSInput
-				:name="formName2"
-				required
-				variableName="registrAddress"
-				title="客服电话"
-				layout="row"
-				titleLayout="left"
-				v-model="form2.registrAddress"
-			></QSInput>
-			<QSInput
-				:name="formName2"
-				required
-				variableName="registrAddress"
-				title="用户简称"
-				layout="row"
-				titleLayout="left"
-				v-model="form2.registrAddress"
-			></QSInput>
-			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep1">提交注册</QSWavesButton>
+			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep1">
+				提交注册
+			</QSWavesButton>
 		</block>
 	</view>
 </template>
@@ -193,7 +164,7 @@ export default {
 	},
 	data() {
 		return {
-			shopOptions: {},
+			// ============ 步骤条 ==============
 			stepActive: 0,
 			stepList: [
 				{
@@ -210,16 +181,16 @@ export default {
 				}
 			],
 
-			//商铺数据
+			// ============ 经营信息 ==============
 			formName0: 'step0',
 			fromValue0: {
 				legal: '',
 				mobileNo: '',
 				email: '',
 				shortername: '',
-				pickerValue1: {},
-				pickerValue2: {},
-				pickerValue3: {},
+				picker1: '',
+				picker2: '',
+				picker3: '',
 				agentname: '',
 				compaddress: '',
 				checkbox: [1],
@@ -249,18 +220,6 @@ export default {
 				steps: {
 					step_1_value: 'name'
 				}
-			},
-
-			//结算数据
-			formName1: 'step1',
-			form1: {
-				pic: [{ title: '正面' }]
-			},
-
-			//基本信息
-			formName2: 'step2',
-			form2: {
-				pic: [{ title: '正面' }]
 			}
 		};
 	},
@@ -377,14 +336,14 @@ export default {
 	},
 
 	onReady() {
-		this.setPickerData();
-		this.setIntputValueFc('inputlegal', this.options.legal);
-		this.setIntputValueFc('inputmobileNo', this.options.mobileNo);
-		this.setIntputValueFc('inputemail', this.options.email);
-		this.setIntputValueFc('inputshortername', this.options.shortername);
-		this.setIntputValueFc('inputagentname', this.options.agentname);
-		this.setIntputValueFc('inputcompaddress', this.options.compaddress);
-		this.setIntputValueFc('inputshop_tel', this.options.shop_tel);
+		this.initPickerData();
+		this.setIntputValueFc('ref_legal', this.options.legal);
+		this.setIntputValueFc('ref_mobileNo', this.options.mobileNo);
+		this.setIntputValueFc('ref_email', this.options.email);
+		this.setIntputValueFc('ref_shortername', this.options.shortername);
+		this.setIntputValueFc('ref_agentname', this.options.agentname);
+		this.setIntputValueFc('ref_compaddress', this.options.compaddress);
+		this.setIntputValueFc('ref_shop_tel', this.options.shop_tel);
 	},
 
 	computed: {
@@ -398,23 +357,55 @@ export default {
 	},
 	methods: {
 		onPickerType1(data) {
-			let item = data.data[0].item;
-			this.fromValue0.pickerValue1 = item;
-			this.fromValue0.pickerValue2.typename = '请选择';
-			this.fromValue0.pickerValue3.typename = '请选择';
-			this.updateTwoType(item.typeid);
+			// let item = data.data[0].item;
+			// this.fromValue0.picker1 = item;
+			// this.fromValue0.picker2.typename = '请选择';
+			// this.fromValue0.picker3.typename = '请选择';
+			// this.updateTwoType(item.typeid);
 		},
 
 		onPickerType2(data) {
-			this.fromValue0.pickerValue2 = data.data[0].item;
-			this.fromValue0.pickerValue3 = {
-				typename: '请选择'
-			};
-			this.updateThreeType(this.fromValue0.pickerValue2.typeid);
+			// this.fromValue0.picker2 = data.data[0].item;
+			// this.fromValue0.picker3 = {
+			// 	typename: '请选择'
+			// };
+			// this.updateThreeType(this.fromValue0.picker2.typeid);
 		},
 
 		onPickerType3(data) {
-			this.fromValue0.pickerValue3 = data.data[0].item;
+			// this.fromValue0.picker3 = data.data[0].item;
+		},
+
+		setIntputValueFc(name, data) {
+			this.$refs[name].setValue(data);
+		},
+
+		setPickerDataFc(name, data) {
+			this.$refs[name].setData(data);
+		},
+
+		//类型一
+		updateOneType(one_type) {
+			getShopsType().then(data => {
+				let arr = [];
+				data.map(item => {
+					if (item.typeid == one_type) {
+						this.$refs['ref_picker1'].confirm({
+							data: [
+								{
+									name: item.typename,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.typename,
+						value: item
+					});
+				});
+				this.setPickerDataFc('ref_picker1', [arr]);
+			});
 		},
 
 		// 更新二级类型
@@ -426,14 +417,21 @@ export default {
 				let arr = [];
 				data.map(item => {
 					if (two_type && item.typeid == two_type) {
-						this.fromValue0.pickerValue2 = item;
+						this.$refs['ref_picker2'].confirm({
+							data: [
+								{
+									name: item.typename,
+									value: item
+								}
+							]
+						});
 					}
 					arr.push({
 						name: item.typename,
 						item: item
 					});
 				});
-				this.setPickerDataFc('pickerType2', [arr]);
+				this.setPickerDataFc('ref_picker2', [arr]);
 			});
 		},
 
@@ -446,46 +444,33 @@ export default {
 				let arr = [];
 				data.map(item => {
 					if (three_type && item.typeid == three_type) {
-						this.fromValue0.pickerValue3 = item;
+						this.$refs['ref_picker3'].confirm({
+							data: [
+								{
+									name: item.typename,
+									value: item
+								}
+							]
+						});
 					}
 					arr.push({
 						name: item.typename,
 						item: item
 					});
 				});
-				this.setPickerDataFc('pickerType3', [arr]);
+				this.setPickerDataFc('ref_picker3', [arr]);
 			});
 		},
 
-		setIntputValueFc(name, data) {
-			this.$refs[name].setValue(data);
-		},
-
-		setPickerDataFc(name, data) {
-			this.$refs[name].setData(data);
-		},
-
-		setPickerData() {
+		initPickerData() {
 			// 类型一
-			getShopsType().then(data => {
-				let arr = [];
-				data.map(item => {
-					if (item.typeid == this.options.one_type) {
-						this.fromValue0.pickerValue1 = item;
-					}
-					arr.push({
-						name: item.typename,
-						item: item
-					});
-				});
-				this.setPickerDataFc('pickerType1', [arr]);
-			});
-
+			if (this.options.one_type) {
+				this.updateOneType(this.options.one_type);
+			}
 			//类型二
 			if (this.options.two_type) {
 				this.updateTwoType(this.options.one_type, this.options.two_type);
 			}
-
 			// 类型三
 			if (this.options.three_type) {
 				this.updateThreeType(this.options.two_type, this.options.three_type);
@@ -515,14 +500,9 @@ export default {
 					console.log(res);
 
 					if (res.verifyErr.length > 0) {
-						this.$refs['Message'].error(res.verifyErr[0].title + " 错误");
+						this.$refs['Message'].error(res.verifyErr[0].title + ' 错误');
+						return;
 					}
-
-	 
-
-					// uni.showToast({
-					// 	title: '获取表单数据成功'
-					// });
 					// console.log(res.data);
 					// this.stepActive = 1;
 				})
