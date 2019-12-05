@@ -223,27 +223,29 @@
 			></QSInput>
 
 			<QSPickerCustom
-				:name="formName0"
+				:name="formName1"
 				variableName="prov_cd"
 				ref="ref_prov_cd"
 				required
 				:steps="fromValue1.steps"
 				v-model="fromValue1.prov_cd"
+				@change="onChangeProv_cd"
 				title="省"
 			/>
 
 			<QSPickerCustom
-				:name="formName0"
+				:name="formName1"
 				variableName="city"
 				ref="ref_city"
 				required
 				:steps="fromValue1.steps"
 				v-model="fromValue1.city"
 				title="市"
+				@change="onChangeCity"
 			/>
 
 			<QSPickerCustom
-				:name="formName0"
+				:name="formName1"
 				variableName="areaid"
 				ref="ref_areaid"
 				required
@@ -255,7 +257,7 @@
 			<view class="type-title">企业法人/经办人</view>
 
 			<QSPickerCustom
-				:name="formName0"
+				:name="formName1"
 				variableName="holder_type"
 				ref="ref_holder_type"
 				required
@@ -273,7 +275,7 @@
 			></QSInput>
 
 			<QSPickerCustom
-				:name="formName0"
+				:name="formName1"
 				variableName="document_type"
 				ref="ref_document_type"
 				required
@@ -339,7 +341,7 @@
 				v-model="fromValue1.electronic_invoice"
 				:itemArray="fromValue1.electronic_invoice_itemArray"
 			></QSRadio>
-			
+
 			<WButton
 				text="下一步"
 				:rotate="fromValue1.isRotate"
@@ -456,8 +458,8 @@ export default {
 				steps: {
 					step_1_value: 'name'
 				},
-				dataSet:{
-					dateFormatArray:['-', '-','-']
+				dataSet: {
+					dateFormatArray: ['-', '-', '-']
 				},
 				holder_type: '',
 				holder_name: '',
@@ -608,13 +610,31 @@ export default {
 				]);
 			}
 
-			this.fromValue1.electronic_invoice = data.electronic_invoice
+			this.setIntputValueFc('ref_electronic_invoice', data.electronic_invoice);
 		},
 
 		//==================== 商户信息 ====================
 
+		onChangeProv_cd(item) {
+			if (this.fromValue1.picker1Init) {
+				this.fromValue1.picker1Init = false;
+				return;
+			}
+			this.updateCityType(item.data[0].value.areaid, '', true).then(() => {
+				this.updateAreaType(this.fromValue1.city.data[0].value.areaid, '', true);
+			});
+		},
+
+		onChangeCity(item) {
+			if (this.fromValue1.picker2Init) {
+				this.fromValue1.picker2Init = false;
+				return;
+			}
+			this.updateAreaType(this.fromValue1.city.data[0].value.areaid, '', true);
+		},
+
 		// 省会
-		updateProvType(proareaid) {
+		updateProvType(proareaid, change) {
 			return getProvcd().then(data => {
 				let arr = [];
 				data.map(item => {
@@ -641,7 +661,7 @@ export default {
 		},
 
 		// 市
-		updateCityType(proareaid, cityareaid) {
+		updateCityType(proareaid, cityareaid, change) {
 			return getProvcd({
 				type: 'city',
 				areaid: proareaid
@@ -651,7 +671,7 @@ export default {
 					if (item.areaid == cityareaid) {
 						// 强制初始化赋值，所以updateOneType在change会调用一次
 						//覆盖初始化的值，这里用给一个变量跳过
-						this.fromValue1.picker1Init = true;
+						this.fromValue1.picker2Init = true;
 						this.$refs['ref_city'].confirm({
 							data: [
 								{
@@ -666,12 +686,18 @@ export default {
 						value: item
 					});
 				});
+				// 如果是改变的处理，默认赋第一个值
+				if (change) {
+					this.$refs['ref_city'].confirm({
+						data: [arr[0]]
+					});
+				}
 				this.setInputDataFc('ref_city', [arr]);
 			});
 		},
 
 		// 区
-		updateAreaType(cityareaid, areaid) {
+		updateAreaType(cityareaid, areaid, change) {
 			return getProvcd({
 				type: 'area',
 				areaid: cityareaid
@@ -693,6 +719,11 @@ export default {
 						value: item
 					});
 				});
+				if (change) {
+					this.$refs['ref_areaid'].confirm({
+						data: [arr[0]]
+					});
+				}
 				this.setInputDataFc('ref_areaid', [arr]);
 			});
 		},
@@ -872,25 +903,23 @@ export default {
 				});
 		},
 
-
 		/**
 		 * 注册第二步
 		 */
 		getStep1() {
 			QSApp.getForm(this.formName1)
 				.then(res => {
-					console.log(res)
+					console.log(res);
 					if (res.verifyErr.length > 0) {
 						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
 						return;
 					}
-					// this.saveRequest1(res.data);
+					this.saveRequest2(res.data);
 				})
 				.catch(err => {
 					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
 				});
 		},
-
 
 		/**
 		 * 获取上传图片的url
@@ -937,6 +966,42 @@ export default {
 					this.fromValue0.isRotate = false;
 				});
 		},
+
+		saveRequest2(data) {
+			console.log(data)
+			this.fromValue0.isRotate = true;
+			let query = {
+				agentid:  this.agentid,
+				areaid: '',
+				business_img: '/tgimg/201911/d15af216-79fe-42d5-a217-ee797e5f87ea.jpg',
+				business_license: '湖南曙光教育培训学校',
+				business_number: '524300004448823740',
+				business_scope:
+					'家电、电工、焊工、电脑、电脑远程教育、无线电通讯、计算机运用、锅炉操作工、厂内机动车辆驾驶员、制冷工等技能培训及技能鉴定、英语教学与职业英语培训、秘书、物业管理员、餐厅服务员、客房服务员、前厅服务员、育婴师、健康管理师、人力资源管理师、室内装饰设计师、圆林绿化工、家政服务员、养老护理员。',
+				city: '430100',
+				contractendate: '2020-05-12',
+				contractstdate: '2017-05-12',
+				document_type: '身份证',
+				electronic_invoice: '是',
+				holder_name: '王永元',
+				holder_type: '法人',
+				idcards_back: '/tgimg/201911/ca5890cb-9b81-4692-a770-e539292ab754.jpg',
+				idcards_front: '/tgimg/201911/8df29186-e4be-43ec-9899-0be3e5ae4e16.jpg',
+				identification_end: '2027-11-30',
+				identification_number: '430103194702102531',
+				identification_start: '2007-09-26',
+				prov_cd: '430000',
+				userId: '4166'
+			};
+			// saveAgentJjOne(query)
+			// 	.then(data => {
+			// 		this.fromValue0.isRotate = false;
+			// 		this.stepActive = 1;
+			// 	})
+			// 	.catch(() => {
+			// 		this.fromValue0.isRotate = false;
+			// 	});
+		}
 
 		/**
 		 * 注册第二步
