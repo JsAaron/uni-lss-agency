@@ -185,6 +185,7 @@
 				:name="formName1"
 				dateFormatArray="-"
 				variableName="contractstdate"
+				:dataSet="fromValue1.dataSet"
 				ref="ref_contractstdate"
 				title="营业期限开始"
 				v-model="fromValue1.contractstdate"
@@ -195,6 +196,7 @@
 				:name="formName1"
 				variableName="contractendate"
 				ref="ref_contractendate"
+				:dataSet="fromValue1.dataSet"
 				title="营业期限结束"
 				:value="dateValue"
 				v-model="fromValue1.contractendate"
@@ -290,6 +292,7 @@
 
 			<QSPickerDate
 				:name="formName1"
+				:dataSet="fromValue1.dataSet"
 				variableName="identification_start"
 				ref="ref_identification_start"
 				title="证件有效期开始"
@@ -300,6 +303,7 @@
 			<QSPickerDate
 				:name="formName1"
 				variableName="identification_end"
+				:dataSet="fromValue1.dataSet"
 				ref="ref_identification_end"
 				title="证件有效期结束"
 				v-model="fromValue1.identification_end"
@@ -451,6 +455,9 @@ export default {
 				areaid: '',
 				steps: {
 					step_1_value: 'name'
+				},
+				dataSet:{
+					dateFormatArray:['-', '-','-']
 				},
 				holder_type: '',
 				holder_name: '',
