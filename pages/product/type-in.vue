@@ -130,6 +130,7 @@
 			<QSPics
 				:name="formName0"
 				variableName="pic_1"
+				ref="ref_pic_1"
 				required
 				title="特殊资质"
 				v-model="fromValue0.pic_1"
@@ -138,6 +139,7 @@
 			<QSPics
 				:name="formName0"
 				variableName="pic_2"
+				ref="ref_pic_2"
 				required
 				title="补充材料"
 				v-model="fromValue0.pic_2"
@@ -253,14 +255,24 @@ export default {
 		this.getTableData().then(data => {
 			this.agentData = data;
 			this.initPickerData();
-			this.setIntputValueFc('ref_legal', this.agentData.legal);
-			this.setIntputValueFc('ref_mobileNo', this.agentData.mobileNo);
-			this.setIntputValueFc('ref_email', this.agentData.email);
-			this.setIntputValueFc('ref_shortername', this.agentData.shortername);
-			this.setIntputValueFc('ref_agentname', this.agentData.agentname);
-			this.setIntputValueFc('ref_compaddress', this.agentData.compaddress);
-			this.setIntputValueFc('ref_shop_tel', this.agentData.shop_tel);
-		});
+			this.setIntputValueFc('ref_legal', data.legal);
+			this.setIntputValueFc('ref_mobileNo', data.mobileNo);
+			this.setIntputValueFc('ref_email', data.email);
+			this.setIntputValueFc('ref_shortername', data.shortername);
+			this.setIntputValueFc('ref_agentname', data.agentname);
+			this.setIntputValueFc('ref_compaddress', data.compaddress);
+			this.setIntputValueFc('ref_shop_tel', data.shop_tel);
+			if (data.special_qualification != null && data.special_qualification != '') {
+				this.setInputDataFc('ref_pic_1', [
+					{ required: true, path: 'https://img.facess.net/' + data.special_qualification }
+				]);
+			}
+			if (data.supple_materials != null && data.supple_materials != '') {
+				this.setInputDataFc('ref_pic_2', [
+					{ required: true, path: 'https://img.facess.net/' + data.supple_materials }
+				]);
+			}
+		}); 
 	},
 
 	computed: {
@@ -298,10 +310,10 @@ export default {
 		},
 
 		setIntputValueFc(name, data) {
-			this.$refs[name].setValue(data);
+			this.$refs[name].setForm(data);
 		},
 
-		setPickerDataFc(name, data) {
+		setInputDataFc(name, data) {
 			this.$refs[name].setData(data);
 		},
 
@@ -328,7 +340,7 @@ export default {
 						value: item
 					});
 				});
-				this.setPickerDataFc('ref_picker1', [arr]);
+				this.setInputDataFc('ref_picker1', [arr]);
 			});
 		},
 
@@ -365,7 +377,7 @@ export default {
 						data: [arr[0]]
 					});
 				}
-				this.setPickerDataFc('ref_picker2', [arr]);
+				this.setInputDataFc('ref_picker2', [arr]);
 			});
 		},
 
@@ -400,7 +412,7 @@ export default {
 					});
 				}
 
-				this.setPickerDataFc('ref_picker3', [arr]);
+				this.setInputDataFc('ref_picker3', [arr]);
 			});
 		},
 
@@ -444,7 +456,7 @@ export default {
 					console.log(res);
 
 					if (res.verifyErr.length > 0) {
-						this.$refs['Message'].error(res.verifyErr[0].title + ' 错误');
+						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
 						return;
 					}
 					// console.log(res.data);
