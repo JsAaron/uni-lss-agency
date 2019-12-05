@@ -49,6 +49,7 @@
 			></QSInput>
 
 			<view class="type-title">经营信息</view>
+
 			<QSInput
 				:name="formName0"
 				variableName="shortername"
@@ -68,6 +69,7 @@
 				@change="onChangePicker1"
 				title="一级经营类型"
 			/>
+
 			<QSPickerCustom
 				:name="formName0"
 				variableName="picker2"
@@ -149,25 +151,197 @@
 				v-model="fromValue0.pic_2"
 			></QSPics>
 
-			<wButton
+			<WButton
 				text="下一步"
 				:rotate="fromValue0.isRotate"
 				@click.native="getStep0()"
 				bgColor="rgb(47, 133, 252)"
-			></wButton>
+			></WButton>
 		</block>
 
 		<block v-if="stepActive == 1">
-			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep1">
-				下一步
-			</QSWavesButton>
+			<view class="type-title">经营信息</view>
+
+			<QSInput
+				:name="formName1"
+				variableName="business_number"
+				ref="ref_business_number"
+				title="营业执照注册号"
+				verifyType="Number"
+				required
+				v-model="fromValue1.business_number"
+			></QSInput>
+
+			<QSInput
+				:name="formName1"
+				variableName="business_scope"
+				ref="ref_business_scope"
+				title="经营范围"
+				required
+				v-model="fromValue1.business_scope"
+			></QSInput>
+
+			<QSPickerDate
+				:name="formName1"
+				dateFormatArray="-"
+				variableName="contractstdate"
+				ref="ref_contractstdate"
+				title="营业期限开始"
+				:value="fromValue1.contractstdateDefault"
+				v-model="fromValue1.contractstdate"
+				placherhold="请选择"
+			/>
+
+			<QSPickerDate
+				:name="formName1"
+				variableName="contractendate"
+				ref="ref_contractendate"
+				title="营业期限结束"
+				:value="dateValue"
+				v-model="fromValue1.contractendate"
+				placherhold="请选择"
+			/>
+
+			<QSPics
+				:name="formName1"
+				variableName="business_img"
+				ref="ref_business_img"
+				customId="typein"
+				required
+				title="营业执照照片"
+				v-model="fromValue1.business_img"
+			></QSPics>
+
+			<QSInput
+				:name="formName1"
+				variableName="business_license"
+				ref="ref_business_license"
+				title="营业执照注册名称"
+				required
+				v-model="fromValue1.business_license"
+			></QSInput>
+
+			<QSPickerCustom
+				:name="formName0"
+				variableName="prov_cd"
+				ref="ref_prov_cd"
+				required
+				:steps="fromValue1.steps"
+				v-model="fromValue1.prov_cd"
+				title="省"
+			/>
+
+			<QSPickerCustom
+				:name="formName0"
+				variableName="city"
+				ref="ref_city"
+				required
+				:steps="fromValue1.steps"
+				v-model="fromValue1.city"
+				title="市"
+			/>
+
+			<QSPickerCustom
+				:name="formName0"
+				variableName="areaid"
+				ref="ref_areaid"
+				required
+				:steps="fromValue1.steps"
+				v-model="fromValue1.areaid"
+				title="区"
+			/>
+
+			<view class="type-title">企业法人/经办人</view>
+
+			<QSPickerCustom
+				:name="formName0"
+				variableName="holder_type"
+				ref="ref_holder_type"
+				required
+				:steps="fromValue1.steps"
+				v-model="fromValue1.holder_type"
+				title="证件持有人类型"
+			/>
+
+			<QSInput
+				:name="formName1"
+				variableName="holder_name"
+				ref="ref_holder_name"
+				title="证件持有人姓名"
+				required
+				v-model="fromValue1.holder_name"
+			></QSInput>
+
+			<QSPickerCustom
+				:name="formName0"
+				variableName="document_type"
+				ref="ref_document_type"
+				required
+				:steps="fromValue1.steps"
+				v-model="fromValue1.document_type"
+				title="证件类型"
+			/>
+
+			<QSInput
+				:name="formName1"
+				variableName="identification_number"
+				ref="ref_identification_number"
+				title="证件号码"
+				required
+				v-model="fromValue1.identification_number"
+			></QSInput>
+
+			<QSPickerDate
+				:name="formName1"
+				variableName="identification_start"
+				title="证件有效期开始"
+				:value="dateValue"
+				v-model="fromValue1.identification_start"
+				placherhold="请选择"
+			/>
+
+			<QSPickerDate
+				:name="formName1"
+				variableName="identification_end"
+				title="证件有效期结束"
+				:value="dateValue"
+				v-model="fromValue1.identification_end"
+				placherhold="请选择"
+			/>
+
+			<QSPics
+				:name="formName1"
+				variableName="idcards_front"
+				ref="ref_idcards_front"
+				customId="typein"
+				required
+				title="证件扫描件"
+				v-model="fromValue1.idcards_front"
+			></QSPics>
+
+			<QSPics
+				:name="formName1"
+				variableName="idcards_back"
+				ref="ref_idcards_back"
+				customId="typein"
+				required
+				title="证件扫描件反面"
+				v-model="fromValue1.idcards_back"
+			></QSPics>
+
+			<QSRadio
+				:name="formName1"
+				variableName="electronic_invoice"
+				title="是否开通电子发票"
+				required
+				v-model="fromValue1.electronic_invoice"
+				:itemArray="electronic_invoice_itemArray"
+			></QSRadio>
 		</block>
 
-		<block v-if="stepActive == 2">
-			<QSWavesButton btnStyle="margin:50rpx 10px;" :wavesColor="'rgba(47, 133, 252,0.6)'" @click="getStep1">
-				提交注册
-			</QSWavesButton>
-		</block>
+		<block v-if="stepActive == 2"></block>
+
+		<block v-if="stepActive == 4"></block>
 	</view>
 </template>
 
@@ -177,12 +351,10 @@ import QSApp from '@/components/QS-inputs-split/js/app.js';
 import uniSteps from '@/components/uni-steps/uni-steps.vue';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
-import wButton from '@/components/watch-login/watch-button.vue'; //button
-import { getShopsType, getPerfectAgent, saveAgentJjOne } from '@/api/agent';
+import { getShopsType, getPerfectAgent, saveAgentJjOne, getProvcd } from '@/api/agent';
 
 export default {
 	components: {
-		wButton,
 		uniSteps,
 		uniIcons,
 		uniNavBar
@@ -190,9 +362,10 @@ export default {
 	data() {
 		return {
 			agentData: {},
+			typeOptions: {},
 
 			// ============ 步骤条 ==============
-			stepActive: 0,
+			stepActive: 1,
 			stepList: [
 				{
 					title: '经营信息'
@@ -211,6 +384,7 @@ export default {
 			// ============ 经营信息 ==============
 			formName0: 'step0',
 			fromValue0: {
+				isRotate: false,
 				legal: '',
 				mobileNo: '',
 				email: '',
@@ -251,8 +425,47 @@ export default {
 					step_1_value: 'name'
 				},
 				pic_1: [{ required: true, path: '' }],
-				pic_2: [{ required: true, path: '' }],
-				isRotate: false
+				pic_2: [{ required: true, path: '' }]
+			},
+
+			// ============ 商户信息 ==============
+			formName1: 'step1',
+			fromValue1: {
+				business_number: '',
+				business_scope: '',
+				contractstdate: '',
+				contractstdateDefault: '',
+				contractendate: '',
+				business_img: [{ required: true, path: '' }],
+				business_license: '',
+				prov_cd: '',
+				picker1Init: false,
+				picker2Init: false,
+				picker3Init: false,
+				city: '',
+				areaid: '',
+				steps: {
+					step_1_value: 'name'
+				},
+				holder_type: '',
+				holder_name: '',
+				document_type: '',
+				identification_number: '',
+				identification_start: '',
+				identification_end: '',
+				idcards_front: '',
+				idcards_back: '',
+				electronic_invoice: '',
+				electronic_invoice_itemArray: [
+					{
+						name: '男',
+						value: '男'
+					},
+					{
+						name: '女',
+						value: '女'
+					}
+				]
 			}
 		};
 	},
@@ -263,9 +476,39 @@ export default {
 	},
 
 	onReady() {
-		this.getTableData().then(data => {
-			// console.log('init',data,data.shop_scene.split(","))
-			this.agentData = data;
+		this.initData();
+	},
+
+	computed: {
+		barText() {
+			if (this.stepActive == 1 || this.stepActive == 2 || this.stepActive == 3) {
+				return '上一步';
+			} else {
+				return '';
+			}
+		}
+	},
+	methods: {
+		initData() {
+			getPerfectAgent({
+				agentid: this.agentid
+			}).then(data => {
+				console.log('data', data);
+				this.agentData = data;
+				this.initStep1();
+			});
+		},
+
+		setIntputValueFc(name, data) {
+			this.$refs[name].setValue(data);
+		},
+
+		setInputDataFc(name, data) {
+			this.$refs[name].setData(data);
+		},
+
+		initStep0() {
+			let data = this.agentData;
 			this.initPickerData();
 			this.setIntputValueFc('ref_legal', data.legal);
 			this.setIntputValueFc('ref_mobileNo', data.mobileNo);
@@ -285,24 +528,128 @@ export default {
 					{ required: true, path: 'https://img.facess.net/' + data.supple_materials }
 				]);
 			}
-		});
-	},
+		},
 
-	computed: {
-		barText() {
-			if (this.stepActive == 1 || this.stepActive == 2 || this.stepActive == 3) {
-				return '上一步';
-			} else {
-				return '';
+		initStep1() {
+			let data = this.agentData;
+			this.initAddressData();
+			this.setIntputValueFc('ref_business_number', data.business_number);
+			this.setIntputValueFc('ref_business_scope', data.business_scope);
+			this.setIntputValueFc('ref_business_license', data.business_license);
+
+			if (data.contractstdate) {
+				this.$refs['ref_contractstdate'].confirm({
+					data: [data.contractstdate]
+				});
 			}
-		}
-	},
-	methods: {
-		getTableData() {
-			return getPerfectAgent({
-				agentid: this.agentid
+			if (data.contractendate) {
+				this.$refs['ref_contractendate'].confirm({
+					data: [data.contractendate]
+				});
+			}
+
+			if (data.business_img != null && data.business_img != '') {
+				this.setInputDataFc('ref_business_img', [
+					{ required: true, path: 'https://img.facess.net/' + data.business_img }
+				]);
+			}
+		},
+
+		//==================== 商户信息 ====================
+
+		// 省会
+		updateProvType(proareaid) {
+			return getProvcd().then(data => {
+				let arr = [];
+				data.map(item => {
+					if (item.areaid == proareaid) {
+						// 强制初始化赋值，所以updateOneType在change会调用一次
+						//覆盖初始化的值，这里用给一个变量跳过
+						this.fromValue1.picker1Init = true;
+						this.$refs['ref_prov_cd'].confirm({
+							data: [
+								{
+									name: item.areaname,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.areaname,
+						value: item
+					});
+				});
+				this.setInputDataFc('ref_prov_cd', [arr]);
 			});
 		},
+
+		// 市
+		updateCityType(proareaid, cityareaid) {
+			return getProvcd({
+				type: 'city',
+				areaid: proareaid
+			}).then(data => {
+				let arr = [];
+				data.map(item => {
+					if (item.areaid == cityareaid) {
+						// 强制初始化赋值，所以updateOneType在change会调用一次
+						//覆盖初始化的值，这里用给一个变量跳过
+						this.fromValue1.picker1Init = true;
+						this.$refs['ref_city'].confirm({
+							data: [
+								{
+									name: item.areaname,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.areaname,
+						value: item
+					});
+				});
+				this.setInputDataFc('ref_city', [arr]);
+			});
+		},
+
+		// 区
+		updateAreaType(cityareaid, areaid) {
+			return getProvcd({
+				type: 'area',
+				areaid: cityareaid
+			}).then(data => {
+				let arr = [];
+				data.map(item => {
+					if (item.areaid == areaid) {
+						this.$refs['ref_areaid'].confirm({
+							data: [
+								{
+									name: item.areaname,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.areaname,
+						value: item
+					});
+				});
+				this.setInputDataFc('ref_areaid', [arr]);
+			});
+		},
+
+		initAddressData() {
+			this.updateProvType(this.agentData.proareaid).then(() => {
+				this.updateCityType(this.agentData.proareaid, this.agentData.cityareaid).then(() => {
+					this.updateAreaType(this.agentData.cityareaid, this.agentData.areaid);
+				});
+			});
+		},
+
+		//==================== 经营信息 ====================
 
 		onChangePicker1(item) {
 			if (this.fromValue0.picker1Init) {
@@ -320,14 +667,6 @@ export default {
 				return;
 			}
 			this.updateThreeType(this.fromValue0.picker2.data[0].value.typeid, '', true);
-		},
-
-		setIntputValueFc(name, data) {
-			this.$refs[name].setValue(data);
-		},
-
-		setInputDataFc(name, data) {
-			this.$refs[name].setData(data);
 		},
 
 		//类型一
@@ -471,12 +810,8 @@ export default {
 						return;
 					}
 					this.saveRequest1(res.data);
-					// this.stepActive = 1;
 				})
 				.catch(err => {
-					// uni.showToast({
-					// 	title: '获取表单数据失败'
-					// });
 					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
 				});
 		},
@@ -497,7 +832,7 @@ export default {
 		},
 
 		saveRequest1(data) {
-			this.fromValue0.isRotate = true
+			this.fromValue0.isRotate = true;
 			let query = {
 				agentid: this.agentid,
 				agentname: data.agentname,
@@ -517,12 +852,14 @@ export default {
 				three_type: this.fromValue0.picker3.data[0].value.typeid,
 				userId: this.agentData.userId
 			};
-			// saveAgentJjOne(query).then(data => {
-			// 	this.fromValue0.isRotate = false
-			// 	console.log(111, data);
-			// }).catch(()=>{
-			// 	this.fromValue0.isRotate = false
-			// })
+			saveAgentJjOne(query)
+				.then(data => {
+					this.fromValue0.isRotate = false;
+					this.stepActive = 1;
+				})
+				.catch(() => {
+					this.fromValue0.isRotate = false;
+				});
 		},
 
 		/**

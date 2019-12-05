@@ -42,3 +42,11 @@ export function saveAgentJjOne(data) {
 		data: data
 	})
 }
+
+export function getProvcd(data) {
+	return request({
+		url: '/moblieapp/getProvcd',
+		method: 'post',
+		params: data
+	})
+}

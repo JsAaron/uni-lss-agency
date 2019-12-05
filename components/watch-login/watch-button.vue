@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 按钮 -->
-		<button :class="['buttonBorder',!_rotate?'dlbutton':'dlbutton_loading']" :style="{'background':bgColor, 'color': fontColor}">
+		<button :class="['buttonBorder',!_rotate?'dlbutton':'dlbutton_loading']" :style="{'background':bgColor, 'color': fontColor,'margin':margin}">
 			<view :class="_rotate?'rotate_loop':''">
 				<text v-if="_rotate" class="cuIcon cuIcon-loading1 "></text>
 				<text v-if="!_rotate">{{ text }}</text>
@@ -23,6 +23,10 @@
 				//按钮背景颜色
 				type: String,
 				default: "linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.6))",
+			},
+			margin: {
+				type: String,
+				default: '50rpx auto'
 			},
 			fontColor:{
 				//按钮字体颜色
@@ -46,15 +50,15 @@
 		color: #FFFFFF;
 		font-size: 30upx;
 		width:601upx;
-		height:100upx;
+		height:90upx;
 		background:linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.6));
 		box-shadow:0upx 0upx 13upx 0upx rgba(164,217,228,0.4);
-		border-radius:2.5rem;
-		line-height: 100upx;
+		border-radius:5px;
+		line-height: 90upx;
 		text-align: center;
 		margin-left: auto;
 		margin-right: auto;
-		margin-top: 96upx;
+		/* margin-top: 96upx; */
 	}
 	.dlbutton_loading {
 		color: #FFFFFF;
@@ -68,7 +72,6 @@
 		text-align: center;
 		margin-left: auto;
 		margin-right: auto;
-		margin-top: 96upx;
 	}
 	.buttonBorder{
 	    border: none ;
