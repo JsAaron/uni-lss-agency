@@ -58,3 +58,11 @@ export function saveAgentJjTwo(data) {
 		data: data
 	})
 }
+
+export function saveAgentJjThree(data) {
+	return request({
+		url: '/moblieapp/AgentSaveJjThree',
+		method: 'post',
+		data: data
+	})
+}

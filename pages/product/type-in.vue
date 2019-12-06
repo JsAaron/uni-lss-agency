@@ -349,9 +349,154 @@
 			></WButton>
 		</block>
 
-		<block v-if="stepActive == 2"></block>
+		<block v-if="stepActive == 2">
+			<view class="type-title">结算信息</view>
 
-		<block v-if="stepActive == 4"></block>
+			<view class="step2-row">
+				<view class="step2-title">
+					<text class="step2-star">*</text>
+					<text>微信费率</text>
+				</view>
+				<uni-number-box
+					:min="0.0"
+					:max="100"
+					:step="0.01"
+					:value="fromValue2.wx_num_gf"
+					@change="onchange_wx_num_gf"
+				/>
+			</view>
+
+			<view class="step2-row">
+				<view class="step2-title">
+					<text class="step2-star">*</text>
+					<text>支付宝费率</text>
+				</view>
+				<uni-number-box
+					:min="0.0"
+					:max="100"
+					:step="0.01"
+					:value="fromValue2.zfb_num_gf"
+					@change="onchange_zfb_num_gf"
+				/>
+			</view>
+
+			<view class="step2-row">
+				<view class="step2-title">随行付支付宝费率</view>
+				<uni-number-box
+					:min="0.0"
+					:max="100"
+					:step="0.01"
+					:value="fromValue2.zfb_num_sxf"
+					@change="onchange_zfb_num_sxf"
+				/>
+			</view>
+
+			<view class="step2-row">
+				<view class="step2-title">随行付微信费率</view>
+				<uni-number-box
+					:min="0.0"
+					:max="100"
+					:step="0.01"
+					:value="fromValue2.wx_num_sxf"
+					@change="onchange_wx_num_sxf"
+				/>
+			</view>
+
+			<view class="step2-row">
+				<view class="step2-title">富友支付宝费率</view>
+				<uni-number-box
+					:min="0.0"
+					:max="100"
+					:step="0.01"
+					:value="fromValue2.zfb_num_fy"
+					@change="onchange_zfb_num_fy"
+				/>
+			</view>
+
+			<view class="step2-row">
+				<view class="step2-title">富友微信费率</view>
+				<uni-number-box
+					:min="0.0"
+					:max="100"
+					:step="0.01"
+					:value="fromValue2.wx_num_fy"
+					@change="onchange_wx_num_fy"
+				/>
+			</view>
+
+			<QSPickerCustom
+				:name="formName2"
+				variableName="zflxtype"
+				ref="ref_zflxtype"
+				required
+				v-model="fromValue2.zflxtype"
+				title="账户类型"
+			/>
+
+			<QSInput
+				:name="formName2"
+				variableName="account_name"
+				ref="ref_account_name"
+				title="开户名称"
+				required
+				v-model="fromValue2.account_name"
+			></QSInput>
+
+			<QSInput
+				:name="formName2"
+				variableName="account_city"
+				ref="ref_account_city"
+				title="开户银行城市"
+				required
+				v-model="fromValue2.account_city"
+			></QSInput>
+
+			<QSInput
+				:name="formName2"
+				variableName="deposit_bank"
+				ref="ref_deposit_bank"
+				title="开户银行"
+				required
+				v-model="fromValue2.deposit_bank"
+			></QSInput>
+
+			<QSInput
+				:name="formName2"
+				variableName="bank_branch"
+				ref="ref_bank_branch"
+				title="开户支行"
+				required
+				v-model="fromValue2.bank_branch"
+			></QSInput>
+
+			<QSInput
+				:name="formName2"
+				variableName="bank_account"
+				ref="ref_bank_account"
+				title="银行账号"
+				required
+				v-model="fromValue2.bank_account"
+			></QSInput>
+
+			<QSPics
+				:name="formName2"
+				variableName="industry_license"
+				ref="ref_industry_license"
+				customId="typein"
+				required
+				title="开户许可证"
+				v-model="fromValue2.industry_license"
+			></QSPics>
+
+			<WButton
+				text="下一步"
+				:rotate="fromValue2.isRotate"
+				@click.native="getStep2()"
+				bgColor="rgb(47, 133, 252)"
+			></WButton>
+		</block>
+
+		<block v-if="stepActive == 3"></block>
 	</view>
 </template>
 
@@ -361,13 +506,22 @@ import QSApp from '@/components/QS-inputs-split/js/app.js';
 import uniSteps from '@/components/uni-steps/uni-steps.vue';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
-import { getShopsType, getPerfectAgent, saveAgentJjOne, getProvcd, saveAgentJjTwo } from '@/api/agent';
+import uniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
+import {
+	getShopsType,
+	getPerfectAgent,
+	saveAgentJjOne,
+	getProvcd,
+	saveAgentJjTwo,
+	saveAgentJjThree
+} from '@/api/agent';
 
 export default {
 	components: {
 		uniSteps,
 		uniIcons,
-		uniNavBar
+		uniNavBar,
+		uniNumberBox
 	},
 	data() {
 		return {
@@ -375,7 +529,7 @@ export default {
 			typeOptions: {},
 
 			// ============ 步骤条 ==============
-			stepActive: 1,
+			stepActive: 2,
 			stepList: [
 				{
 					title: '经营信息'
@@ -479,6 +633,25 @@ export default {
 						value: '否'
 					}
 				]
+			},
+
+			// ============ 结算信息 ==============
+			formName2: 'step2',
+			fromValue2: {
+				isRotate: false,
+				wx_num_gf: '',
+				zfb_num_gf: '',
+				zfb_num_sxf: '',
+				wx_num_sxf: '',
+				zfb_num_fy: '',
+				zfb_num_fy: '',
+				zflxtype: [],
+				account_name: '',
+				account_city: '',
+				deposit_bank: '',
+				bank_branch: '',
+				bank_account: '',
+				industry_license: [{ required: true, path: '' }]
 			}
 		};
 	},
@@ -508,7 +681,7 @@ export default {
 			}).then(data => {
 				console.log('data', data);
 				this.agentData = data;
-				this.initStep1();
+				this.initStep2();
 			});
 		},
 
@@ -604,6 +777,51 @@ export default {
 			}
 
 			this.setIntputValueFc('ref_electronic_invoice', data.electronic_invoice);
+		},
+
+		initStep2() {
+			let data = this.agentData;
+			this.fromValue2.wx_num_gf = data.wx_num_gf;
+			this.fromValue2.zfb_num_gf = data.zfb_num_gf;
+			this.fromValue2.zfb_num_sxf = data.zfb_num_sxf;
+			this.fromValue2.wx_num_sxf = data.wx_num_sxf;
+			this.fromValue2.zfb_num_fy = data.zfb_num_fy;
+			this.fromValue2.wx_num_fy = data.wx_num_fy;
+			this.setInputDataFc('ref_zflxtype', [['对公账号', '经营者账号']]);
+			this.$refs['ref_zflxtype'].confirm({
+				data: [data.zflxtype]
+			});
+			this.setIntputValueFc('ref_account_name', data.account_name);
+			this.setIntputValueFc('ref_account_city', data.account_city);
+			this.setIntputValueFc('ref_deposit_bank', data.deposit_bank);
+			this.setIntputValueFc('ref_bank_branch', data.bank_branch);
+			this.setIntputValueFc('ref_bank_account', data.bank_account);
+			if (data.industry_license != null && data.industry_license != '') {
+				this.setInputDataFc('ref_industry_license', [
+					{ required: true, path: 'https://img.facess.net/' + data.industry_license }
+				]);
+			}
+		},
+
+		//==================== 结算账户 ====================
+
+		onchange_wx_num_gf(value) {
+			this.fromValue2.wx_num_gf = value;
+		},
+		onchange_zfb_num_gf(value) {
+			this.fromValue2.zfb_num_gf = value;
+		},
+		onchange_zfb_num_sxf(value) {
+			this.fromValue2.zfb_num_sxf = value;
+		},
+		onchange_wx_num_sxf(value) {
+			this.fromValue2.wx_num_sxf = value;
+		},
+		onchange_zfb_num_fy(value) {
+			this.fromValue2.zfb_num_fy = value;
+		},
+		onchange_wx_num_fy(value) {
+			this.fromValue2.wx_num_fy = value;
 		},
 
 		//==================== 商户信息 ====================
@@ -902,12 +1120,29 @@ export default {
 		getStep1() {
 			QSApp.getForm(this.formName1)
 				.then(res => {
-					console.log(res);
 					if (res.verifyErr.length > 0) {
 						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
 						return;
 					}
 					this.saveRequest2(res.data);
+				})
+				.catch(err => {
+					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
+				});
+		},
+
+		/**
+		 * 第三步
+		 */
+		getStep2() {
+			QSApp.getForm(this.formName2)
+				.then(res => {
+					console.log(res);
+					if (res.verifyErr.length > 0) {
+						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
+						return;
+					}
+					this.saveRequest3(res.data);
 				})
 				.catch(err => {
 					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
@@ -937,9 +1172,43 @@ export default {
 			}
 		},
 
+		saveRequest3(data) {
+			if (this.fromValue2.isRotate) {
+				return;
+			}
+			this.fromValue2.isRotate = true;
+
+			let query = {
+				agentid: this.agentid,
+				userId: this.agentData.userId,
+				account_city: data.account_city,
+				account_name: data.account_name,
+				bank_account: data.bank_account,
+				bank_branch: data.bank_branch,
+				deposit_bank: data.deposit_bank,
+				industry_license: this.getUploadUrl('industry_license', data),
+				wx_num_fy: this.fromValue2.wx_num_fy,
+				wx_num_gf: this.fromValue2.wx_num_gf,
+				wx_num_sxf: this.fromValue2.wx_num_sxf,
+				zfb_num_fy: this.fromValue2.zfb_num_fy,
+				zfb_num_gf: this.fromValue2.zfb_num_gf,
+				zfb_num_sxf: this.fromValue2.zfb_num_sxf,
+				zflxtype: data.zflxtype.data[0]
+			};
+
+			saveAgentJjThree(query)
+				.then(data => {
+					this.fromValue2.isRotate = false;
+					this.stepActive = 3;
+				})
+				.catch(() => {
+					this.fromValue2.isRotate = false;
+				});
+		},
+
 		saveRequest1(data) {
-			if(this.fromValue0.isRotate){
-				return 
+			if (this.fromValue0.isRotate) {
+				return;
 			}
 			this.fromValue0.isRotate = true;
 			let query = {
@@ -972,8 +1241,8 @@ export default {
 		},
 
 		saveRequest2(data) {
-			if(this.fromValue1.isRotate){
-				return 
+			if (this.fromValue1.isRotate) {
+				return;
 			}
 			this.fromValue1.isRotate = true;
 			let query = {
@@ -1002,8 +1271,7 @@ export default {
 			saveAgentJjTwo(query)
 				.then(data => {
 					this.fromValue1.isRotate = false;
-					console.log(213);
-					// this.stepActive = 1;
+					this.stepActive = 2;
 				})
 				.catch(() => {
 					this.fromValue1.isRotate = false;
@@ -1052,5 +1320,18 @@ export default {
 		height: 32upx;
 		background-color: #ccc;
 	}
+}
+
+.step2-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20rpx 30rpx;
+	font-size: 28rpx;
+}
+
+.step2-star {
+	color: red;
+	margin-right: 10rpx;
 }
 </style>
