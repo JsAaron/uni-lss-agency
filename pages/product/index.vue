@@ -105,15 +105,8 @@ export default {
 	onShow() {
 		// 强制更新状态
 		if (app.globalData.product.update) {
-			let tabItem = this.tabBars[this.tabCurrentIndex];
-			if (tabItem.newsList) {
-				tabItem.newsList.map(item => {
-					if (item.pass == 3 && item.agentid == app.globalData.product.agentid) {
-						item.passName = '待审核';
-						item.pass = 2;
-					}
-				});
-			}
+			this.updateState(0);
+			this.updateState(1);
 		}
 	},
 	async onLoad() {
@@ -125,6 +118,19 @@ export default {
 		this.initTabbars();
 	},
 	methods: {
+		
+		updateState(index){
+			let tabItem = this.tabBars[index];
+			if (tabItem.newsList) {
+				tabItem.newsList.map(item => {
+					if (item.pass == 3 && item.agentid == app.globalData.product.agentid) {
+						item.passName = '待审核';
+						item.pass = 2;
+					}
+				});
+			}
+		},
+
 		/**
 		 * 数据处理方法在vue和nvue中通用，可以直接用mixin混合
 		 * 这里直接写的
