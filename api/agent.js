@@ -66,3 +66,20 @@ export function saveAgentJjThree(data) {
 		data: data
 	})
 }
+
+export function saveAgentJjFour(data) {
+	return request({
+		url: '/moblieapp/AgentSaveJjFour',
+		method: 'post',
+		data: data
+	})
+}
+
+
+export function delAgent(data) {
+	return request({
+		url: '/moblieapp/agentDel',
+		method: 'post',
+		data: data,
+	})
+}

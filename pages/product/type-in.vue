@@ -10,8 +10,8 @@
 			background-color="#2F85FC"
 			title="录入资料"
 			color="#ffffff"
-			@click-left="onBack"
-			@click-right="onStep"
+			@click-left="onBackPage"
+			@click-right="onPrevStep"
 		/>
 		<view class="type-steps"><uni-steps :options="stepList" :active="stepActive" /></view>
 
@@ -496,7 +496,63 @@
 			></WButton>
 		</block>
 
-		<block v-if="stepActive == 3"></block>
+		<block v-if="stepActive == 3">
+			<view class="type-title">组织机构信息</view>
+
+			<QSInput
+				:name="formName3"
+				variableName="organization_code"
+				ref="ref_organization_code"
+				title="组织机构代码"
+				required
+				v-model="fromValue3.organization_code"
+			></QSInput>
+
+			<QSPickerDate
+				:name="formName3"
+				dateFormatArray="-"
+				variableName="organization_start"
+				:dataSet="fromValue3.dataSet"
+				ref="ref_organization_start"
+				title="有效期开始"
+				required
+				v-model="fromValue3.organization_start"
+				placherhold="请选择"
+			/>
+
+			<QSPickerDate
+				:name="formName3"
+				dateFormatArray="-"
+				variableName="organization_end"
+				:dataSet="fromValue3.dataSet"
+				ref="ref_organization_end"
+				required
+				title="有效期结束"
+				v-model="fromValue3.organization_end"
+				placherhold="请选择"
+			/>
+
+			<QSPics
+				:name="formName3"
+				variableName="organization_img"
+				ref="ref_organization_img"
+				customId="typein"
+				required
+				title="组织机构代码证照片"
+				v-model="fromValue3.organization_img"
+			></QSPics>
+
+			<WButton
+				text="下一步"
+				:rotate="fromValue3.isRotate"
+				@click.native="getStep3()"
+				bgColor="rgb(47, 133, 252)"
+			></WButton>
+		</block>
+
+		<block v-if="stepActive == 4">
+			<WButton text="确定提交" @click.native="getStep4()" bgColor="rgb(47, 133, 252)"></WButton>
+		</block>
 	</view>
 </template>
 
@@ -513,7 +569,9 @@ import {
 	saveAgentJjOne,
 	getProvcd,
 	saveAgentJjTwo,
-	saveAgentJjThree
+	saveAgentJjThree,
+	saveAgentJjFour,
+	delAgent
 } from '@/api/agent';
 
 export default {
@@ -529,7 +587,7 @@ export default {
 			typeOptions: {},
 
 			// ============ 步骤条 ==============
-			stepActive: 2,
+			stepActive: 0,
 			stepList: [
 				{
 					title: '经营信息'
@@ -542,6 +600,9 @@ export default {
 				},
 				{
 					title: '组织机构'
+				},
+				{
+					title: '提交'
 				}
 			],
 
@@ -652,6 +713,19 @@ export default {
 				bank_branch: '',
 				bank_account: '',
 				industry_license: [{ required: true, path: '' }]
+			},
+
+			// ============ 组织机构 ==============
+			formName3: 'step3',
+			fromValue3: {
+				isRotate: false,
+				organization_code: '',
+				organization_start: '',
+				organization_end: '',
+				organization_img: [{ required: true, path: '' }],
+				dataSet: {
+					dateFormatArray: ['-', '-', '-']
+				}
 			}
 		};
 	},
@@ -681,8 +755,26 @@ export default {
 			}).then(data => {
 				console.log('data', data);
 				this.agentData = data;
-				this.initStep2();
+				this.initStep0();
 			});
+		},
+
+		/**
+		 * 返回
+		 */
+		onBackPage() {
+			gotoPage('back');
+		},
+
+		onPrevStep() {
+			this.stepActive -= 1;
+		},
+		
+		onPrevNext() {
+			this.stepActive += 1;
+			setTimeout(()=>{
+				this[`initStep${this.stepActive}`]()
+			},0)
 		},
 
 		setIntputValueFc(name, data) {
@@ -803,6 +895,27 @@ export default {
 			}
 		},
 
+		initStep3() {
+			let data = this.agentData;
+			this.setIntputValueFc('ref_organization_code', data.organization_code);
+
+			if (data.organization_start) {
+				this.$refs['ref_organization_start'].confirm({
+					data: data.organization_start
+				});
+			}
+			if (data.organization_end) {
+				this.$refs['ref_organization_end'].confirm({
+					data: data.organization_end
+				});
+			}
+			if (data.organization_img != null && data.organization_img != '') {
+				this.setInputDataFc('ref_organization_img', [
+					{ required: true, path: 'https://img.facess.net/' + data.organization_img }
+				]);
+			}
+		},
+
 		//==================== 结算账户 ====================
 
 		onchange_wx_num_gf(value) {
@@ -823,7 +936,7 @@ export default {
 		onchange_wx_num_fy(value) {
 			this.fromValue2.wx_num_fy = value;
 		},
-
+ 
 		//==================== 商户信息 ====================
 
 		onChangeProv_cd(item) {
@@ -1084,20 +1197,6 @@ export default {
 		},
 
 		/**
-		 * 返回
-		 */
-		onBack() {
-			gotoPage('back');
-		},
-
-		/**
-		 * 上一步
-		 */
-		onStep() {
-			this.stepActive -= 1;
-		},
-
-		/**
 		 * 注册第一步
 		 */
 		getStep0() {
@@ -1150,6 +1249,43 @@ export default {
 		},
 
 		/**
+		 * 第4步
+		 */
+		getStep3() {
+			QSApp.getForm(this.formName3)
+				.then(res => {
+					console.log(res);
+					if (res.verifyErr.length > 0) {
+						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
+						return;
+					}
+					this.saveRequest4(res.data);
+				})
+				.catch(err => {
+					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
+				});
+		},
+
+		/**
+		 * 提交
+		 */
+		getStep4() {
+			uni.showModal({
+				title: '确认信息',
+				content: '确认审核操作？',
+				success: function(res) {
+					if (res.confirm) {
+						this.onBackPage()
+						// delAgent({ agentid: this.agentData.agentid, type: 2 }).then(() => {
+						// 	this.$refs['Message'].success('提交成功,等待审核');
+							
+						// });
+					}
+				}
+			});
+		},
+
+		/**
 		 * 获取上传图片的url
 		 */
 		getUploadUrl(key, data) {
@@ -1170,6 +1306,29 @@ export default {
 				//已存在
 				return splits(upLoadResult.data);
 			}
+		},
+
+		saveRequest4(data) {
+			if (this.fromValue3.isRotate) {
+				return;
+			}
+			this.fromValue3.isRotate = true;
+			let query = {
+				agentid: this.agentid,
+				userId: this.agentData.userId,
+				organization_code: data.organization_code,
+				organization_start: data.organization_start.data,
+				organization_end: data.organization_end.data,
+				organization_img: this.getUploadUrl('organization_img', data)
+			};
+			saveAgentJjFour(query)
+				.then(data => {
+					this.fromValue3.isRotate = false;
+					this.onPrevNext()
+				})
+				.catch(() => {
+					this.fromValue3.isRotate = false;
+				});
 		},
 
 		saveRequest3(data) {
@@ -1199,7 +1358,7 @@ export default {
 			saveAgentJjThree(query)
 				.then(data => {
 					this.fromValue2.isRotate = false;
-					this.stepActive = 3;
+					this.onPrevNext()
 				})
 				.catch(() => {
 					this.fromValue2.isRotate = false;
@@ -1233,7 +1392,7 @@ export default {
 			saveAgentJjOne(query)
 				.then(data => {
 					this.fromValue0.isRotate = false;
-					this.stepActive = 1;
+					this.onPrevNext()
 				})
 				.catch(() => {
 					this.fromValue0.isRotate = false;
@@ -1271,26 +1430,19 @@ export default {
 			saveAgentJjTwo(query)
 				.then(data => {
 					this.fromValue1.isRotate = false;
-					this.stepActive = 2;
+					this.onPrevNext()
 				})
 				.catch(() => {
 					this.fromValue1.isRotate = false;
 				});
 		}
-
-		/**
-		 * 注册第二步
-		//  */
-		// getStep1() {
-		// 	this.stepActive = 2;
-		// }
 	}
 };
 </script>
 
 <style lang="scss">
 .container {
-	// height: 100%;
+	height: 100%;
 	background-color: #fff;
 }
 
