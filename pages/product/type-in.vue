@@ -248,7 +248,6 @@
 				:name="formName1"
 				variableName="areaid"
 				ref="ref_areaid"
-				required
 				:steps="fromValue1.steps"
 				v-model="fromValue1.areaid"
 				title="区"
@@ -362,7 +361,7 @@ import QSApp from '@/components/QS-inputs-split/js/app.js';
 import uniSteps from '@/components/uni-steps/uni-steps.vue';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
-import { getShopsType, getPerfectAgent, saveAgentJjOne, getProvcd } from '@/api/agent';
+import { getShopsType, getPerfectAgent, saveAgentJjOne, getProvcd, saveAgentJjTwo } from '@/api/agent';
 
 export default {
 	components: {
@@ -563,32 +562,26 @@ export default {
 				data: [data.document_type]
 			});
 
-			if (data.identification_start) {
-				this.$refs['ref_identification_start'].confirm({
-					data: [data.identification_start]
-				});
-			}
-
-			if (data.identification_start) {
-				this.$refs['ref_identification_end'].confirm({
-					data: [data.identification_end]
-				});
-			}
-
-			if (data.contractendate) {
-				this.$refs['ref_contractendate'].confirm({
-					data: [data.contractendate]
-				});
-			}
-
 			if (data.contractstdate) {
 				this.$refs['ref_contractstdate'].confirm({
-					data: [data.contractstdate]
+					data: data.contractstdate
 				});
 			}
 			if (data.contractendate) {
 				this.$refs['ref_contractendate'].confirm({
-					data: [data.contractendate]
+					data: data.contractendate
+				});
+			}
+
+			if (data.identification_start) {
+				this.$refs['ref_identification_start'].confirm({
+					data: data.identification_start
+				});
+			}
+
+			if (data.identification_end) {
+				this.$refs['ref_identification_end'].confirm({
+					data: data.identification_end
 				});
 			}
 
@@ -925,18 +918,29 @@ export default {
 		 * 获取上传图片的url
 		 */
 		getUploadUrl(key, data) {
+			//只允许一个/开头
+			function splits(url) {
+				if (!url) {
+					return '';
+				}
+				let path = url.split('tgimg')[1];
+				return '/tgimg' + path;
+			}
 			let upLoadResult = data[key][0].upLoadResult;
 			//是新上传
 			if (upLoadResult.length > 0) {
 				let data1 = JSON.parse(upLoadResult[1].data);
-				return data1.url;
+				return splits(data1.url);
 			} else {
 				//已存在
-				return upLoadResult.data;
+				return splits(upLoadResult.data);
 			}
 		},
 
 		saveRequest1(data) {
+			if(this.fromValue0.isRotate){
+				return 
+			}
 			this.fromValue0.isRotate = true;
 			let query = {
 				agentid: this.agentid,
@@ -968,39 +972,42 @@ export default {
 		},
 
 		saveRequest2(data) {
-			console.log(data)
-			this.fromValue0.isRotate = true;
+			if(this.fromValue1.isRotate){
+				return 
+			}
+			this.fromValue1.isRotate = true;
 			let query = {
-				agentid:  this.agentid,
-				areaid: '',
-				business_img: '/tgimg/201911/d15af216-79fe-42d5-a217-ee797e5f87ea.jpg',
-				business_license: '湖南曙光教育培训学校',
-				business_number: '524300004448823740',
-				business_scope:
-					'家电、电工、焊工、电脑、电脑远程教育、无线电通讯、计算机运用、锅炉操作工、厂内机动车辆驾驶员、制冷工等技能培训及技能鉴定、英语教学与职业英语培训、秘书、物业管理员、餐厅服务员、客房服务员、前厅服务员、育婴师、健康管理师、人力资源管理师、室内装饰设计师、圆林绿化工、家政服务员、养老护理员。',
-				city: '430100',
-				contractendate: '2020-05-12',
-				contractstdate: '2017-05-12',
-				document_type: '身份证',
-				electronic_invoice: '是',
-				holder_name: '王永元',
-				holder_type: '法人',
-				idcards_back: '/tgimg/201911/ca5890cb-9b81-4692-a770-e539292ab754.jpg',
-				idcards_front: '/tgimg/201911/8df29186-e4be-43ec-9899-0be3e5ae4e16.jpg',
-				identification_end: '2027-11-30',
-				identification_number: '430103194702102531',
-				identification_start: '2007-09-26',
-				prov_cd: '430000',
-				userId: '4166'
+				userId: this.agentData.userId,
+				agentid: this.agentid,
+				prov_cd: data.prov_cd.data[0].value.areaid,
+				city: data.city.data[0].value.areaid,
+				areaid: data.areaid.data ? data.areaid.data[0].value.areaid : '',
+				business_img: this.getUploadUrl('business_img', data),
+				business_license: data.business_license,
+				business_number: data.business_number,
+				business_scope: data.business_scope,
+				contractendate: data.contractendate.data,
+				contractstdate: data.contractstdate.data,
+				document_type: data.document_type.data[0],
+				electronic_invoice: data.electronic_invoice,
+				holder_name: data.holder_name,
+				holder_type: data.holder_type.data[0],
+				idcards_back: this.getUploadUrl('idcards_back', data),
+				idcards_front: this.getUploadUrl('idcards_front', data),
+				identification_start: data.identification_start.data,
+				identification_end: data.identification_end.data,
+				identification_number: data.identification_number
 			};
-			// saveAgentJjOne(query)
-			// 	.then(data => {
-			// 		this.fromValue0.isRotate = false;
-			// 		this.stepActive = 1;
-			// 	})
-			// 	.catch(() => {
-			// 		this.fromValue0.isRotate = false;
-			// 	});
+
+			saveAgentJjTwo(query)
+				.then(data => {
+					this.fromValue1.isRotate = false;
+					console.log(213);
+					// this.stepActive = 1;
+				})
+				.catch(() => {
+					this.fromValue1.isRotate = false;
+				});
 		}
 
 		/**
