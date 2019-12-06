@@ -15,7 +15,7 @@ function simulate() {
 		"agency": "/pages/agency/index",
 		"add-business": "/pages/agency/add-business"
 	}
-	return pages["typeIn"]
+	// return pages["typeIn"]
 	return pages["product"]
 	// return pages["product-details"]
 	// return pages["center"]

@@ -541,9 +541,9 @@
 				title="组织机构代码证照片"
 				v-model="fromValue3.organization_img"
 			></QSPics>
-
+			
 			<WButton
-				text="下一步"
+				text="下一步" 
 				:rotate="fromValue3.isRotate"
 				@click.native="getStep3()"
 				bgColor="rgb(47, 133, 252)"
@@ -551,7 +551,9 @@
 		</block>
 
 		<block v-if="stepActive == 4">
-			<WButton text="确定提交" @click.native="getStep4()" bgColor="rgb(47, 133, 252)"></WButton>
+			<WButton v-if="submit_success" text="完成" @click.native="onBackPage()" bgColor="rgb(47, 133, 252)"></WButton>
+			<WButton v-else text="确定提交" @click.native="getStep4()" bgColor="rgb(47, 133, 252)"></WButton>
+
 		</block>
 	</view>
 </template>
@@ -585,6 +587,7 @@ export default {
 		return {
 			agentData: {},
 			typeOptions: {},
+			submit_success: false,
 
 			// ============ 步骤条 ==============
 			stepActive: 0,
@@ -732,7 +735,7 @@ export default {
 
 	onLoad(options) {
 		// console.log(options.agentid)
-		this.agentid = '70800072265457';
+		this.agentid = options.agentid;
 	},
 
 	onReady() {
@@ -741,11 +744,13 @@ export default {
 
 	computed: {
 		barText() {
-			if (this.stepActive == 1 || this.stepActive == 2 || this.stepActive == 3) {
-				return '上一步';
-			} else {
-				return '';
+			if(this.submit_success){
+				return ''
 			}
+			if (this.stepActive != 0) {
+				return '上一步';
+			}
+			return '';
 		}
 	},
 	methods: {
@@ -767,14 +772,20 @@ export default {
 		},
 
 		onPrevStep() {
+			if (this.submit_success) {
+				return;
+			}
 			this.stepActive -= 1;
+			setTimeout(() => {
+				this[`initStep${this.stepActive}`]();
+			}, 0);
 		},
-		
+
 		onPrevNext() {
 			this.stepActive += 1;
-			setTimeout(()=>{
-				this[`initStep${this.stepActive}`]()
-			},0)
+			setTimeout(() => {
+				this[`initStep${this.stepActive}`]();
+			}, 0);
 		},
 
 		setIntputValueFc(name, data) {
@@ -916,6 +927,9 @@ export default {
 			}
 		},
 
+		//占位
+		initStep4() {},
+
 		//==================== 结算账户 ====================
 
 		onchange_wx_num_gf(value) {
@@ -936,7 +950,7 @@ export default {
 		onchange_wx_num_fy(value) {
 			this.fromValue2.wx_num_fy = value;
 		},
- 
+
 		//==================== 商户信息 ====================
 
 		onChangeProv_cd(item) {
@@ -1236,7 +1250,6 @@ export default {
 		getStep2() {
 			QSApp.getForm(this.formName2)
 				.then(res => {
-					console.log(res);
 					if (res.verifyErr.length > 0) {
 						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
 						return;
@@ -1254,7 +1267,6 @@ export default {
 		getStep3() {
 			QSApp.getForm(this.formName3)
 				.then(res => {
-					console.log(res);
 					if (res.verifyErr.length > 0) {
 						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
 						return;
@@ -1273,13 +1285,15 @@ export default {
 			uni.showModal({
 				title: '确认信息',
 				content: '确认审核操作？',
-				success: function(res) {
+				success: res => {
 					if (res.confirm) {
-						this.onBackPage()
-						// delAgent({ agentid: this.agentData.agentid, type: 2 }).then(() => {
-						// 	this.$refs['Message'].success('提交成功,等待审核');
-							
-						// });
+			this.$refs['Message'].success('提交成功,等待审核');
+			this.submit_success = true;
+
+			// 			delAgent({ agentid: this.agentData.agentid, type: 2 }).then(() => {
+			// this.$refs['Message'].success('提交成功,等待审核');
+			// this.submit_success = true;
+			// 			});
 					}
 				}
 			});
@@ -1324,7 +1338,7 @@ export default {
 			saveAgentJjFour(query)
 				.then(data => {
 					this.fromValue3.isRotate = false;
-					this.onPrevNext()
+					this.onPrevNext();
 				})
 				.catch(() => {
 					this.fromValue3.isRotate = false;
@@ -1358,7 +1372,7 @@ export default {
 			saveAgentJjThree(query)
 				.then(data => {
 					this.fromValue2.isRotate = false;
-					this.onPrevNext()
+					this.onPrevNext();
 				})
 				.catch(() => {
 					this.fromValue2.isRotate = false;
@@ -1392,7 +1406,7 @@ export default {
 			saveAgentJjOne(query)
 				.then(data => {
 					this.fromValue0.isRotate = false;
-					this.onPrevNext()
+					this.onPrevNext();
 				})
 				.catch(() => {
 					this.fromValue0.isRotate = false;
@@ -1430,7 +1444,7 @@ export default {
 			saveAgentJjTwo(query)
 				.then(data => {
 					this.fromValue1.isRotate = false;
-					this.onPrevNext()
+					this.onPrevNext();
 				})
 				.catch(() => {
 					this.fromValue1.isRotate = false;
@@ -1441,7 +1455,7 @@ export default {
 </script>
 
 <style lang="scss">
-.container {
+page {
 	height: 100%;
 	background-color: #fff;
 }
