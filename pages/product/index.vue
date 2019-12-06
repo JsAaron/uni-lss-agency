@@ -2,18 +2,36 @@
 	<view class="container">
 		<!-- 顶部选项卡 -->
 		<scroll-view id="nav-bar" class="nav-bar" scroll-x scroll-with-animation :scroll-left="scrollLeft">
-			<view v-for="(item, index) in tabBars" :key="item.id" class="nav-item" :class="{ current: index === tabCurrentIndex }" :id="'tab' + index" @click="changeTab(index)">
+			<view
+				v-for="(item, index) in tabBars"
+				:key="item.id"
+				class="nav-item"
+				:class="{ current: index === tabCurrentIndex }"
+				:id="'tab' + index"
+				@click="changeTab(index)"
+			>
 				{{ item.name }}
 			</view>
 		</scroll-view>
 
 		<!-- 下拉刷新组件 -->
-		<mix-pulldown-refresh ref="mixPulldownRefresh" class="panel-content" :top="90" @refresh="onPulldownReresh" @setEnableScroll="setEnableScroll">
+		<mix-pulldown-refresh
+			ref="mixPulldownRefresh"
+			class="panel-content"
+			:top="90"
+			@refresh="onPulldownReresh"
+			@setEnableScroll="setEnableScroll"
+		>
 			<!-- 内容部分 -->
 			<swiper id="swiper" class="swiper-box" :duration="300" :current="tabCurrentIndex" @change="changeTab">
 				<swiper-item v-for="tabItem in tabBars" :key="tabItem.id">
 					<scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadMore">
-						<view v-for="(item, index) in tabItem.newsList" :key="index" class="content__row lss-hairline--bottom" @click="navToDetails(index)">
+						<view
+							v-for="(item, index) in tabItem.newsList"
+							:key="index"
+							class="content__row lss-hairline--bottom"
+							@click="navToDetails(index)"
+						>
 							<view class="content__left">
 								<view class="content__name">{{ item.agentname }}</view>
 								<view class="content__code">{{ item.userCode }}</view>
@@ -34,10 +52,14 @@
 
 <script>
 import * as util from '@/utils';
+import { mapActions } from 'vuex';
 import uniIcon from '@/components/uni-icon/uni-icon';
 import { getAgentPagedList } from '@/api/agent';
 import mixPulldownRefresh from '@/components/mix-pulldown-refresh/mix-pulldown-refresh';
 import mixLoadMore from '@/components/mix-load-more/mix-load-more';
+
+let app = getApp();
+
 let windowWidth = 0,
 	scrollTimer = false,
 	tabBar;
@@ -80,6 +102,20 @@ export default {
 		};
 	},
 	computed: {},
+	onShow() {
+		// 强制更新状态
+		if (app.globalData.product.update) {
+			let tabItem = this.tabBars[this.tabCurrentIndex];
+			if (tabItem.newsList) {
+				tabItem.newsList.map(item => {
+					if (item.pass == 3 && item.agentid == app.globalData.product.agentid) {
+						item.passName = '待审核';
+						item.pass = 2;
+					}
+				});
+			}
+		}
+	},
 	async onLoad() {
 		this.agentid = util.cookies.get('agentid');
 		this.dl_type = util.cookies.get('dl_type');

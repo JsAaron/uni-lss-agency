@@ -541,9 +541,9 @@
 				title="组织机构代码证照片"
 				v-model="fromValue3.organization_img"
 			></QSPics>
-			
+
 			<WButton
-				text="下一步" 
+				text="下一步"
 				:rotate="fromValue3.isRotate"
 				@click.native="getStep3()"
 				bgColor="rgb(47, 133, 252)"
@@ -551,9 +551,13 @@
 		</block>
 
 		<block v-if="stepActive == 4">
-			<WButton v-if="submit_success" text="完成" @click.native="onBackPage()" bgColor="rgb(47, 133, 252)"></WButton>
+			<WButton
+				v-if="submit_success"
+				text="完成"
+				@click.native="onBackPage()"
+				bgColor="rgb(47, 133, 252)"
+			></WButton>
 			<WButton v-else text="确定提交" @click.native="getStep4()" bgColor="rgb(47, 133, 252)"></WButton>
-
 		</block>
 	</view>
 </template>
@@ -744,8 +748,8 @@ export default {
 
 	computed: {
 		barText() {
-			if(this.submit_success){
-				return ''
+			if (this.submit_success) {
+				return '';
 			}
 			if (this.stepActive != 0) {
 				return '上一步';
@@ -1287,13 +1291,15 @@ export default {
 				content: '确认审核操作？',
 				success: res => {
 					if (res.confirm) {
-			this.$refs['Message'].success('提交成功,等待审核');
-			this.submit_success = true;
-
-			// 			delAgent({ agentid: this.agentData.agentid, type: 2 }).then(() => {
-			// this.$refs['Message'].success('提交成功,等待审核');
-			// this.submit_success = true;
-			// 			});
+						delAgent({ agentid: this.agentData.agentid, type: 2 }).then(() => {
+							this.$refs['Message'].success('提交成功,等待审核');
+							this.submit_success = true;
+							getApp().globalData.product = {
+								agentid: this.agentData.agentid,
+								update: true,
+								pass: 2
+							};
+						});
 					}
 				}
 			});

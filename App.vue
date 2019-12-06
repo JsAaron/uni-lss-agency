@@ -2,6 +2,11 @@
 
 export default {
 	globalData: {
+		
+		product:{
+			
+		},
+		
 		route: {}, //路由页面
 		/**
 		 * 设置需要刷新的路由页面
