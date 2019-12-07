@@ -44,7 +44,7 @@ import { getPerfectAgent } from '@/api/agent';
 export default {
 	components: {},
 	props: {
-		agentid: Object
+		agentData: Object
 	},
 	data() {
 		return {
