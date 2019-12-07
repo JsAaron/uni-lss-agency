@@ -6,18 +6,45 @@
 			<view class="content__title">
 				<view class="content__line"></view>
 				<view class="content__text">支付通道占比</view>
-				<div class="header__date">
-					<div
-						v-for="(item, index) in tooggleDate"
-						:key="index"
-						class="header__date-row"
-						:class="tooggleDateIndex === index ? 'header__date-row--active' : ''"
-						@click="onHandleToggleDate(item, index)"
+
+				<view class="filter-date-item">
+					<picker
+						class="filter-date-picker"
+						mode="date"
+						:value="startDataValue"
+						:start="startDate"
+						:end="endDate"
+						@change="bindStartDateChange"
 					>
-						{{ item }}
-					</div>
-				</div>
+						<view>{{ startDataValue }}</view>
+					</picker>
+					<text class="filter-date-text">-</text>
+					<picker
+						class="filter-date-picker"
+						mode="date"
+						:value="endDataValue"
+						:start="startDate"
+						:end="endDate"
+						@change="bindEndDateChange"
+					>
+						<view>{{ endDataValue }}</view>
+					</picker>
+				</view>
 			</view>
+		</view> 
+
+		<view class="header__date-item">
+			<div class="header__date">
+				<div
+					v-for="(item, index) in tooggleDate"
+					:key="index"
+					class="header__date-row"
+					:class="tooggleDateIndex === index ? 'header__date-row--active' : ''"
+					@click="onHandleToggleDate(item, index)"
+				>
+					{{ item }}
+				</div>
+			</div>
 		</view>
 
 		<view class="qiun-columns">
@@ -50,9 +77,14 @@ var canvaRing = null;
 
 export default {
 	data() {
+		const currentDate = this.getDate({
+			format: true
+		});
 		return {
 			tooggleDateIndex: 0,
 			tooggleDate: ['交易金额', '交易笔数'],
+			startDataValue: this.getDate('last'),
+			endDataValue: currentDate,
 
 			cWidth: '',
 			cHeight: '',
@@ -73,7 +105,14 @@ export default {
 	mounted() {
 		this.getTableDataPayjyje();
 	},
-	computed: {},
+	computed: {
+		startDate() {
+			return this.getDate('start');
+		},
+		endDate() {
+			return this.getDate('end');
+		}
+	},
 	methods: {
 		...mapActions('home', ['getHomeData']),
 
@@ -81,10 +120,37 @@ export default {
 			this.tooggleDateIndex = index;
 		},
 
+		bindStartDateChange(e) {
+			this.startDataValue = e.target.value;
+		},
+
+		bindEndDateChange(e) {
+			this.endDataValue = e.target.value;
+		},
+
 		dateConversion(value) {
 			var d = new Date(value);
 			var date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
 			return date;
+		},
+
+		getDate(type) {
+			const date = new Date();
+			let year = date.getFullYear();
+			let month = date.getMonth() + 1;
+			let day = date.getDate();
+
+			if (type === 'start') {
+				year = year - 60;
+			} else if (type === 'end') {
+				year = year + 2;
+			} else if (type === 'last') {
+				month = month - 6;
+			}
+
+			month = month > 9 ? month : '0' + month;
+			day = day > 9 ? day : '0' + day;
+			return `${year}-${month}-${day}`;
 		},
 
 		getTableDataPayjyje() {
@@ -223,7 +289,7 @@ export default {
 		@include flex-h-left;
 		font-weight: bold;
 		font-size: 30rpx;
-		 position: relative;
+		position: relative;
 	}
 	&__line {
 		margin: 0 20rpx;
@@ -298,9 +364,15 @@ export default {
 	background: #0069d9;
 	margin-right: 5rpx;
 }
+ 
+.header__date-item{
+	display: flex;
+	justify-content: flex-end;
+	margin-right: 20rpx;
+	margin-top: 30rpx;
+}
 
 .header {
-
 	&__date {
 		display: inline-block;
 		// height: 30px;
@@ -309,8 +381,6 @@ export default {
 		// display: flex;
 		// align-items: center;
 		// margin-left: 20rpx;
-			position: absolute;
-			right: 20rpx;
 		overflow: hidden;
 	}
 	&__date-row {
@@ -328,5 +398,37 @@ export default {
 	&__date-row:not(:last-child) {
 		border-right: 1px solid #dcdfe6;
 	}
+}
+
+.filter-date-item {
+	position: absolute;
+	right: 20rpx;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.filter-date {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.filter-date-text {
+	margin: 0 10rpx;
+}
+
+.filter-date-picker {
+	padding: 10rpx 20rpx;
+	background-color: #fff;
+	background-image: none;
+	border-radius: 4px;
+	border: 1px solid #dcdfe6;
+	font-size: 25rpx;
+	// font-weight: bold;
+}
+
+.filter-date-picker:active {
+	border-color: #409eff;
 }
 </style>
