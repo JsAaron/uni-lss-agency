@@ -1,17 +1,29 @@
 <template>
 	<view class="container">
-		
 		<m-header></m-header>
 
 		<view class="content">
 			<view class="content__title">
 				<view class="content__line"></view>
-				<view class="content__text">业务员发展商户占比</view>
+				<view class="content__text">支付通道占比</view>
+				<div class="header__date">
+					<div
+						v-for="(item, index) in tooggleDate"
+						:key="index"
+						class="header__date-row"
+						:class="tooggleDateIndex === index ? 'header__date-row--active' : ''"
+						@click="onHandleToggleDate(item, index)"
+					>
+						{{ item }}
+					</div>
+				</div>
 			</view>
 		</view>
 
 		<view class="qiun-columns">
-			<view class="qiun-charts"><canvas canvas-id="canvasRing" id="canvasRing" class="charts"></canvas></view>
+			<view class="qiun-charts">
+				<canvas canvas-id="canvasRing" id="canvasRing" class="charts"></canvas>
+			</view>
 		</view>
 
 		<view class="qiun-bottom">
@@ -30,7 +42,7 @@
 <script>
 import * as util from '@/utils';
 import { mapState, mapActions } from 'vuex';
-import { getStatisticsHomedl } from '@/api/agent';
+import { getStatisticsHomedl, getStatisticsHomePay } from '@/api/agent';
 import mHeader from './header.vue';
 import uCharts from '@/components/u-charts/u-charts.js';
 var _self;
@@ -39,6 +51,9 @@ var canvaRing = null;
 export default {
 	data() {
 		return {
+			tooggleDateIndex: 0,
+			tooggleDate: ['交易金额', '交易笔数'],
+
 			cWidth: '',
 			cHeight: '',
 			pixelRatio: 1,
@@ -55,10 +70,60 @@ export default {
 	components: {
 		mHeader
 	},
-	mounted() {},
+	mounted() {
+		this.getTableDataPayjyje();
+	},
 	computed: {},
 	methods: {
 		...mapActions('home', ['getHomeData']),
+
+		onHandleToggleDate(item, index) {
+			this.tooggleDateIndex = index;
+		},
+
+		dateConversion(value) {
+			var d = new Date(value);
+			var date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+			return date;
+		},
+
+		getTableDataPayjyje() {
+			let query = {
+				agentid: util.cookies.get('agentid'),
+				type: '1',
+				start_time: '2019-05-01',
+				end_time: '2019-12-01'
+			};
+
+			getStatisticsHomePay(query).then(data => {
+				if (data != null && data != '') {
+					// //循环遍历,将穿回来的list转换为chart需要的键值对形式
+					// let countlistmap = {};
+					// countlistmap['type'] = '微信: ' + data.wx_num_bf + '% | ' + data.wx_num_amount;
+					// countlistmap['percentage'] = data.wx_num_amount;
+					// countlistArray.push(countlistmap);
+					// let countlistmap2 = {};
+					// countlistmap2['type'] = '支付宝: ' + data.zfb_num_bf + '% | ' + data.zfb_num_amount;
+					// countlistmap2['percentage'] = data.zfb_num_amount;
+					// countlistArray.push(countlistmap2);
+					// let countlistmap3 = {};
+					// countlistmap3['type'] = '银行卡: ' + data.yhk_num_bf + '% | ' + data.yhk_num_amount;
+					// countlistmap3['percentage'] = data.yhk_num_amount;
+					// countlistArray.push(countlistmap3);
+					// let countlistmap4 = {};
+					// countlistmap4['type'] = '会员卡: ' + data.fyk_num_bf + '% | ' + data.fyk_num_amount;
+					// countlistmap4['percentage'] = data.fyk_num_amount;
+					// countlistArray.push(countlistmap4);
+					// let countlistmap5 = {};
+					// countlistmap5['type'] = '未知: ' + data.wz_num_bf + '% | ' + data.wz_num_amount;
+					// countlistmap5['percentage'] = data.wx_num_amount;
+					// countlistArray.push(countlistmap5);
+					// //将键值对形式加到array数组里
+					// //将行和列分别赋值给chartdata的行和列
+					// this.chartData.rows = countlistArray;
+				}
+			});
+		},
 
 		getServerData() {
 			uni.request({
@@ -77,6 +142,9 @@ export default {
 					}
 					_self.textarea = JSON.stringify(res.data.data.Ring);
 					_self.serieNames = Ring.series;
+
+					console.log('Ring', res.data.data.Ring);
+
 					_self.showRing('canvasRing', Ring);
 				},
 				fail: () => {
@@ -155,6 +223,7 @@ export default {
 		@include flex-h-left;
 		font-weight: bold;
 		font-size: 30rpx;
+		 position: relative;
 	}
 	&__line {
 		margin: 0 20rpx;
@@ -228,5 +297,36 @@ export default {
 	background: red;
 	background: #0069d9;
 	margin-right: 5rpx;
+}
+
+.header {
+
+	&__date {
+		display: inline-block;
+		// height: 30px;
+		border-radius: 4px;
+		border: 1px solid #dcdfe6;
+		// display: flex;
+		// align-items: center;
+		// margin-left: 20rpx;
+			position: absolute;
+			right: 20rpx;
+		overflow: hidden;
+	}
+	&__date-row {
+		padding: 0.3rem;
+		// height: 26px;
+		float: left;
+		font-size: 12px;
+		display: flex;
+		align-items: center;
+	}
+	&__date-row--active {
+		background-color: #409eff !important;
+		color: #fff;
+	}
+	&__date-row:not(:last-child) {
+		border-right: 1px solid #dcdfe6;
+	}
 }
 </style>

@@ -21,7 +21,13 @@
 				placeholder="请输入密码"
 			/>
 			<view class="zai-label" @click="onFindPasswrod">忘记密码？</view>
-			<button class="zai-btn" @click="onLogin">立即登录</button>
+
+			<WButton
+				text="立即登录"
+				:rotate="isRotate"
+				@click.native="onLogin()"
+				bgColor="rgb(47, 133, 252)"
+			></WButton>
 		</view>
 	</view>
 </template>
@@ -33,6 +39,7 @@ import { $$set, $$get } from '@/common/global';
 export default {
 	data() {
 		return {
+			isRotate: false,
 			username: 'admin',
 			password: 'lianshuashua1234'
 		};
@@ -49,6 +56,10 @@ export default {
 			this.password = value;
 		},
 		onLogin() {
+			if (this.isRotate) {
+				return;
+			}
+			this.isRotate = true;
 			this.login({
 				username: this.username,
 				password: this.password
@@ -56,10 +67,12 @@ export default {
 				.then(() => {
 					this.$refs['Message'].success('登录成功');
 					setTimeout(() => {
+						this.isRotate = false;
 						util.gotoPage('switchTab', '/pages/home/index');
 					}, 2000);
 				})
 				.catch(err => {
+					this.isRotate = false;
 					this.$refs['Message'].error(err);
 				});
 		},
