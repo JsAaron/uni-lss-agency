@@ -425,6 +425,7 @@ export default {
 	border-radius: 4px;
 	border: 1px solid #dcdfe6;
 	font-size: 25rpx;
+	
 	// font-weight: bold;
 }
 
