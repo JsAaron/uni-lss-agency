@@ -1,6 +1,19 @@
 <template>
 	<view>
 		<message ref="Message"></message>
+
+		<uni-nav-bar
+			left-icon="arrowleft"
+			fixed
+			status-bar
+			right-text="编辑"
+			background-color="#2F85FC"
+			:title="titleText"
+			color="#ffffff"
+			@click-left="onBack"
+			@click-right="onAmend"
+		/>
+
 		<!-- 代理 -->
 		<block v-if="pageType == 'agency'">
 			<QSInput
@@ -9,6 +22,8 @@
 				ref="ref_legal"
 				title="姓名"
 				required
+				:tapClear="!disabled"
+				:disabled="disabled"
 				v-model="fromValue0.legal"
 			></QSInput>
 
@@ -18,6 +33,8 @@
 				ref="ref_userName"
 				title="公司/个人"
 				required
+				:tapClear="!disabled"
+				:disabled="disabled"
 				v-model="fromValue0.userName"
 			></QSInput>
 
@@ -29,6 +46,8 @@
 				verifyType="Tel"
 				inputType="number"
 				title="手机"
+				:tapClear="!disabled"
+				:disabled="disabled"
 				v-model="fromValue0.mobileNo"
 			></QSInput>
 
@@ -37,6 +56,8 @@
 				variableName="prov_cd"
 				ref="ref_prov_cd"
 				required
+				:tapClear="!disabled"
+				:disabled="disabled"
 				:steps="fromValue0.steps"
 				v-model="fromValue0.prov_cd"
 				@change="onChangeProv_cd"
@@ -50,6 +71,8 @@
 				:steps="fromValue0.steps"
 				v-model="fromValue0.city"
 				title="市"
+				:tapClear="!disabled"
+				:disabled="disabled"
 				@change="onChangeCity"
 			/>
 
@@ -57,6 +80,8 @@
 				:name="formName0"
 				variableName="areaid"
 				ref="ref_areaid"
+				:tapClear="!disabled"
+				:disabled="disabled"
 				:steps="fromValue0.steps"
 				v-model="fromValue0.areaid"
 				title="区"
@@ -66,8 +91,9 @@
 				:name="formName0"
 				variableName="compaddress"
 				ref="ref_compaddress"
-				titleLayout="left"
 				title="地址"
+				:tapClear="!disabled"
+				:disabled="disabled"
 				v-model="fromValue0.compaddress"
 			></QSInput>
 
@@ -78,6 +104,8 @@
 				:dataSet="fromValue0.dataSet"
 				ref="ref_contractstdate"
 				title="合同开始日期"
+				:tapClear="!disabled"
+				:disabled="disabled"
 				v-model="fromValue0.contractstdate"
 				placherhold="请选择"
 			/>
@@ -88,12 +116,15 @@
 				ref="ref_contractendate"
 				:dataSet="fromValue0.dataSet"
 				title="合同结束日期"
+				:tapClear="!disabled"
+				:disabled="disabled"
 				:value="dateValue"
 				v-model="fromValue0.contractendate"
 				placherhold="请选择"
 			/>
 
 			<WButton
+				v-if="!disabled"
 				text="确定修改"
 				:rotate="fromValue0.isRotate"
 				@click.native="onEnsure()"
@@ -110,11 +141,16 @@
 import * as util from '@/utils';
 import QSApp from '@/components/QS-inputs-split/js/app.js';
 import { getProvcd } from '@/api/agent';
-
+import uniIcons from '@/components/uni-icons/uni-icons.vue';
+import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
 export default {
-	components: {},
+	components: {
+		uniNavBar
+	},
 	data() {
 		return {
+			titleText: '',
+			disabled: true,
 			pageType: 'agency',
 			formName0: 'step0',
 			fromValue0: {
@@ -142,6 +178,7 @@ export default {
 	created() {},
 	onLoad(options) {
 		this.agentData = JSON.parse(options.agentData);
+		this.titleText = options.title
 	},
 	onReady() {
 		this.initData();
@@ -168,7 +205,6 @@ export default {
 		},
 
 		initAddressData() {
-			console.log(this.agentData);
 			this.updateProvType(this.agentData.prov_cd).then(() => {
 				this.updateCityType(this.agentData.prov_cd, this.agentData.city).then(() => {
 					this.updateAreaType(this.agentData.city, this.agentData.areaid);
@@ -311,11 +347,18 @@ export default {
 				});
 		},
 
+		onBack() {
+			util.gotoPage('back');
+		},
+		onAmend() {
+			this.disabled = false;
+		},
+
 		saveRequest() {
 			if (this.fromValue0.isRotate) {
 				return;
 			}
-			this.fromValue0.isRotate = true
+			this.fromValue0.isRotate = true;
 		}
 	}
 };

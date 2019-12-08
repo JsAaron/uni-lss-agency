@@ -79,7 +79,7 @@
 		{
 			"path": "pages/agency/amend",
 			"style": {
-				"navigationBarTitleText": "编辑"
+				"navigationStyle": "custom"
 			}
 		},
 		{
