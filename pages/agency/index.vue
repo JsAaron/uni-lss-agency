@@ -147,23 +147,10 @@ export default {
 		});
 	},
 	methods: {
-		
 		onClickSegmented(index) {
 			if (this.segmented.current !== index) {
 				this.segmented.current = index;
 				this.resetTabbars(index);
-			}
-		},
-
-		updateState(index) {
-			let tabItem = this.tabBars[index];
-			if (tabItem.newsList) {
-				tabItem.newsList.map(item => {
-					if (item.pass == 3 && item.agentid == app.globalData.product.agentid) {
-						item.passName = '待审核';
-						item.pass = 2;
-					}
-				});
 			}
 		},
 
@@ -179,17 +166,21 @@ export default {
 			this.tabBars = tabList;
 			this.loadNewsList('add');
 		},
-		
-		resetTabbars(){
-			this.tabCurrentIndex = 0
-			this.tabBars.map(item=>{
-				item.loaded = false
-				item.pageIndex = 0; 
-				item.totalPages = 0; 
+
+		resetTabbars(tabIndex) {
+			this.tabCurrentIndex = 0;
+			this.tabBars.map((item, index) => {
+				if (index == 2) {
+					item.name = tabIndex == 3 ? '未签约' : '待审核';
+				}
+				console.log(item, index);
+				item.loaded = false;
+				item.pageIndex = 0;
+				item.totalPages = 0;
 				item.newsList = [];
 				item.loadMoreStatus = 0;
 				item.refreshing = 0;
-			})
+			});
 			this.loadNewsList('add');
 		},
 
@@ -237,6 +228,13 @@ export default {
 				}
 			} else if (this.segmented.current == 1) {
 				query.dl_type2 = '1';
+				if (this.tabCurrentIndex == 1) {
+					query.state_type = '0';
+				} else if (this.tabCurrentIndex == 2) {
+					query.state_type = '2';
+				}
+			} else if (this.segmented.current == 2) {
+				query.dl_type2 = '2';
 				if (this.tabCurrentIndex == 1) {
 					query.state_type = '0';
 				} else if (this.tabCurrentIndex == 2) {
@@ -295,11 +293,8 @@ export default {
 		navToDetails(index) {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
 			let data = tabItem.newsList[index];
-			if (data.pass == '0' || data.pass == '2') {
-				util.gotoPage(`/pages/product/details/index?agentid=${data.agentid}`);
-			} else {
-				util.gotoPage(`/pages/product/type-in?agentid=${data.agentid}`);
-			}
+			let title='一级代理商信息'
+			util.gotoPage(`/pages/agency/details?agentData=${JSON.stringify(data)}&title=${title}`);
 		},
 
 		//设置scroll-view是否允许滚动，在小程序里下拉刷新时避免列表可以滑动
