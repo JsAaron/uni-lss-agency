@@ -1,39 +1,53 @@
 <template>
 	<view class="container">
-		<view class="container__segmented">
-			<uni-segmented-control
-				:current="segmented.current"
-				:values="segmented.items"
-				:style-type="segmented.styleType"
-				:active-color="segmented.activeColor"
-				@clickItem="onClickSegmented"
-			/>
-		</view>
-
-		<!-- 顶部选项卡 -->
-		<scroll-view id="nav-bar" class="nav-bar" scroll-x scroll-with-animation :scroll-left="scrollLeft">
-			<view
-				v-for="(item, index) in tabBars"
-				:key="item.id"
-				class="nav-item"
-				:class="{ current: index === tabCurrentIndex }"
-				:id="'tab' + index"
-				@click="changeTab(index)"
-			>
-				{{ item.name }}
+		<view class="container-top">
+			<view class="container__segmented">
+				<uni-segmented-control
+					:current="segmented.current"
+					:values="segmented.items"
+					:style-type="segmented.styleType"
+					:active-color="segmented.activeColor"
+					@clickItem="onClickSegmented"
+				/>
 			</view>
-		</scroll-view>
+
+			<!-- 顶部选项卡 -->
+			<scroll-view
+				id="nav-bar"
+				class="nav-bar"
+				scroll-x
+				scroll-with-animation
+				:scroll-left="scrollLeft"
+			>
+				<view
+					v-for="(item, index) in tabBars"
+					:key="item.id"
+					class="nav-item"
+					:class="{ current: index === tabCurrentIndex }"
+					:id="'tab' + index"
+					@click="changeTab(index)"
+				>
+					{{ item.name }}
+				</view>
+			</scroll-view>
+		</view>
 
 		<!-- 下拉刷新组件 -->
 		<mix-pulldown-refresh
 			ref="mixPulldownRefresh"
 			class="panel-content"
-			:top="90"
+			:top="segmented.top"
 			@refresh="onPulldownReresh"
 			@setEnableScroll="setEnableScroll"
 		>
 			<!-- 内容部分 -->
-			<swiper id="swiper" class="swiper-box" :duration="300" :current="tabCurrentIndex" @change="changeTab">
+			<swiper
+				id="swiper"
+				class="swiper-box"
+				:duration="300"
+				:current="tabCurrentIndex"
+				@change="changeTab"
+			>
 				<swiper-item v-for="tabItem in tabBars" :key="tabItem.id">
 					<scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadMore">
 						<view
@@ -81,32 +95,12 @@ let tabList = [
 		pass: ''
 	},
 	{
-		name: '未开通',
+		name: '已签约',
 		pass: '3'
 	},
 	{
 		name: '待审核',
 		pass: '2'
-	},
-	{
-		name: '已签约',
-		pass: '0'
-	},
-	{
-		name: '签约失败',
-		pass: '4'
-	},
-	{
-		name: '待审核',
-		pass: '2'
-	},
-	{
-		name: '已签约',
-		pass: '0'
-	},
-	{
-		name: '签约失败',
-		pass: '4'
 	}
 ];
 
@@ -120,6 +114,7 @@ export default {
 	data() {
 		return {
 			segmented: {
+				top: 0,
 				items: ['一级代理', '二级代理', '三级代理', '商户'],
 				current: 0,
 				activeColor: '#007aff',
@@ -146,10 +141,15 @@ export default {
 		this.xt_id = util.cookies.get('xt_id');
 		// 获取屏幕宽度
 		windowWidth = uni.getSystemInfoSync().windowWidth;
-		this.initTabbars();
+		const query = wx.createSelectorQuery();
+		query.select('.container-top').boundingClientRect();
+		query.selectViewport().scrollOffset();
+		query.exec(res => {
+			this.segmented.top = res[0].height * 2;
+			this.initTabbars();
+		});
 	},
 	methods: {
-		
 		onClickSegmented(index) {
 			if (this.segmented.current !== index) {
 				this.segmented.current = index;

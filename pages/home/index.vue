@@ -31,7 +31,7 @@
 					</picker>
 				</view>
 			</view>
-		</view> 
+		</view>
 
 		<view class="header__date-item">
 			<div class="header__date">
@@ -49,7 +49,7 @@
 
 		<view class="qiun-columns">
 			<view class="qiun-charts">
-				<canvas canvas-id="canvasRing" id="canvasRing" class="charts"></canvas>
+				<canvas canvas-id="canvasPie" id="canvasPie" class="charts" ></canvas>
 			</view>
 		</view>
 
@@ -72,8 +72,8 @@ import { mapState, mapActions } from 'vuex';
 import { getStatisticsHomedl, getStatisticsHomePay } from '@/api/agent';
 import mHeader from './header.vue';
 import uCharts from '@/components/u-charts/u-charts.js';
-var _self;
-var canvaRing = null;
+let _self;
+let canvaPie = null;
 
 export default {
 	data() {
@@ -90,20 +90,44 @@ export default {
 			cHeight: '',
 			pixelRatio: 1,
 			serverData: '',
-			serieNames: []
+			piearr: [],
+
+			chartData: {
+				series: [
+					{
+						name: '一班',
+						data: 50
+					},
+					{
+						name: '二班',
+						data: 30
+					},
+					{
+						name: '三班',
+						data: 20
+					},
+					{
+						name: '四班',
+						data: 18
+					},
+					{
+						name: '五班',
+						data: 8
+					}
+				]
+			}
 		};
 	},
 	onLoad() {
-		_self = this;
-		this.cWidth = uni.upx2px(750);
-		this.cHeight = uni.upx2px(500);
-		this.getServerData();
 	},
 	components: {
 		mHeader
 	},
-	mounted() {
-		this.getTableDataPayjyje();
+	onLoad() {
+		this.cWidth = uni.upx2px(750);
+		this.cHeight = uni.upx2px(500);
+		this.getServerData();
+		_self = this;
 	},
 	computed: {
 		startDate() {
@@ -115,6 +139,26 @@ export default {
 	},
 	methods: {
 		...mapActions('home', ['getHomeData']),
+
+
+		getServerData(){
+				uni.request({
+					url: 'https://www.ucharts.cn/data.json',
+					data:{
+					},
+					success: function(res) {
+						console.log(res.data.data)
+						let Pie={series:[]};
+						//这里我后台返回的是数组，所以用等于，如果您后台返回的是单条数据，需要push进去
+						Pie.series=res.data.data.Pie.series;
+						_self.textarea = JSON.stringify(res.data.data.Pie);
+						_self.showPie("canvasPie",Pie);
+					},
+					fail: () => {
+						_self.tips="网络错误，小程序端请检查合法域名";
+					},
+				});
+			},
 
 		onHandleToggleDate(item, index) {
 			this.tooggleDateIndex = index;
@@ -154,6 +198,7 @@ export default {
 		},
 
 		getTableDataPayjyje() {
+			
 			let query = {
 				agentid: util.cookies.get('agentid'),
 				type: '1',
@@ -163,6 +208,7 @@ export default {
 
 			getStatisticsHomePay(query).then(data => {
 				if (data != null && data != '') {
+					this.showPie();
 					// //循环遍历,将穿回来的list转换为chart需要的键值对形式
 					// let countlistmap = {};
 					// countlistmap['type'] = '微信: ' + data.wx_num_bf + '% | ' + data.wx_num_amount;
@@ -191,86 +237,34 @@ export default {
 			});
 		},
 
-		getServerData() {
-			uni.request({
-				url: 'https://www.ucharts.cn/data.json',
-				data: {},
-				success: function(res) {
-					console.log(res.data.data);
-					let Ring = { series: [] };
-					//这里我后台返回的是数组，所以用等于，如果您后台返回的是单条数据，需要push进去
-					Ring.series = res.data.data.Ring.series;
-					//自定义文案示例，需设置format字段
-					for (let i = 0; i < Ring.series.length; i++) {
-						Ring.series[i].format = () => {
-							return Ring.series[i].name + Ring.series[i].data;
-						};
-					}
-					_self.textarea = JSON.stringify(res.data.data.Ring);
-					_self.serieNames = Ring.series;
-
-					console.log('Ring', res.data.data.Ring);
-
-					_self.showRing('canvasRing', Ring);
-				},
-				fail: () => {
-					_self.tips = '网络错误，小程序端请检查合法域名';
-				}
-			});
-		},
-
-		showRing(canvasId, chartData) {
-			canvaRing = new uCharts({
+		showPie(canvasId,chartData) {
+			console.log(11,this.chartData.series)
+			this.canvaPie = new uCharts({
 				$this: _self,
-				canvasId: canvasId,
-				type: 'ring',
+				canvasId: 'canvasPie',
+				type: 'pie',
 				fontSize: 11,
 				padding: [20, 5, 5, 5],
 				legend: {
 					show: false
 				},
 				background: '#FFFFFF',
-				pixelRatio: _self.pixelRatio,
+				pixelRatio: this.pixelRatio,
 				series: chartData.series,
-				animation: false,
-				width: _self.cWidth * _self.pixelRatio,
-				height: _self.cHeight * _self.pixelRatio,
-				disablePieStroke: true,
+				animation: true,
+				width: this.cWidth * this.pixelRatio,
+				height: this.cHeight * this.pixelRatio,
 				dataLabel: true,
-				subtitle: {
-					name: '70%',
-					color: '#7cb5ec',
-					fontSize: 25 * _self.pixelRatio
-				},
-				title: {
-					name: '收益率',
-					color: '#666666',
-					fontSize: 15 * _self.pixelRatio
-				},
 				extra: {
 					pie: {
 						offsetAngle: 0,
-						ringWidth: 40 * _self.pixelRatio,
+						ringWidth: 40 * this.pixelRatio,
 						labelWidth: 15
 					}
 				}
 			});
+			this.piearr = this.canvaPie.opts.series;
 		}
-
-		// getServerData() {
-		// 	let chartData = {
-		// 		series: []
-		// 	};
-		// 	for (var i = 0; i < 20; i++) {
-		// 		chartData.series.push({
-		// 			name: '业务员' + i,
-		// 			data: 5
-		// 		});
-		// 	}
-		// 	_self.showRing('canvasPie', chartData);
-		// },
-
-		//===================================
 	}
 };
 </script>
@@ -364,8 +358,8 @@ export default {
 	background: #0069d9;
 	margin-right: 5rpx;
 }
- 
-.header__date-item{
+
+.header__date-item {
 	display: flex;
 	justify-content: flex-end;
 	margin-right: 20rpx;
@@ -425,7 +419,7 @@ export default {
 	border-radius: 4px;
 	border: 1px solid #dcdfe6;
 	font-size: 25rpx;
-	
+
 	// font-weight: bold;
 }
 
