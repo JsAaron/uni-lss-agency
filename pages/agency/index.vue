@@ -293,8 +293,15 @@ export default {
 		navToDetails(index) {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
 			let data = tabItem.newsList[index];
-			let title='一级代理商信息'
-			util.gotoPage(`/pages/agency/details?agentData=${JSON.stringify(data)}&title=${title}`);
+			let title;
+			if (this.segmented.current == 0) {
+				title = '一级代理商信息';
+			} else if (this.segmented.current == 1) {
+				title = '二级代理商信息';
+			} else if (this.segmented.current == 2) {
+				title = '三级代理商信息';
+			}
+			util.gotoPage(`/pages/agency/amend?agentData=${JSON.stringify(data)}&title=${title}`);
 		},
 
 		//设置scroll-view是否允许滚动，在小程序里下拉刷新时避免列表可以滑动

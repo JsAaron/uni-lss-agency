@@ -13,8 +13,11 @@ function simulate() {
 		"product-details": "/pages/product/details/index",
 		"center": "/pages/center/index",
 		"agency": "/pages/agency/index",
+		"agency-amend": "/pages/agency/amend",
 		"add-business": "/pages/agency/add-business"
+		
 	}
+	// return pages["agency-amend"]
 	// return pages["typeIn"]
 	// return pages["product"]
 	// return pages["product-details"]

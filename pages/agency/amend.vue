@@ -1,193 +1,321 @@
 <template>
 	<view>
+		<message ref="Message"></message>
 		<!-- 代理 -->
 		<block v-if="pageType == 'agency'">
 			<QSInput
-				:name="formName"
-				variableName="company"
+				:name="formName0"
+				variableName="legal"
+				ref="ref_legal"
+				title="姓名"
+				required
+				v-model="fromValue0.legal"
+			></QSInput>
+
+			<QSInput
+				:name="formName0"
+				variableName="userName"
+				ref="ref_userName"
 				title="公司/个人"
-				requiredSign
-				layout="row"
-				titleLayout="left"
-				v-model="form.company"
+				required
+				v-model="fromValue0.userName"
 			></QSInput>
 
 			<QSInput
-				:name="formName"
-				variableName="name"
-				title="联系人"
-				requiredSign
-				layout="row"
-				titleLayout="left"
-				v-model="form.name"
+				:name="formName0"
+				variableName="mobileNo"
+				ref="ref_mobileNo"
+				required
+				verifyType="Tel"
+				inputType="number"
+				title="手机"
+				v-model="fromValue0.mobileNo"
 			></QSInput>
-
-			<QSInput
-				:name="formName"
-				requiredSign
-				variableName="address"
-				title="联系地址"
-				layout="row"
-				titleLayout="left"
-				v-model="form.address"
-			></QSInput>
-
 
 			<QSPickerCustom
-				:name="formName"
-				ref="refProvince"
-				layout="row"
-				titleLayout="left"
+				:name="formName0"
+				variableName="prov_cd"
+				ref="ref_prov_cd"
 				required
-				variableName="province"
+				:steps="fromValue0.steps"
+				v-model="fromValue0.prov_cd"
+				@change="onChangeProv_cd"
 				title="省"
 			/>
-			
+
 			<QSPickerCustom
-				:name="formName"
-				titleLayout="left"
-				layout="row"
-				ref="refCity"
-				required
+				:name="formName0"
 				variableName="city"
+				ref="ref_city"
+				:steps="fromValue0.steps"
+				v-model="fromValue0.city"
 				title="市"
+				@change="onChangeCity"
 			/>
 
-			<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onEnsure">
-				确定修改
-			</QSWavesButton>
+			<QSPickerCustom
+				:name="formName0"
+				variableName="areaid"
+				ref="ref_areaid"
+				:steps="fromValue0.steps"
+				v-model="fromValue0.areaid"
+				title="区"
+			/>
+
+			<QSInput
+				:name="formName0"
+				variableName="compaddress"
+				ref="ref_compaddress"
+				titleLayout="left"
+				title="地址"
+				v-model="fromValue0.compaddress"
+			></QSInput>
+
+			<QSPickerDate
+				:name="formName0"
+				dateFormatArray="-"
+				variableName="contractstdate"
+				:dataSet="fromValue0.dataSet"
+				ref="ref_contractstdate"
+				title="合同开始日期"
+				v-model="fromValue0.contractstdate"
+				placherhold="请选择"
+			/>
+
+			<QSPickerDate
+				:name="formName0"
+				variableName="contractendate"
+				ref="ref_contractendate"
+				:dataSet="fromValue0.dataSet"
+				title="合同结束日期"
+				:value="dateValue"
+				v-model="fromValue0.contractendate"
+				placherhold="请选择"
+			/>
+
+			<WButton
+				text="确定修改"
+				:rotate="fromValue0.isRotate"
+				@click.native="onEnsure()"
+				bgColor="rgb(47, 133, 252)"
+			></WButton>
 		</block>
-		
+
 		<!-- 商户 -->
-		<block v-if="pageType == 'business'">
-			<QSInput
-				:name="formName"
-				variableName="company"
-				title="商户名"
-				requiredSign
-				layout="row"
-				titleLayout="left"
-				v-model="form.company"
-			></QSInput>
-			
-			<QSInput
-				:name="formName"
-				variableName="name"
-				title="联系人"
-				requiredSign
-				layout="row"
-				titleLayout="left"
-				v-model="form.name"
-			></QSInput>
-			
-			<QSInput
-				:name="formName"
-				requiredSign
-				variableName="address"
-				title="电子邮箱"
-				layout="row"
-				titleLayout="left"
-				v-model="form.address"
-			></QSInput>
-			
-			<QSInput
-				:name="formName"
-				requiredSign
-				variableName="address"
-				title="详细地址"
-				layout="row"
-				titleLayout="left"
-				v-model="form.address"
-			></QSInput>
-			
-			<QSPickerCustom
-				:name="formName"
-				ref="refProvince"
-				layout="row"
-				titleLayout="left"
-				required
-				variableName="province"
-				title="省"
-			/>
-			
-			<QSPickerCustom
-				:name="formName"
-				titleLayout="left"
-				layout="row"
-				ref="refCity"
-				required
-				variableName="city"
-				title="市"
-			/>
-
-			<QSPickerCustom
-				:name="formName"
-				titleLayout="left"
-				layout="row"
-				ref="refCategory"
-				required
-				variableName="category"
-				title="经营类别"
-			/>
-
-
-			<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onEnsure">
-				确定修改
-			</QSWavesButton>
-		</block>
-		
+		<block v-if="pageType == 'business'"></block>
 	</view>
 </template>
 
 <script>
 import * as util from '@/utils';
-import { $$set, $$get } from '@/common/global';
 import QSApp from '@/components/QS-inputs-split/js/app.js';
-import uniSteps from '@/components/uni-steps/uni-steps.vue';
-import uniIcons from '@/components/uni-icons/uni-icons.vue';
-import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
+import { getProvcd } from '@/api/agent';
 
 export default {
 	components: {},
 	data() {
 		return {
-			pageType: '',
-			formName: 'add',
-			form: {
-				company: '',
-				name: '',
-				phone: '',
-				address: '',
-				city: ''
+			pageType: 'agency',
+			formName0: 'step0',
+			fromValue0: {
+				isRotate: false,
+				legal: '',
+				userName: '',
+				mobileNo: '',
+				compaddress: '',
+				prov_cd: '',
+				city: '',
+				areaid: '',
+				picker1Init: false,
+				picker2Init: false,
+				picker3Init: false,
+				steps: {
+					step_1_value: 'name'
+				},
+				dataSet: {
+					dateFormatArray: ['-', '-', '-']
+				}
 			}
 		};
 	},
 	props: {},
-
-	onReady() {
-		this.setPickerData()
-	},
-
 	created() {},
-	onLoad(optopns) {
-		this.pageType = optopns.pageType;
-		uni.setNavigationBarTitle({
-		    title: optopns.pageType === 'agency' ?'编辑代理商':'编辑商户'
-		});
+	onLoad(options) {
+		this.agentData = JSON.parse(options.agentData);
+	},
+	onReady() {
+		this.initData();
 	},
 	computed: {},
 	methods: {
-		setPickerData() {
-			const province = [['美食', '娱乐']];
-			const city = [['美食', '娱乐']];
-			const category = [['美食', '娱乐']];
-			this.setPickerDataFc('refProvince', province);
-			this.setPickerDataFc('refCity', city);
-			this.setPickerDataFc('refCategory', category);
+		initData() {
+			let data = this.agentData;
+			this.initAddressData();
+			this.setIntputValueFc('ref_legal', data.legal);
+			this.setIntputValueFc('ref_userName', data.userName);
+			this.setIntputValueFc('ref_mobileNo', data.mobileNo);
+			this.setIntputValueFc('ref_compaddress', data.compaddress);
+			if (data.contractstdate) {
+				this.$refs['ref_contractstdate'].confirm({
+					data: data.contractstdate
+				});
+			}
+			if (data.contractendate) {
+				this.$refs['ref_contractendate'].confirm({
+					data: data.contractendate
+				});
+			}
 		},
-		setPickerDataFc(name, data) {
-			console.log('准备 调用setData');
+
+		initAddressData() {
+			console.log(this.agentData);
+			this.updateProvType(this.agentData.prov_cd).then(() => {
+				this.updateCityType(this.agentData.prov_cd, this.agentData.city).then(() => {
+					this.updateAreaType(this.agentData.city, this.agentData.areaid);
+				});
+			});
+		},
+
+		onChangeProv_cd(item) {
+			if (this.fromValue0.picker1Init) {
+				this.fromValue0.picker1Init = false;
+				return;
+			}
+			this.updateCityType(item.data[0].value.areaid, '', true).then(() => {
+				this.updateAreaType(this.fromValue0.city.data[0].value.areaid, '', true);
+			});
+		},
+
+		onChangeCity(item) {
+			if (this.fromValue0.picker2Init) {
+				this.fromValue0.picker2Init = false;
+				return;
+			}
+			this.updateAreaType(this.fromValue0.city.data[0].value.areaid, '', true);
+		},
+
+		// 省会
+		updateProvType(proareaid, change) {
+			return getProvcd().then(data => {
+				let arr = [];
+				data.map(item => {
+					if (item.areaid == proareaid) {
+						// 强制初始化赋值，所以updateOneType在change会调用一次
+						//覆盖初始化的值，这里用给一个变量跳过
+						this.fromValue0.picker1Init = true;
+						this.$refs['ref_prov_cd'].confirm({
+							data: [
+								{
+									name: item.areaname,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.areaname,
+						value: item
+					});
+				});
+				this.setInputDataFc('ref_prov_cd', [arr]);
+			});
+		},
+
+		// 市
+		updateCityType(proareaid, cityareaid, change) {
+			return getProvcd({
+				type: 'city',
+				areaid: proareaid
+			}).then(data => {
+				let arr = [];
+				data.map(item => {
+					if (item.areaid == cityareaid) {
+						// 强制初始化赋值，所以updateOneType在change会调用一次
+						//覆盖初始化的值，这里用给一个变量跳过
+						this.fromValue0.picker2Init = true;
+						this.$refs['ref_city'].confirm({
+							data: [
+								{
+									name: item.areaname,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.areaname,
+						value: item
+					});
+				});
+				// 如果是改变的处理，默认赋第一个值
+				if (change) {
+					this.$refs['ref_city'].confirm({
+						data: [arr[0]]
+					});
+				}
+				this.setInputDataFc('ref_city', [arr]);
+			});
+		},
+
+		// 区
+		updateAreaType(cityareaid, areaid, change) {
+			return getProvcd({
+				type: 'area',
+				areaid: cityareaid
+			}).then(data => {
+				let arr = [];
+				data.map(item => {
+					if (item.areaid == areaid) {
+						this.$refs['ref_areaid'].confirm({
+							data: [
+								{
+									name: item.areaname,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.areaname,
+						value: item
+					});
+				});
+				if (change) {
+					this.$refs['ref_areaid'].confirm({
+						data: [arr[0]]
+					});
+				}
+				this.setInputDataFc('ref_areaid', [arr]);
+			});
+		},
+
+		setInputDataFc(name, data) {
 			this.$refs[name].setData(data);
+		},
+
+		setIntputValueFc(name, data) {
+			this.$refs[name].setValue(data);
+		},
+
+		onEnsure() {
+			QSApp.getForm(this.formName0)
+				.then(res => {
+					if (res.verifyErr.length > 0) {
+						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
+						return;
+					}
+					this.saveRequest(res.data);
+				})
+				.catch(err => {
+					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
+				});
+		},
+
+		saveRequest() {
+			if (this.fromValue0.isRotate) {
+				return;
+			}
+			this.fromValue0.isRotate = true
 		}
 	}
 };
