@@ -120,7 +120,10 @@ export default {
 				activeColor: '#007aff',
 				styleType: 'button'
 			},
-
+			searchForm: {
+				userName: '',
+				userCode: ''
+			},
 			tabCurrentIndex: 0, //当前选项卡索引
 			scrollLeft: 0, //顶部选项卡左滑距离
 			enableScroll: true,
@@ -128,13 +131,7 @@ export default {
 		};
 	},
 	computed: {},
-	onShow() {
-		// 强制更新状态
-		if (app.globalData.product.update) {
-			this.updateState(0);
-			this.updateState(1);
-		}
-	},
+	onShow() {},
 	async onLoad() {
 		this.agentid = util.cookies.get('agentid');
 		this.dl_type = util.cookies.get('dl_type');
@@ -150,9 +147,11 @@ export default {
 		});
 	},
 	methods: {
+		
 		onClickSegmented(index) {
 			if (this.segmented.current !== index) {
 				this.segmented.current = index;
+				this.resetTabbars(index);
 			}
 		},
 
@@ -168,11 +167,6 @@ export default {
 			}
 		},
 
-		/**
-		 * 数据处理方法在vue和nvue中通用，可以直接用mixin混合
-		 * 这里直接写的
-		 * mixin使用方法看index.nuve
-		 */
 		//获取分类
 		initTabbars() {
 			tabList.forEach(item => {
@@ -185,6 +179,20 @@ export default {
 			this.tabBars = tabList;
 			this.loadNewsList('add');
 		},
+		
+		resetTabbars(){
+			this.tabCurrentIndex = 0
+			this.tabBars.map(item=>{
+				item.loaded = false
+				item.pageIndex = 0; 
+				item.totalPages = 0; 
+				item.newsList = [];
+				item.loadMoreStatus = 0;
+				item.refreshing = 0;
+			})
+			this.loadNewsList('add');
+		},
+
 		//列表数据
 		loadNewsList(type) {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
@@ -202,22 +210,42 @@ export default {
 				// #endif
 			}
 
-			//获取指定列表数据
+			//一级代理
 			let query = {
 				pageIndex: ++tabItem.pageIndex,
-				pageSize: 50,
+				pageSize: 30,
 				sortBy: '',
 				agentid: this.agentid,
 				dl_type: this.dl_type,
 				xt_id: this.xt_id,
-				dl_type2: '4',
 				descending: false,
 				filter: {
-					pass: tabItem.pass,
-					userName: '',
-					userCode: ''
-				}
+					userCode: '',
+					userName: ''
+				},
+				filter: this.searchForm,
+				sortBy: ''
 			};
+
+			if (this.segmented.current == 0) {
+				query.dl_type2 = '0';
+				if (this.tabCurrentIndex == 0) {
+				} else if (this.tabCurrentIndex == 1) {
+					query.state_type = '0';
+				} else if (this.tabCurrentIndex == 2) {
+					query.state_type = '2';
+				}
+			} else if (this.segmented.current == 1) {
+				query.dl_type2 = '1';
+				if (this.tabCurrentIndex == 1) {
+					query.state_type = '0';
+				} else if (this.tabCurrentIndex == 2) {
+					query.state_type = '2';
+				}
+			}
+
+			console.log(query);
+
 			getAgentPagedList(query).then(async res => {
 				if (type === 'refresh') {
 					tabItem.newsList = []; //刷新前清空数组
@@ -232,6 +260,7 @@ export default {
 					}
 					tabItem.newsList.push(item);
 				});
+
 				tabItem.totalPages = res.totalpage;
 
 				//下拉刷新 关闭刷新动画
@@ -243,8 +272,8 @@ export default {
 					tabItem.loadMoreStatus = 0;
 				}
 
-				//上滑加载 处理状态
-				if (type === 'add') {
+				//上滑加载.刷新处理状态
+				if (type === 'add' || type == 'refresh') {
 					tabItem.loadMoreStatus = tabItem.pageIndex >= tabItem.totalPages ? 2 : 0;
 				}
 			});
@@ -330,7 +359,7 @@ export default {
 					this.loadNewsList('add');
 					tabItem.loaded = true;
 				}
-			}, 300);
+			}, 100);
 		},
 		//获得元素的size
 		getElSize(id) {
