@@ -86,7 +86,6 @@ export function delAgent(data) {
 
 
 export function getStatisticsHomePay(data) {
-	console.log(data)
 	return request({
 		url: '/moblieapp/getStatisticsHomePay',
 		method: 'post',

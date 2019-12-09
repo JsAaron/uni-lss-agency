@@ -287,12 +287,13 @@ export default {
 				}
 			}
 
-			console.log(query);
+			// console.log(query);
 
 			getAgentPagedList(query).then(async res => {
 				if (type === 'refresh') {
 					tabItem.newsList = []; //刷新前清空数组
 				}
+				// console.log(res)
 				res.rows.forEach(item => {
 					if (item.pass == '0') {
 						item.passName = '已签约';

@@ -191,7 +191,7 @@ export default {
 			pageType: '',
 			action: '',
 			agentData: {},
-			dl_type:'',
+			dl_type: '',
 
 			formName0: 'step0',
 			fromValue0: {
@@ -234,13 +234,16 @@ export default {
 		if (this.action != 'add') {
 			this.agentData = JSON.parse(options.agentData);
 		}
-		this.dl_type = options.dl_type
+		this.dl_type = options.dl_type;
 		this.titleText = options.title;
 		this.pageType = options.pageType;
 	},
 	onReady() {
 		if (this.action == 'add') {
 			this.initAddressData();
+			if (this.pageType == 'business') {
+				this.initPickerData();
+			}
 		} else {
 			this.initData();
 		}
@@ -273,19 +276,17 @@ export default {
 
 		initPickerData() {
 			// 类型一
-			if (this.agentData.one_type) {
-				this.updateOneType(this.agentData.one_type).then(() => {
-					//类型二
-					if (this.agentData.two_type) {
-						this.updateTwoType(this.agentData.one_type, this.agentData.two_type).then(() => {
-							// 类型三
-							if (this.agentData.three_type) {
-								this.updateThreeType(this.agentData.two_type, this.agentData.three_type);
-							}
-						});
-					}
-				});
-			}
+			this.updateOneType(this.agentData.one_type).then(() => {
+				//类型二
+				if (this.agentData.two_type) {
+					this.updateTwoType(this.agentData.one_type, this.agentData.two_type).then(() => {
+						// 类型三
+						if (this.agentData.three_type) {
+							this.updateThreeType(this.agentData.two_type, this.agentData.three_type);
+						}
+					});
+				}
+			});
 		},
 
 		onChangePicker1(item) {
@@ -293,9 +294,11 @@ export default {
 				this.fromValue0.type1Init = false;
 				return;
 			}
-			this.updateTwoType(item.data[0].value.typeid, '', true).then(item => {
-				this.updateThreeType(this.fromValue0.picker2.data[0].value.typeid, '', true);
-			});
+			if (item.data[0].value) {
+				this.updateTwoType(item.data[0].value.typeid, '', true).then(item => {
+					this.updateThreeType(this.fromValue0.picker2.data[0].value.typeid, '', true);
+				});
+			}
 		},
 
 		onChangePicker2(data) {
@@ -303,13 +306,16 @@ export default {
 				this.fromValue0.type2Init = false;
 				return;
 			}
-			this.updateThreeType(this.fromValue0.picker2.data[0].value.typeid, '', true);
+			if (this.fromValue0.picker2.data) {
+				this.updateThreeType(this.fromValue0.picker2.data[0].value.typeid, '', true);
+			}
 		},
 
 		//类型一
 		updateOneType(one_type) {
 			return getShopsType().then(data => {
 				let arr = [];
+				console.log(123, data);
 				data.map(item => {
 					if (item.typeid == one_type) {
 						// 强制初始化赋值，所以updateOneType在change会调用一次
@@ -420,9 +426,11 @@ export default {
 				this.fromValue0.picker1Init = false;
 				return;
 			}
-			this.updateCityType(item.data[0].value.areaid, '', true).then(() => {
-				this.updateAreaType(this.fromValue0.city.data[0].value.areaid, '', true);
-			});
+			if (item.data[0]) {
+				this.updateCityType(item.data[0].value.areaid, '', true).then(() => {
+					this.updateAreaType(this.fromValue0.city.data[0].value.areaid, '', true);
+				});
+			}
 		},
 
 		onChangeCity(item) {
@@ -430,7 +438,9 @@ export default {
 				this.fromValue0.picker2Init = false;
 				return;
 			}
-			this.updateAreaType(this.fromValue0.city.data[0].value.areaid, '', true);
+			if (this.fromValue0.city.data) {
+				this.updateAreaType(this.fromValue0.city.data[0].value.areaid, '', true);
+			}
 		},
 
 		// 省会
@@ -560,16 +570,14 @@ export default {
 			this.disabled = false;
 		},
 
-
-		resetInit(){
-			this.fromValue0.legal = ''
-			this.fromValue0.userName = ''
-			this.fromValue0.mobileNo = ''
-			this.fromValue0.compaddress = ''
-			this.fromValue0.userCode = ''
-			this.fromValue0.mobileNo = ''
+		resetInit() {
+			this.fromValue0.legal = '';
+			this.fromValue0.userName = '';
+			this.fromValue0.mobileNo = '';
+			this.fromValue0.compaddress = '';
+			this.fromValue0.userCode = '';
+			this.fromValue0.mobileNo = '';
 		},
-		
 
 		saveRequest(data) {
 			if (this.fromValue0.isRotate) {
@@ -583,7 +591,7 @@ export default {
 				legal: data.legal,
 				userName: data.userName,
 				mobileNo: data.mobileNo,
-				
+
 				prov_cd: data.prov_cd.data[0].value.areaid,
 				userCode: data.userCode || this.agentData.userCode,
 				id: this.agentData ? this.agentData.userId : '',
@@ -612,7 +620,7 @@ export default {
 					this.fromValue0.isRotate = false;
 					if (this.action == 'add') {
 						this.$refs['Message'].success('新增成功');
-						this.resetInit()
+						this.resetInit();
 						getApp().globalData.agency = {
 							action: 'add'
 						};
@@ -626,9 +634,9 @@ export default {
 						};
 					}
 				})
-				.catch(() => {
+				.catch(err => {
 					this.fromValue0.isRotate = false;
-					this.$refs['Message'].error('修改失败');
+					this.$refs['Message'].error(err);
 				});
 		}
 	}
