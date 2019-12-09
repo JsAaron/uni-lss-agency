@@ -1,21 +1,19 @@
 <template>
 	<view>
 		<message ref="Message"></message>
+		
+			<uni-nav-bar
+				left-icon="arrowleft"
+				fixed
+				status-bar
+				right-text="编辑"
+				background-color="#2F85FC"
+				:title="titleText"
+				color="#ffffff"
+				@click-left="onBack"
+				@click-right="onAmend"
+			/>
 
-		<uni-nav-bar
-			left-icon="arrowleft"
-			fixed
-			status-bar
-			right-text="编辑"
-			background-color="#2F85FC"
-			:title="titleText"
-			color="#ffffff"
-			@click-left="onBack"
-			@click-right="onAmend"
-		/>
-
-		<!-- 代理 -->
-		<block v-if="pageType == 'agency'">
 			<QSInput
 				:name="formName0"
 				variableName="legal"
@@ -60,7 +58,7 @@
 				@change="onChangeProv_cd"
 				title="省"
 			/>
-
+			
 			<QSPickerCustom
 				:name="formName0"
 				variableName="city"
@@ -90,6 +88,39 @@
 				v-model="fromValue0.compaddress"
 			></QSInput>
 
+			<QSPickerCustom
+				v-if="pageType == 'business'"
+				:name="formName0"
+				variableName="picker1"
+				ref="ref_picker1"
+				required
+				:steps="fromValue0.steps"
+				v-model="fromValue0.picker1"
+				@change="onChangePicker1"
+				title="一级经营类型"
+			/>
+
+			<QSPickerCustom
+				v-if="pageType == 'business'"
+				:name="formName0"
+				variableName="picker2"
+				ref="ref_picker2"
+				:steps="fromValue0.steps"
+				@change="onChangePicker2"
+				autoHide
+				v-model="fromValue0.picker2"
+				title="二级经营类型"
+			/>
+			<QSPickerCustom
+				v-if="pageType == 'business'"
+				:name="formName0"
+				variableName="picker3"
+				ref="ref_picker3"
+				:steps="fromValue0.steps"
+				v-model="fromValue0.picker3"
+				title="三级经营类型"
+			/>
+			
 			<QSPickerDate
 				:name="formName0"
 				dateFormatArray="-"
@@ -121,17 +152,17 @@
 			></WButton>
 		</block>
 
-		<!-- 商户 -->
-		<block v-if="pageType == 'business'"></block>
+		</block>
 	</view>
 </template>
 
 <script>
 import * as util from '@/utils';
 import QSApp from '@/components/QS-inputs-split/js/app.js';
-import { getProvcd, saveAgent } from '@/api/agent';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
+import { getProvcd, saveAgent, getShopsType } from '@/api/agent';
+
 export default {
 	components: {
 		uniNavBar
@@ -140,7 +171,8 @@ export default {
 		return {
 			titleText: '',
 			disabled: true,
-			pageType: 'agency',
+			pageType: '',
+
 			formName0: 'step0',
 			fromValue0: {
 				isRotate: false,
@@ -151,9 +183,17 @@ export default {
 				prov_cd: '',
 				city: '',
 				areaid: '',
+				
+				picker1: '',
+				picker2: '',
+				picker3: '',
+				
 				picker1Init: false,
 				picker2Init: false,
-				picker3Init: false,
+	
+				type1Init: false,
+				type2Init: false,
+				
 				steps: {
 					step_1_value: 'name'
 				},
@@ -168,15 +208,20 @@ export default {
 	onLoad(options) {
 		this.agentData = JSON.parse(options.agentData);
 		this.titleText = options.title;
+		this.pageType = options.pageType;
 	},
 	onReady() {
 		this.initData();
 	},
 	computed: {},
 	methods: {
+	
 		initData() {
 			let data = this.agentData;
 			this.initAddressData();
+			if(this.pageType == 'business'){
+				 this.initPickerData();
+			}
 			this.setIntputValueFc('ref_legal', data.legal);
 			this.setIntputValueFc('ref_userName', data.userName);
 			this.setIntputValueFc('ref_mobileNo', data.mobileNo);
@@ -192,6 +237,145 @@ export default {
 				});
 			}
 		},
+
+		//=============== 类型 ==================
+	
+		initPickerData() {
+			// 类型一
+			if (this.agentData.one_type) {
+				this.updateOneType(this.agentData.one_type).then(() => {
+					//类型二
+					if (this.agentData.two_type) {
+						this.updateTwoType(this.agentData.one_type, this.agentData.two_type).then(() => {
+							// 类型三
+							if (this.agentData.three_type) {
+								this.updateThreeType(this.agentData.two_type, this.agentData.three_type);
+							}
+						});
+					}
+				});
+			}
+		},
+
+		onChangePicker1(item) {
+			if (this.fromValue0.type1Init) {
+				this.fromValue0.type1Init = false;
+				return;
+			}
+			this.updateTwoType(item.data[0].value.typeid, '', true).then(item => {
+				this.updateThreeType(this.fromValue0.picker2.data[0].value.typeid, '', true);
+			});
+		},
+
+		onChangePicker2(data) {
+			if (this.fromValue0.type2Init) {
+				this.fromValue0.type2Init = false;
+				return;
+			}
+			this.updateThreeType(this.fromValue0.picker2.data[0].value.typeid, '', true);
+		},
+
+		//类型一
+		updateOneType(one_type) {
+			return getShopsType().then(data => {
+				let arr = [];
+				data.map(item => {
+					if (item.typeid == one_type) {
+						// 强制初始化赋值，所以updateOneType在change会调用一次
+						//覆盖初始化的值，这里用给一个变量跳过
+						this.fromValue0.type1Init = true;
+						this.$refs['ref_picker1'].confirm({
+							data: [
+								{
+									name: item.typename,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.typename,
+						value: item
+					});
+				});
+				this.setInputDataFc('ref_picker1', [arr]);
+			});
+		},
+
+		// 更新二级类型
+		updateTwoType(one_type, two_type, change) {
+			return getShopsType({
+				type: 'twotype',
+				typeid: one_type
+			}).then(data => {
+				let arr = [];
+				data.map(item => {
+					if (two_type && item.typeid == two_type) {
+						// 强制初始化赋值，所以updateOneType在change会调用一次
+						//覆盖初始化的值，这里用给一个变量跳过
+						this.fromValue0.type2Init = true;
+						this.$refs['ref_picker2'].confirm({
+							data: [
+								{
+									name: item.typename,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.typename,
+						value: item
+					});
+				});
+
+				// 如果是改变的处理，默认赋第一个值
+				if (change) {
+					this.$refs['ref_picker2'].confirm({
+						data: [arr[0]]
+					});
+				}
+				this.setInputDataFc('ref_picker2', [arr]);
+			});
+		},
+
+		// 更新三级
+		updateThreeType(two_type, three_type, change) {
+			getShopsType({
+				type: 'threetype',
+				typeid: two_type
+			}).then(data => {
+				let arr = [];
+				data.map(item => {
+					if (three_type && item.typeid == three_type) {
+						this.$refs['ref_picker3'].confirm({
+							data: [
+								{
+									name: item.typename,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.typename,
+						value: item
+					});
+				});
+
+				// 如果是改变的处理，默认赋第一个值
+				if (change) {
+					this.$refs['ref_picker3'].confirm({
+						data: [arr[0]]
+					});
+				}
+
+				this.setInputDataFc('ref_picker3', [arr]);
+			});
+		},
+
+
+		//=============== 范围 ==================
 
 		initAddressData() {
 			this.updateProvType(this.agentData.prov_cd).then(() => {
@@ -322,8 +506,10 @@ export default {
 			this.$refs[name].setValue(data);
 		},
 
+
+		//===============  提交  ==================
+
 		onEnsure() {
-			if (this.pageType == 'agency') {
 				QSApp.getForm(this.formName0)
 					.then(res => {
 						if (res.verifyErr.length > 0) {
@@ -335,12 +521,12 @@ export default {
 					.catch(err => {
 						console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
 					});
-			}
 		},
 
 		onBack() {
 			util.gotoPage('back');
 		},
+
 		onAmend() {
 			this.disabled = false;
 		},
@@ -350,34 +536,37 @@ export default {
 				return;
 			}
 			this.fromValue0.isRotate = true;
-			console.log(data);
-			console.log(this.agentData);
-
-			let query;
-			if (this.agentData.userId) {
-				query = {
-					agentid: util.cookies.get('agentid'),
-					agentids: this.agentData.agentid,
-					prov_cd: data.prov_cd.data[0].value.areaid,
-					city: data.city.data[0].value.areaid,
-					areaid: data.areaid.data ? data.areaid.data[0].value.areaid : '',
-					compaddress: data.compaddress,
-					contractendate: data.contractendate.data,
-					contractstdate: data.contractstdate.data,
-					id: this.agentData.userId,
-					legal: data.legal,
-					mobileNo: data.mobileNo,
-					userCode: this.agentData.userCode,
-					userName: data.userName
-				};
+			
+			let query = {
+				agentid: util.cookies.get('agentid'),
+				agentids: this.agentData.agentid,
+				prov_cd: data.prov_cd.data[0].value.areaid,
+				city: data.city.data[0].value.areaid,
+				areaid: data.areaid.data ? data.areaid.data[0].value.areaid : '',
+				compaddress: data.compaddress,
+				contractendate: data.contractendate.data,
+				contractstdate: data.contractstdate.data,
+				id: this.agentData.userId,
+				legal: data.legal,
+				mobileNo: data.mobileNo,
+				userCode: this.agentData.userCode,
+				userName: data.userName
+			};
+			
+			//商户补充
+			if(this.pageType == 'business'){
+				query.one_type =  this.fromValue0.picker1.data[0].value.typeid
+				query.two_type= this.fromValue0.picker2.data[0].value.typeid
+				query.three_type= this.fromValue0.picker3.data[0].value.typeid
 			}
+			
 			saveAgent(query)
 				.then(data => {
 					this.fromValue0.isRotate = false;
 					this.disabled = true;
 					this.$refs['Message'].success('修改成功');
 					getApp().globalData.agency = {
-						agentid:this.agentData.agentid,
+						agentid: this.agentData.agentid,
 						agentData: query,
 						update: true
 					};

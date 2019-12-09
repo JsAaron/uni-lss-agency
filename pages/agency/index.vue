@@ -45,7 +45,7 @@
 							@click="navToDetails(index)"
 						>
 							<view class="content__left">
-								<view class="content__name">{{ item.userName }}</view>
+								<view class="content__name">{{ item.agentname }}</view>
 								<view class="content__code">{{ item.mobileNo }}</view>
 							</view>
 							<view v-if="item.passName" class="content__right">
@@ -178,7 +178,6 @@ export default {
 				if (index == 2) {
 					item.name = tabIndex == 3 ? '未签约' : '待审核';
 				}
-				console.log(item, index);
 				item.loaded = false;
 				item.pageIndex = 0;
 				item.totalPages = 0;
@@ -245,6 +244,13 @@ export default {
 				} else if (this.tabCurrentIndex == 2) {
 					query.state_type = '2';
 				}
+			} else if (this.segmented.current == 3) {
+				query.dl_type2 = '4';
+				if (this.tabCurrentIndex == 1) {
+					query.state_type = '0';
+				} else if (this.tabCurrentIndex == 2) {
+					query.state_type = '2';
+				}
 			}
 
 			console.log(query);
@@ -259,7 +265,7 @@ export default {
 					} else if (item.pass == '1' || item.pass == '3') {
 						item.passName = '未开通';
 					} else if (item.pass == '2') {
-						item.passName = '待审核';
+						item.passName = this.segmented.current == 3 ? '未签约' : '待审核';
 					}
 					tabItem.newsList.push(item);
 				});
@@ -299,14 +305,20 @@ export default {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
 			let data = tabItem.newsList[index];
 			let title;
+			let pageType = 'agency';
 			if (this.segmented.current == 0) {
 				title = '一级代理商信息';
 			} else if (this.segmented.current == 1) {
 				title = '二级代理商信息';
 			} else if (this.segmented.current == 2) {
 				title = '三级代理商信息';
+			} else if (this.segmented.current == 3) {
+				title = '商户信息';
+				pageType = 'business';
 			}
-			util.gotoPage(`/pages/agency/amend?agentData=${JSON.stringify(data)}&title=${title}`);
+			util.gotoPage(
+				`/pages/agency/amend?agentData=${JSON.stringify(data)}&title=${title}&pageType=${pageType}`
+			);
 		},
 
 		//设置scroll-view是否允许滚动，在小程序里下拉刷新时避免列表可以滑动

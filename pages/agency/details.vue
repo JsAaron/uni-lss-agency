@@ -121,7 +121,7 @@ export default {
 			provName:'',
 			cityName:'',
 			areaName:'',
-			pageType: 'agency',
+			pageType: '',
 			formName: 'add',
 			form: {
 				company: '',
@@ -138,7 +138,9 @@ export default {
 	created() {},
 	onLoad(options) {
 		this.agentData = JSON.parse(options.agentData);
+		this.pageType = options.pageType
 		this.titleText = options.title
+		
 		getProvcd().then(data => {
 			data.map(item => {
 				if (item.areaid == this.agentData.prov_cd) {
