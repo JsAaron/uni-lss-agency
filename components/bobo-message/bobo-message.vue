@@ -163,10 +163,10 @@
 	  url('https://at.alicdn.com/t/font_1477381_i3ji49ios6.svg#iconfont') format('svg');
 	}
 
-	.container {
+	.container { 
 		left: 0;
 		right: 0;
-		top: calc(var(--status-bar-height) + 24px);
+		top: calc(var(--status-bar-height) + 50px);
 		min-width: 10rpx;
 		max-width: 550rpx;
 		position: fixed;

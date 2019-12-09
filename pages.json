@@ -11,7 +11,7 @@
 				"navigationBarTitleText": "首页",
 				"app-plus": {
 					"titleNView": {
-						"tags": [{
+						"tags": [{ 
 							"tag": "img",
 							"src": "/static/img/home-icon.png",
 							"position": {

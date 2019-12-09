@@ -173,7 +173,7 @@
 			></WButton>
 			<view v-else>
 				<!-- 新增,提交审核 -->
-				<view v-if="pageType != 'business'  && (agentData.pass == '1' || agentData.pass == '3')">
+				<view v-if="pageType != 'business' && (agentData.pass == '1' || agentData.pass == '3')">
 					<WButton
 						text="分润设置"
 						:rotate="fromValue0.isRotate"
@@ -220,7 +220,7 @@ export default {
 	},
 	data() {
 		return {
-			submit_success:false,
+			submit_success: false,
 			titleText: '',
 			rightText: '编辑',
 			disabled: true,
@@ -616,7 +616,7 @@ export default {
 						delAgent({ agentid: this.agentData.agentid, type: 0 }).then(() => {
 							this.$refs['Message'].success('审核通过');
 							this.submit_success = true;
-							this.rightText = ''
+							this.rightText = '';
 							getApp().globalData.agency = {
 								action: 'examine'
 							};
@@ -694,13 +694,18 @@ export default {
 			//商户补充
 			if (this.pageType == 'business') {
 				query.one_type = this.fromValue0.picker1.data[0].value.typeid;
-				query.two_type = this.fromValue0.picker2.data ? this.fromValue0.picker2.data[0].value.typeid : '';
-				query.three_type = this.fromValue0.picker3.data ? this.fromValue0.picker3.data[0].value.typeid : '';
+				query.two_type = this.fromValue0.picker2.data
+					? this.fromValue0.picker2.data[0].value.typeid
+					: '';
+				query.three_type = this.fromValue0.picker3.data
+					? this.fromValue0.picker3.data[0].value.typeid
+					: '';
 			}
 
 			saveAgent(query)
 				.then(data => {
 					this.fromValue0.isRotate = false;
+					this.onAmend()
 					if (this.action == 'add') {
 						this.$refs['Message'].success('新增成功');
 						this.resetInit();
@@ -708,7 +713,6 @@ export default {
 							action: 'add'
 						};
 					} else {
-						this.disabled = true;
 						this.$refs['Message'].success('修改成功');
 						getApp().globalData.agency = {
 							agentid: this.agentData.agentid,

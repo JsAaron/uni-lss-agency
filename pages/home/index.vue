@@ -49,7 +49,7 @@
 
 		<view class="qiun-columns">
 			<view class="qiun-charts">
-				<canvas canvas-id="canvasPie" id="canvasPie" class="charts" ></canvas>
+				<canvas canvas-id="canvasPie" id="canvasPie" class="charts"></canvas>
 			</view>
 		</view>
 
@@ -95,38 +95,40 @@ export default {
 			chartData: {
 				series: [
 					{
-						name: '一班',
-						data: 50
+						name: '会员:一班',
+						data: 25,
+						format(value){
+							return value + 'test'
+						}
 					},
 					{
-						name: '二班',
-						data: 30
+						name: '会员:一班',
+						data: 25
 					},
 					{
-						name: '三班',
-						data: 20
+						name: '会员:一班',
+						data: 25
 					},
 					{
-						name: '四班',
-						data: 18
+						name: '会员:一班',
+						data: 25
 					},
 					{
-						name: '五班',
-						data: 8
+						name: '会员:一班',
+						data: 25
 					}
 				]
 			}
 		};
 	},
-	onLoad() {
-	},
+	onLoad() {},
 	components: {
 		mHeader
 	},
 	onLoad() {
 		this.cWidth = uni.upx2px(750);
-		this.cHeight = uni.upx2px(500);
-		this.getServerData();
+		this.cHeight = uni.upx2px(450);
+		this.showPie();
 		_self = this;
 	},
 	computed: {
@@ -138,28 +140,6 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions('home', ['getHomeData']),
-
-
-		getServerData(){
-				uni.request({
-					url: 'https://www.ucharts.cn/data.json',
-					data:{
-					},
-					success: function(res) {
-						console.log(res.data.data)
-						let Pie={series:[]};
-						//这里我后台返回的是数组，所以用等于，如果您后台返回的是单条数据，需要push进去
-						Pie.series=res.data.data.Pie.series;
-						_self.textarea = JSON.stringify(res.data.data.Pie);
-						_self.showPie("canvasPie",Pie);
-					},
-					fail: () => {
-						_self.tips="网络错误，小程序端请检查合法域名";
-					},
-				});
-			},
-
 		onHandleToggleDate(item, index) {
 			this.tooggleDateIndex = index;
 		},
@@ -198,7 +178,6 @@ export default {
 		},
 
 		getTableDataPayjyje() {
-			
 			let query = {
 				agentid: util.cookies.get('agentid'),
 				type: '1',
@@ -237,33 +216,32 @@ export default {
 			});
 		},
 
-		showPie(canvasId,chartData) {
-			console.log(11,this.chartData.series)
+		showPie() {
+			console.log(11, this.chartData.series);
 			this.canvaPie = new uCharts({
-				$this: _self,
+				$this: this,
 				canvasId: 'canvasPie',
 				type: 'pie',
-				fontSize: 11,
+				fontSize: 13,
 				padding: [20, 5, 5, 5],
 				legend: {
 					show: false
 				},
 				background: '#FFFFFF',
 				pixelRatio: this.pixelRatio,
-				series: chartData.series,
+				series: this.chartData.series,
 				animation: true,
 				width: this.cWidth * this.pixelRatio,
 				height: this.cHeight * this.pixelRatio,
+				disablePieStroke: true,
+				dataPointShape:true,
 				dataLabel: true,
 				extra: {
 					pie: {
-						offsetAngle: 0,
-						ringWidth: 40 * this.pixelRatio,
 						labelWidth: 15
 					}
 				}
 			});
-			this.piearr = this.canvaPie.opts.series;
 		}
 	}
 };
