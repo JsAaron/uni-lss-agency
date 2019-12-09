@@ -197,7 +197,7 @@ import * as util from '@/utils';
 import QSApp from '@/components/QS-inputs-split/js/app.js';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
-import { getProvcd, saveAgent, getShopsType } from '@/api/agent';
+import { getProvcd, saveAgent, getShopsType, delAgent } from '@/api/agent';
 
 export default {
 	components: {
@@ -568,15 +568,27 @@ export default {
 		},
 
 		//===============  提交  ==================
-		
-		onShare(){
-			util.gotoPage(
-				`/pages/agency/share?agentData=${this.agentData}`
-			);
+
+		onShare() {
+			let data = this.agentData;
+			util.gotoPage(`/pages/agency/share?agentid=${data.agentid}&dl_type=${data.dl_type}`);
 		},
-		
-		onExamine(){
-			
+
+		onExamine() {
+			uni.showModal({
+				title: '确认信息',
+				content: '确认审核操作？',
+				success: res => {
+					if (res.confirm) {
+						delAgent({ agentid: this.agentData.agentid, type: 2 }).then(() => {
+							this.$refs['Message'].success('提交成功,等待审核');
+							getApp().globalData.agency = {
+								action: 'examine'
+							};
+						});
+					}
+				}
+			});
 		},
 
 		onEnsure() {

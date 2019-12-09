@@ -135,6 +135,11 @@ export default {
 			this.loadNewsList('refresh');
 			app.globalData.agency = {};
 		}
+		// 未开通，审核
+		if (app.globalData.agency.action == 'examine') {
+			this.loadNewsList('refresh');
+			app.globalData.agency = {};
+		}
 	},
 	async onLoad() {
 		this.agentid = util.cookies.get('agentid');
@@ -298,7 +303,7 @@ export default {
 					if (item.pass == '0') {
 						item.passName = '已签约';
 					} else if (item.pass == '1' || item.pass == '3') {
-						item.passName = '未签约';
+						item.passName = '未开通';
 					} else if (item.pass == '2') {
 						item.passName = this.segmented.current == 3 ? '未签约' : '待审核';
 					}

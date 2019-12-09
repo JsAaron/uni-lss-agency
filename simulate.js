@@ -18,7 +18,7 @@ function simulate() {
 		"add-business": "/pages/agency/add-business"
 		
 	}
-	return pages["agency-share"]
+	// return pages["agency-share"]
 	// return pages["agency-amend"]
 	// return pages["typeIn"]
 	// return pages["product"]

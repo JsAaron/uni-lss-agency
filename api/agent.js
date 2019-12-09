@@ -100,3 +100,20 @@ export function saveAgent(data) {
 		data: data
 	})
 }
+
+export function getShareAgent(data) {
+	return request({
+		url: '/moblieapp/getShareAgent',
+		method: 'post',
+		params: data
+	})
+}
+
+
+export function saveShareAgent(data) {
+	return request({
+		url: '/moblieapp/ShareAgentSave',
+		method: 'post',
+		data: data
+	})
+}
