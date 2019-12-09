@@ -1,158 +1,156 @@
 <template>
 	<view>
 		<message ref="Message"></message>
-		
-			<uni-nav-bar
-				left-icon="arrowleft"
-				fixed
-				status-bar
-				right-text="编辑"
-				background-color="#2F85FC"
-				:title="titleText"
-				color="#ffffff"
-				@click-left="onBack"
-				@click-right="onAmend"
-			/>
 
-			<QSInput
-				:name="formName0"
-				variableName="legal"
-				ref="ref_legal"
-				title="姓名"
-				required
-				:tapClear="!disabled"
-				:disabled="disabled"
-				v-model="fromValue0.legal"
-			></QSInput>
+		<uni-nav-bar
+			left-icon="arrowleft"
+			fixed
+			status-bar
+			right-text="编辑"
+			background-color="#2F85FC"
+			:title="titleText"
+			color="#ffffff"
+			@click-left="onBack"
+			@click-right="onAmend"
+		/>
 
-			<QSInput
-				:name="formName0"
-				variableName="userName"
-				ref="ref_userName"
-				title="公司/个人"
-				required
-				:tapClear="!disabled"
-				:disabled="disabled"
-				v-model="fromValue0.userName"
-			></QSInput>
+		<QSInput
+			:name="formName0"
+			variableName="legal"
+			ref="ref_legal"
+			title="姓名"
+			required
+			:tapClear="!disabled"
+			:disabled="disabled"
+			v-model="fromValue0.legal"
+		></QSInput>
 
-			<QSInput
-				:name="formName0"
-				variableName="mobileNo"
-				ref="ref_mobileNo"
-				required
-				verifyType="Tel"
-				inputType="number"
-				title="手机"
-				:tapClear="!disabled"
-				:disabled="disabled"
-				v-model="fromValue0.mobileNo"
-			></QSInput>
+		<QSInput
+			:name="formName0"
+			variableName="userName"
+			ref="ref_userName"
+			title="公司/个人"
+			required
+			:tapClear="!disabled"
+			:disabled="disabled"
+			v-model="fromValue0.userName"
+		></QSInput>
 
-			<QSPickerCustom
-				:name="formName0"
-				variableName="prov_cd"
-				ref="ref_prov_cd"
-				:steps="fromValue0.steps"
-				v-model="fromValue0.prov_cd"
-				@change="onChangeProv_cd"
-				title="省"
-			/>
-			
-			<QSPickerCustom
-				:name="formName0"
-				variableName="city"
-				ref="ref_city"
-				:steps="fromValue0.steps"
-				v-model="fromValue0.city"
-				title="市"
-				@change="onChangeCity"
-			/>
+		<QSInput
+			:name="formName0"
+			variableName="mobileNo"
+			ref="ref_mobileNo"
+			required
+			verifyType="Tel"
+			inputType="number"
+			title="手机"
+			:tapClear="!disabled"
+			:disabled="disabled"
+			v-model="fromValue0.mobileNo"
+		></QSInput>
 
-			<QSPickerCustom
-				:name="formName0"
-				variableName="areaid"
-				ref="ref_areaid"
-				:steps="fromValue0.steps"
-				v-model="fromValue0.areaid"
-				title="区"
-			/>
+		<QSPickerCustom
+			:name="formName0"
+			variableName="prov_cd"
+			ref="ref_prov_cd"
+			required
+			:steps="fromValue0.steps"
+			v-model="fromValue0.prov_cd"
+			@change="onChangeProv_cd"
+			title="省"
+		/>
 
-			<QSInput
-				:name="formName0"
-				variableName="compaddress"
-				ref="ref_compaddress"
-				title="地址"
-				:tapClear="!disabled"
-				:disabled="disabled"
-				v-model="fromValue0.compaddress"
-			></QSInput>
+		<QSPickerCustom
+			:name="formName0"
+			variableName="city"
+			ref="ref_city"
+			:steps="fromValue0.steps"
+			v-model="fromValue0.city"
+			title="市"
+			@change="onChangeCity"
+		/>
 
-			<QSPickerCustom
-				v-if="pageType == 'business'"
-				:name="formName0"
-				variableName="picker1"
-				ref="ref_picker1"
-				required
-				:steps="fromValue0.steps"
-				v-model="fromValue0.picker1"
-				@change="onChangePicker1"
-				title="一级经营类型"
-			/>
+		<QSPickerCustom
+			:name="formName0"
+			variableName="areaid"
+			ref="ref_areaid"
+			:steps="fromValue0.steps"
+			v-model="fromValue0.areaid"
+			title="区"
+		/>
 
-			<QSPickerCustom
-				v-if="pageType == 'business'"
-				:name="formName0"
-				variableName="picker2"
-				ref="ref_picker2"
-				:steps="fromValue0.steps"
-				@change="onChangePicker2"
-				autoHide
-				v-model="fromValue0.picker2"
-				title="二级经营类型"
-			/>
-			<QSPickerCustom
-				v-if="pageType == 'business'"
-				:name="formName0"
-				variableName="picker3"
-				ref="ref_picker3"
-				:steps="fromValue0.steps"
-				v-model="fromValue0.picker3"
-				title="三级经营类型"
-			/>
-			
-			<QSPickerDate
-				:name="formName0"
-				dateFormatArray="-"
-				variableName="contractstdate"
-				:dataSet="fromValue0.dataSet"
-				ref="ref_contractstdate"
-				title="合同开始日期"
-				v-model="fromValue0.contractstdate"
-				placherhold="请选择"
-			/>
+		<QSInput
+			:name="formName0"
+			variableName="compaddress"
+			ref="ref_compaddress"
+			title="地址"
+			:tapClear="!disabled"
+			:disabled="disabled"
+			v-model="fromValue0.compaddress"
+		></QSInput>
 
-			<QSPickerDate
-				:name="formName0"
-				variableName="contractendate"
-				ref="ref_contractendate"
-				:dataSet="fromValue0.dataSet"
-				title="合同结束日期"
-				:value="dateValue"
-				v-model="fromValue0.contractendate"
-				placherhold="请选择"
-			/>
+		<QSPickerCustom
+			v-if="pageType == 'business'"
+			:name="formName0"
+			variableName="picker1"
+			ref="ref_picker1"
+			required
+			:steps="fromValue0.steps"
+			v-model="fromValue0.picker1"
+			@change="onChangePicker1"
+			title="一级经营类型"
+		/>
 
-			<WButton
-				v-if="!disabled"
-				text="确定修改"
-				:rotate="fromValue0.isRotate"
-				@click.native="onEnsure()"
-				bgColor="rgb(47, 133, 252)"
-			></WButton>
-		</block>
+		<QSPickerCustom
+			v-if="pageType == 'business'"
+			:name="formName0"
+			variableName="picker2"
+			ref="ref_picker2"
+			:steps="fromValue0.steps"
+			@change="onChangePicker2"
+			autoHide
+			v-model="fromValue0.picker2"
+			title="二级经营类型"
+		/>
+		<QSPickerCustom
+			v-if="pageType == 'business'"
+			:name="formName0"
+			variableName="picker3"
+			ref="ref_picker3"
+			:steps="fromValue0.steps"
+			v-model="fromValue0.picker3"
+			title="三级经营类型"
+		/>
 
-		</block>
+		<QSPickerDate
+			:name="formName0"
+			dateFormatArray="-"
+			variableName="contractstdate"
+			:dataSet="fromValue0.dataSet"
+			ref="ref_contractstdate"
+			title="合同开始日期"
+			v-model="fromValue0.contractstdate"
+			placherhold="请选择"
+		/>
+
+		<QSPickerDate
+			:name="formName0"
+			variableName="contractendate"
+			ref="ref_contractendate"
+			:dataSet="fromValue0.dataSet"
+			title="合同结束日期"
+			:value="dateValue"
+			v-model="fromValue0.contractendate"
+			placherhold="请选择"
+		/>
+
+		<WButton
+			v-if="!disabled"
+			text="确定修改"
+			:rotate="fromValue0.isRotate"
+			@click.native="onEnsure()"
+			bgColor="rgb(47, 133, 252)"
+		></WButton>
 	</view>
 </template>
 
@@ -183,17 +181,17 @@ export default {
 				prov_cd: '',
 				city: '',
 				areaid: '',
-				
+
 				picker1: '',
 				picker2: '',
 				picker3: '',
-				
+
 				picker1Init: false,
 				picker2Init: false,
-	
+
 				type1Init: false,
 				type2Init: false,
-				
+
 				steps: {
 					step_1_value: 'name'
 				},
@@ -215,12 +213,11 @@ export default {
 	},
 	computed: {},
 	methods: {
-	
 		initData() {
 			let data = this.agentData;
 			this.initAddressData();
-			if(this.pageType == 'business'){
-				 this.initPickerData();
+			if (this.pageType == 'business') {
+				this.initPickerData();
 			}
 			this.setIntputValueFc('ref_legal', data.legal);
 			this.setIntputValueFc('ref_userName', data.userName);
@@ -239,7 +236,7 @@ export default {
 		},
 
 		//=============== 类型 ==================
-	
+
 		initPickerData() {
 			// 类型一
 			if (this.agentData.one_type) {
@@ -374,7 +371,6 @@ export default {
 			});
 		},
 
-
 		//=============== 范围 ==================
 
 		initAddressData() {
@@ -506,21 +502,20 @@ export default {
 			this.$refs[name].setValue(data);
 		},
 
-
 		//===============  提交  ==================
 
 		onEnsure() {
-				QSApp.getForm(this.formName0)
-					.then(res => {
-						if (res.verifyErr.length > 0) {
-							this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
-							return;
-						}
-						this.saveRequest(res.data);
-					})
-					.catch(err => {
-						console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
-					});
+			QSApp.getForm(this.formName0)
+				.then(res => {
+					if (res.verifyErr.length > 0) {
+						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
+						return;
+					}
+					this.saveRequest(res.data);
+				})
+				.catch(err => {
+					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
+				});
 		},
 
 		onBack() {
@@ -536,30 +531,31 @@ export default {
 				return;
 			}
 			this.fromValue0.isRotate = true;
-			
+
 			let query = {
 				agentid: util.cookies.get('agentid'),
 				agentids: this.agentData.agentid,
-				prov_cd: data.prov_cd.data[0].value.areaid,
-				city: data.city.data[0].value.areaid,
-				areaid: data.areaid.data ? data.areaid.data[0].value.areaid : '',
-				compaddress: data.compaddress,
-				contractendate: data.contractendate.data,
-				contractstdate: data.contractstdate.data,
-				id: this.agentData.userId,
 				legal: data.legal,
+				userName: data.userName,
 				mobileNo: data.mobileNo,
+				prov_cd: data.prov_cd.data[0].value.areaid,
 				userCode: this.agentData.userCode,
-				userName: data.userName
+				id: this.agentData.userId,
+
+				city: data.city.data ? data.city.data[0].value.areaid : '',
+				areaid: data.areaid.data ? data.areaid.data[0].value.areaid : '',
+				compaddress: data.compaddress ? data.compaddress : '',
+				contractendate: data.contractendate.data ? data.contractendate.data : '',
+				contractstdate: data.contractstdate.data ? data.contractstdate.data : ''
 			};
-			
+
 			//商户补充
-			if(this.pageType == 'business'){
-				query.one_type =  this.fromValue0.picker1.data[0].value.typeid
-				query.two_type= this.fromValue0.picker2.data[0].value.typeid
-				query.three_type= this.fromValue0.picker3.data[0].value.typeid
+			if (this.pageType == 'business') {
+				query.one_type = this.fromValue0.picker1.data[0].value.typeid;
+				query.two_type = this.fromValue0.picker2.data ? this.fromValue0.picker2.data[0].value.typeid : '';
+				query.three_type = this.fromValue0.picker3.data ? this.fromValue0.picker3.data[0].value.typeid : '';
 			}
-			
+
 			saveAgent(query)
 				.then(data => {
 					this.fromValue0.isRotate = false;

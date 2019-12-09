@@ -45,7 +45,7 @@
 							@click="navToDetails(index)"
 						>
 							<view class="content__left">
-								<view class="content__name">{{ item.agentname }}</view>
+								<view class="content__name">{{ item.userName }}</view>
 								<view class="content__code">{{ item.mobileNo }}</view>
 							</view>
 							<view v-if="item.passName" class="content__right">
