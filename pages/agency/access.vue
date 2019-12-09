@@ -6,7 +6,7 @@
 			left-icon="arrowleft"
 			fixed
 			status-bar
-			:right-text="action == 'add' ? '' : '编辑'"
+			:right-text="action == 'add' ? '' : rightText"
 			background-color="#2F85FC"
 			:title="titleText"
 			color="#ffffff"
@@ -162,14 +162,33 @@
 			@click.native="onEnsure()"
 			bgColor="rgb(47, 133, 252)"
 		></WButton>
-
-		<WButton
-			v-if="action != 'add' && !disabled"
-			text="确定修改"
-			:rotate="fromValue0.isRotate"
-			@click.native="onEnsure()"
-			bgColor="rgb(47, 133, 252)"
-		></WButton>
+		<view v-else>
+			<!-- 切换 -->
+			<WButton
+				v-if="!disabled"
+				text="确定修改"
+				:rotate="fromValue0.isRotate"
+				@click.native="onEnsure()"
+				bgColor="rgb(47, 133, 252)"
+			></WButton>
+			<view v-else>
+				<!-- 新增,提交审核 -->
+				<view v-if="agentData.pass == '1' || agentData.pass == '3'">
+					<WButton
+						text="分润设置"
+						:rotate="fromValue0.isRotate"
+						@click.native="onShare()"
+						bgColor="rgb(47, 133, 252)"
+					></WButton>
+					<WButton
+						text="提交审核"
+						:rotate="fromValue0.isRotate"
+						@click.native="onExamine()"
+						bgColor="rgb(47, 133, 252)"
+					></WButton>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -187,6 +206,7 @@ export default {
 	data() {
 		return {
 			titleText: '',
+			rightText: '编辑',
 			disabled: true,
 			pageType: '',
 			action: '',
@@ -233,6 +253,7 @@ export default {
 		}
 		if (this.action != 'add') {
 			this.agentData = JSON.parse(options.agentData);
+			console.log(this.agentData);
 		}
 		this.dl_type = options.dl_type;
 		this.titleText = options.title;
@@ -547,6 +568,16 @@ export default {
 		},
 
 		//===============  提交  ==================
+		
+		onShare(){
+			util.gotoPage(
+				`/pages/agency/share?agentData=${this.agentData}`
+			);
+		},
+		
+		onExamine(){
+			
+		},
 
 		onEnsure() {
 			QSApp.getForm(this.formName0)
@@ -567,7 +598,12 @@ export default {
 		},
 
 		onAmend() {
-			this.disabled = false;
+			this.disabled = !this.disabled;
+			if (this.disabled) {
+				this.rightText = '编辑';
+			} else {
+				this.rightText = '关闭';
+			}
 		},
 
 		resetInit() {

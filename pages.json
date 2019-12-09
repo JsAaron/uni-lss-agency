@@ -75,6 +75,12 @@
 				"navigationStyle": "custom"
 			}
 		},
+		{
+			"path": "pages/agency/share",
+			"style": {
+				"navigationBarTitleText": "分润设置"
+			}
+		},
 	
 		{
 			"path": "pages/product/type-in",

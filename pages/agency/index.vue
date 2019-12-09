@@ -298,7 +298,7 @@ export default {
 					if (item.pass == '0') {
 						item.passName = '已签约';
 					} else if (item.pass == '1' || item.pass == '3') {
-						item.passName = '未开通';
+						item.passName = '未签约';
 					} else if (item.pass == '2') {
 						item.passName = this.segmented.current == 3 ? '未签约' : '待审核';
 					}

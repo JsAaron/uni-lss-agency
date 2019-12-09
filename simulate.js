@@ -8,6 +8,7 @@
 function simulate() {
 
 	const pages = {
+		"agency-share":"/pages/agency/share",
 		"typeIn": "/pages/product/type-in",
 		"product": "/pages/product/index",
 		"product-details": "/pages/product/details/index",
@@ -17,6 +18,7 @@ function simulate() {
 		"add-business": "/pages/agency/add-business"
 		
 	}
+	return pages["agency-share"]
 	// return pages["agency-amend"]
 	// return pages["typeIn"]
 	// return pages["product"]
