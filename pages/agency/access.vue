@@ -173,7 +173,7 @@
 			></WButton>
 			<view v-else>
 				<!-- 新增,提交审核 -->
-				<view v-if="agentData.pass == '1' || agentData.pass == '3'">
+				<view v-if="pageType != 'business'  && (agentData.pass == '1' || agentData.pass == '3')">
 					<WButton
 						text="分润设置"
 						:rotate="fromValue0.isRotate"
