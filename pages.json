@@ -69,25 +69,13 @@
 				"navigationBarTitleText": "代理/商户"
 			}
 		},
-
 		{
-			"path": "pages/agency/details",
+			"path": "pages/agency/access",
 			"style": {
 				"navigationStyle": "custom"
 			}
 		},
-		{
-			"path": "pages/agency/amend",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/agency/add",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		},
+	
 		{
 			"path": "pages/product/type-in",
 			"style": {

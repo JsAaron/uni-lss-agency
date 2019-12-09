@@ -1,7 +1,9 @@
 <template>
 	<view>
+		
 		<!-- 代理 -->
 		<block v-if="pageType == 'agency'">
+			
 			<QSInput
 				:name="formName"
 				variableName="company"
@@ -192,7 +194,7 @@ export default {
 	created() {},
 	onLoad(optopns) {
 		uni.setNavigationBarTitle({
-		    title: optopns.pageType === 'agency' ?'新增代理商':'新增商户'
+		    title: optopns.title
 		});
 		this.pageType = optopns.pageType;
 	},

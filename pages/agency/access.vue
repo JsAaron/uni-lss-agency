@@ -6,13 +6,24 @@
 			left-icon="arrowleft"
 			fixed
 			status-bar
-			right-text="编辑"
+			:right-text="action == 'add' ? '' : '编辑'"
 			background-color="#2F85FC"
 			:title="titleText"
 			color="#ffffff"
 			@click-left="onBack"
 			@click-right="onAmend"
 		/>
+
+		<QSInput
+			v-if="action == 'add'"
+			:name="formName0"
+			variableName="userCode"
+			title="登录名"
+			required
+			:tapClear="!disabled"
+			:disabled="disabled"
+			v-model="fromValue0.userCode"
+		></QSInput>
 
 		<QSInput
 			:name="formName0"
@@ -145,7 +156,15 @@
 		/>
 
 		<WButton
-			v-if="!disabled"
+			v-if="action == 'add'"
+			text="新增"
+			:rotate="fromValue0.isRotate"
+			@click.native="onEnsure()"
+			bgColor="rgb(47, 133, 252)"
+		></WButton>
+
+		<WButton
+			v-if="action != 'add' && !disabled"
 			text="确定修改"
 			:rotate="fromValue0.isRotate"
 			@click.native="onEnsure()"
@@ -170,6 +189,9 @@ export default {
 			titleText: '',
 			disabled: true,
 			pageType: '',
+			action: '',
+			agentData: {},
+			dl_type:'',
 
 			formName0: 'step0',
 			fromValue0: {
@@ -181,6 +203,7 @@ export default {
 				prov_cd: '',
 				city: '',
 				areaid: '',
+				userCode: '',
 
 				picker1: '',
 				picker2: '',
@@ -204,12 +227,23 @@ export default {
 	props: {},
 	created() {},
 	onLoad(options) {
-		this.agentData = JSON.parse(options.agentData);
+		this.action = options.action;
+		if (this.action) {
+			this.disabled = false;
+		}
+		if (this.action != 'add') {
+			this.agentData = JSON.parse(options.agentData);
+		}
+		this.dl_type = options.dl_type
 		this.titleText = options.title;
 		this.pageType = options.pageType;
 	},
 	onReady() {
-		this.initData();
+		if (this.action == 'add') {
+			this.initAddressData();
+		} else {
+			this.initData();
+		}
 	},
 	computed: {},
 	methods: {
@@ -526,6 +560,17 @@ export default {
 			this.disabled = false;
 		},
 
+
+		resetInit(){
+			this.fromValue0.legal = ''
+			this.fromValue0.userName = ''
+			this.fromValue0.mobileNo = ''
+			this.fromValue0.compaddress = ''
+			this.fromValue0.userCode = ''
+			this.fromValue0.mobileNo = ''
+		},
+		
+
 		saveRequest(data) {
 			if (this.fromValue0.isRotate) {
 				return;
@@ -534,20 +579,26 @@ export default {
 
 			let query = {
 				agentid: util.cookies.get('agentid'),
-				agentids: this.agentData.agentid,
+				agentids: this.agentData ? this.agentData.agentid : '',
 				legal: data.legal,
 				userName: data.userName,
 				mobileNo: data.mobileNo,
+				
 				prov_cd: data.prov_cd.data[0].value.areaid,
-				userCode: this.agentData.userCode,
-				id: this.agentData.userId,
-
+				userCode: data.userCode || this.agentData.userCode,
+				id: this.agentData ? this.agentData.userId : '',
 				city: data.city.data ? data.city.data[0].value.areaid : '',
 				areaid: data.areaid.data ? data.areaid.data[0].value.areaid : '',
 				compaddress: data.compaddress ? data.compaddress : '',
-				contractendate: data.contractendate.data ? data.contractendate.data : '',
-				contractstdate: data.contractstdate.data ? data.contractstdate.data : ''
+				contractendate: data.contractendate ? data.contractendate.data : '',
+				contractstdate: data.contractstdate ? data.contractstdate.data : ''
 			};
+
+			// 新增
+			if (this.action == 'add') {
+				query.dl_type = this.dl_type;
+				query.xt_id = util.cookies.get('xt_id');
+			}
 
 			//商户补充
 			if (this.pageType == 'business') {
@@ -559,13 +610,21 @@ export default {
 			saveAgent(query)
 				.then(data => {
 					this.fromValue0.isRotate = false;
-					this.disabled = true;
-					this.$refs['Message'].success('修改成功');
-					getApp().globalData.agency = {
-						agentid: this.agentData.agentid,
-						agentData: query,
-						update: true
-					};
+					if (this.action == 'add') {
+						this.$refs['Message'].success('新增成功');
+						this.resetInit()
+						getApp().globalData.agency = {
+							action: 'add'
+						};
+					} else {
+						this.disabled = true;
+						this.$refs['Message'].success('修改成功');
+						getApp().globalData.agency = {
+							agentid: this.agentData.agentid,
+							agentData: query,
+							action: 'update'
+						};
+					}
 				})
 				.catch(() => {
 					this.fromValue0.isRotate = false;

@@ -9,6 +9,7 @@
 					:active-color="segmented.activeColor"
 					@clickItem="onClickSegmented"
 				/>
+				<view v-if="showAdd" class="container__add" @click="onAdd">新增</view>
 			</view>
 
 			<!-- 顶部选项卡 -->
@@ -118,11 +119,20 @@ export default {
 			tabBars: []
 		};
 	},
-	computed: {},
+	computed: {
+		showAdd(){
+			return this.tabCurrentIndex == 0 ? true:false
+		},
+	},
 	onShow() {
 		// 强制更新状态
-		if (app.globalData.agency.update) {
+		if (app.globalData.agency.action == 'update') {
 			this.updateState();
+			app.globalData.agency = {};
+		}
+		//新增强制刷新
+		if (app.globalData.agency.action == 'add') {
+			this.loadNewsList('refresh');
 			app.globalData.agency = {};
 		}
 	},
@@ -150,6 +160,30 @@ export default {
 					}
 				});
 			}
+		},
+
+		/**
+		 * 新增代理用户
+		 */
+		onAdd() {
+			let title;
+			let pageType = 'agency';
+			let dl_type = '';
+			if (this.segmented.current == 0) {
+				title = '新增一级代理商';
+				dl_type = 0;
+			} else if (this.segmented.current == 1) {
+				title = '新增二级代理商';
+				dl_type = 1;
+			} else if (this.segmented.current == 2) {
+				title = '新增三级代理商';
+				dl_type = 2;
+			} else if (this.segmented.current == 3) {
+				title = '新增商户';
+				dl_type = 4;
+				pageType = 'business';
+			}
+			util.gotoPage(`/pages/agency/access?title=${title}&pageType=${pageType}&action=add&dl_type=${dl_type}`);
 		},
 
 		onClickSegmented(index) {
@@ -317,7 +351,7 @@ export default {
 				pageType = 'business';
 			}
 			util.gotoPage(
-				`/pages/agency/amend?agentData=${JSON.stringify(data)}&title=${title}&pageType=${pageType}`
+				`/pages/agency/access?agentData=${JSON.stringify(data)}&title=${title}&pageType=${pageType}`
 			);
 		},
 
@@ -407,7 +441,17 @@ page,
 	height: 100%;
 	overflow: hidden;
 	&__segmented {
+		position: relative;
 		padding-top: 20rpx;
+	}
+	&__add {
+		font-size: 22rpx;
+		position: absolute;
+		right: 30rpx;
+		top: 32rpx;
+		&:active {
+			color: #007aff;
+		}
 	}
 }
 
