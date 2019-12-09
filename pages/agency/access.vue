@@ -187,6 +187,21 @@
 						bgColor="rgb(47, 133, 252)"
 					></WButton>
 				</view>
+				<view v-if="agentData.pass == '2'">
+					<WButton
+						v-if="submit_success"
+						text="完成"
+						@click.native="onBack()"
+						bgColor="rgb(47, 133, 252)"
+					></WButton>
+					<WButton
+						v-else
+						text="通过审核"
+						:rotate="fromValue0.isRotate"
+						@click.native="onExamined()"
+						bgColor="rgb(47, 133, 252)"
+					></WButton>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -205,6 +220,7 @@ export default {
 	},
 	data() {
 		return {
+			submit_success:false,
 			titleText: '',
 			rightText: '编辑',
 			disabled: true,
@@ -582,6 +598,25 @@ export default {
 					if (res.confirm) {
 						delAgent({ agentid: this.agentData.agentid, type: 2 }).then(() => {
 							this.$refs['Message'].success('提交成功,等待审核');
+							getApp().globalData.agency = {
+								action: 'examine'
+							};
+						});
+					}
+				}
+			});
+		},
+
+		onExamined() {
+			uni.showModal({
+				title: '确认信息',
+				content: '确认审核通过？',
+				success: res => {
+					if (res.confirm) {
+						delAgent({ agentid: this.agentData.agentid, type: 0 }).then(() => {
+							this.$refs['Message'].success('审核通过');
+							this.submit_success = true;
+							this.rightText = ''
 							getApp().globalData.agency = {
 								action: 'examine'
 							};
