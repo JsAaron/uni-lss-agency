@@ -55,9 +55,6 @@
 				:name="formName0"
 				variableName="prov_cd"
 				ref="ref_prov_cd"
-				required
-				:tapClear="!disabled"
-				:disabled="disabled"
 				:steps="fromValue0.steps"
 				v-model="fromValue0.prov_cd"
 				@change="onChangeProv_cd"
@@ -71,8 +68,6 @@
 				:steps="fromValue0.steps"
 				v-model="fromValue0.city"
 				title="市"
-				:tapClear="!disabled"
-				:disabled="disabled"
 				@change="onChangeCity"
 			/>
 
@@ -80,8 +75,6 @@
 				:name="formName0"
 				variableName="areaid"
 				ref="ref_areaid"
-				:tapClear="!disabled"
-				:disabled="disabled"
 				:steps="fromValue0.steps"
 				v-model="fromValue0.areaid"
 				title="区"
@@ -104,8 +97,6 @@
 				:dataSet="fromValue0.dataSet"
 				ref="ref_contractstdate"
 				title="合同开始日期"
-				:tapClear="!disabled"
-				:disabled="disabled"
 				v-model="fromValue0.contractstdate"
 				placherhold="请选择"
 			/>
@@ -116,8 +107,6 @@
 				ref="ref_contractendate"
 				:dataSet="fromValue0.dataSet"
 				title="合同结束日期"
-				:tapClear="!disabled"
-				:disabled="disabled"
 				:value="dateValue"
 				v-model="fromValue0.contractendate"
 				placherhold="请选择"
@@ -140,7 +129,7 @@
 <script>
 import * as util from '@/utils';
 import QSApp from '@/components/QS-inputs-split/js/app.js';
-import { getProvcd } from '@/api/agent';
+import { getProvcd, saveAgent } from '@/api/agent';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
 export default {
@@ -178,7 +167,7 @@ export default {
 	created() {},
 	onLoad(options) {
 		this.agentData = JSON.parse(options.agentData);
-		this.titleText = options.title
+		this.titleText = options.title;
 	},
 	onReady() {
 		this.initData();
@@ -334,17 +323,19 @@ export default {
 		},
 
 		onEnsure() {
-			QSApp.getForm(this.formName0)
-				.then(res => {
-					if (res.verifyErr.length > 0) {
-						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
-						return;
-					}
-					this.saveRequest(res.data);
-				})
-				.catch(err => {
-					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
-				});
+			if (this.pageType == 'agency') {
+				QSApp.getForm(this.formName0)
+					.then(res => {
+						if (res.verifyErr.length > 0) {
+							this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
+							return;
+						}
+						this.saveRequest(res.data);
+					})
+					.catch(err => {
+						console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
+					});
+			}
 		},
 
 		onBack() {
@@ -354,11 +345,47 @@ export default {
 			this.disabled = false;
 		},
 
-		saveRequest() {
+		saveRequest(data) {
 			if (this.fromValue0.isRotate) {
 				return;
 			}
 			this.fromValue0.isRotate = true;
+			console.log(data);
+			console.log(this.agentData);
+
+			let query;
+			if (this.agentData.userId) {
+				query = {
+					agentid: util.cookies.get('agentid'),
+					agentids: this.agentData.agentid,
+					prov_cd: data.prov_cd.data[0].value.areaid,
+					city: data.city.data[0].value.areaid,
+					areaid: data.areaid.data ? data.areaid.data[0].value.areaid : '',
+					compaddress: data.compaddress,
+					contractendate: data.contractendate.data,
+					contractstdate: data.contractstdate.data,
+					id: this.agentData.userId,
+					legal: data.legal,
+					mobileNo: data.mobileNo,
+					userCode: this.agentData.userCode,
+					userName: data.userName
+				};
+			}
+			saveAgent(query)
+				.then(data => {
+					this.fromValue0.isRotate = false;
+					this.disabled = true;
+					this.$refs['Message'].success('修改成功');
+					getApp().globalData.agency = {
+						agentid:this.agentData.agentid,
+						agentData: query,
+						update: true
+					};
+				})
+				.catch(() => {
+					this.fromValue0.isRotate = false;
+					this.$refs['Message'].error('修改失败');
+				});
 		}
 	}
 };

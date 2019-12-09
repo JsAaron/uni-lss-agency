@@ -3,9 +3,8 @@
 export default {
 	globalData: {
 		
-		product:{
-			
-		},
+		product:{},
+		agency:{},
 		
 		route: {}, //路由页面
 		/**

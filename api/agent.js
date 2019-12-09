@@ -93,3 +93,11 @@ export function getStatisticsHomePay(data) {
 		params: data
 	})
 }
+
+export function saveAgent(data) {
+	return request({
+		url: '/moblieapp/AgentSave',
+		method: 'post',
+		data: data
+	})
+}

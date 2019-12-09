@@ -107,6 +107,7 @@ export default {
 		if (app.globalData.product.update) {
 			this.updateState(0);
 			this.updateState(1);
+			app.globalData.product = {}
 		}
 	},
 	async onLoad() {

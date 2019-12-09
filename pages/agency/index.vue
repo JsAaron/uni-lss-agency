@@ -12,13 +12,7 @@
 			</view>
 
 			<!-- 顶部选项卡 -->
-			<scroll-view
-				id="nav-bar"
-				class="nav-bar"
-				scroll-x
-				scroll-with-animation
-				:scroll-left="scrollLeft"
-			>
+			<scroll-view id="nav-bar" class="nav-bar" scroll-x scroll-with-animation :scroll-left="scrollLeft">
 				<view
 					v-for="(item, index) in tabBars"
 					:key="item.id"
@@ -41,13 +35,7 @@
 			@setEnableScroll="setEnableScroll"
 		>
 			<!-- 内容部分 -->
-			<swiper
-				id="swiper"
-				class="swiper-box"
-				:duration="300"
-				:current="tabCurrentIndex"
-				@change="changeTab"
-			>
+			<swiper id="swiper" class="swiper-box" :duration="300" :current="tabCurrentIndex" @change="changeTab">
 				<swiper-item v-for="tabItem in tabBars" :key="tabItem.id">
 					<scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadMore">
 						<view
@@ -57,8 +45,8 @@
 							@click="navToDetails(index)"
 						>
 							<view class="content__left">
-								<view class="content__name">{{ item.agentname }}</view>
-								<view class="content__code">{{ item.userCode }}</view>
+								<view class="content__name">{{ item.userName }}</view>
+								<view class="content__code">{{ item.mobileNo }}</view>
 							</view>
 							<view v-if="item.passName" class="content__right">
 								<view>{{ item.passName }}</view>
@@ -131,7 +119,13 @@ export default {
 		};
 	},
 	computed: {},
-	onShow() {},
+	onShow() {
+		// 强制更新状态
+		if (app.globalData.agency.update) {
+			this.updateState();
+			app.globalData.agency = {};
+		}
+	},
 	async onLoad() {
 		this.agentid = util.cookies.get('agentid');
 		this.dl_type = util.cookies.get('dl_type');
@@ -147,6 +141,17 @@ export default {
 		});
 	},
 	methods: {
+		updateState() {
+			let tabItem = this.tabBars[this.tabCurrentIndex];
+			if (tabItem.newsList) {
+				tabItem.newsList.map((item, index) => {
+					if (item.agentid == app.globalData.agency.agentid) {
+						Object.assign(item, app.globalData.agency.agentData);
+					}
+				});
+			}
+		},
+
 		onClickSegmented(index) {
 			if (this.segmented.current !== index) {
 				this.segmented.current = index;
