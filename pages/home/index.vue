@@ -49,7 +49,7 @@
 
 		<view class="qiun-columns">
 			<view class="qiun-charts">
-				<canvas canvas-id="canvasPie" id="canvasPie" class="charts"></canvas>
+				<canvas canvas-id="canvasRing" id="canvasRing" class="charts" @touchstart="touchRing"></canvas>
 			</view>
 		</view>
 
@@ -72,8 +72,6 @@ import { mapState, mapActions } from 'vuex';
 import { getStatisticsHomedl, getStatisticsHomePay } from '@/api/agent';
 import mHeader from './header.vue';
 import uCharts from '@/components/u-charts/u-charts.js';
-let _self;
-let canvaPie = null;
 
 export default {
 	data() {
@@ -83,42 +81,13 @@ export default {
 		return {
 			tooggleDateIndex: 0,
 			tooggleDate: ['交易金额', '交易笔数'],
-			startDataValue: this.getDate('last'),
+			startDataValue: this.getDate('pre'),
 			endDataValue: currentDate,
 
 			cWidth: '',
 			cHeight: '',
 			pixelRatio: 1,
-			serverData: '',
-			piearr: [],
-
-			chartData: {
-				series: [
-					{
-						name: '会员:一班',
-						data: 25,
-						format(value){
-							return value + 'test'
-						}
-					},
-					{
-						name: '会员:一班',
-						data: 25
-					},
-					{
-						name: '会员:一班',
-						data: 25
-					},
-					{
-						name: '会员:一班',
-						data: 25
-					},
-					{
-						name: '会员:一班',
-						data: 25
-					}
-				]
-			}
+			serverData: ''
 		};
 	},
 	onLoad() {},
@@ -127,9 +96,8 @@ export default {
 	},
 	onLoad() {
 		this.cWidth = uni.upx2px(750);
-		this.cHeight = uni.upx2px(450);
-		this.showPie();
-		_self = this;
+		this.cHeight = uni.upx2px(550);
+		this.getTableDataPayjyje();
 	},
 	computed: {
 		startDate() {
@@ -142,14 +110,25 @@ export default {
 	methods: {
 		onHandleToggleDate(item, index) {
 			this.tooggleDateIndex = index;
+			this.chartBandle()
+		},
+
+		chartBandle(){
+			if (this.tooggleDateIndex == 0) {
+				this.getTableDataPayjyje();
+			} else if (this.tooggleDateIndex == 1) {
+				this.getTableDataPayjybs();
+			}
 		},
 
 		bindStartDateChange(e) {
 			this.startDataValue = e.target.value;
+			this.chartBandle()
 		},
 
 		bindEndDateChange(e) {
 			this.endDataValue = e.target.value;
+			this.chartBandle()
 		},
 
 		dateConversion(value) {
@@ -168,8 +147,8 @@ export default {
 				year = year - 60;
 			} else if (type === 'end') {
 				year = year + 2;
-			} else if (type === 'last') {
-				month = month - 6;
+			} else if (type === 'pre') {
+				month = month - 1;
 			}
 
 			month = month > 9 ? month : '0' + month;
@@ -180,66 +159,111 @@ export default {
 		getTableDataPayjyje() {
 			let query = {
 				agentid: util.cookies.get('agentid'),
-				type: '1',
-				start_time: '2019-05-01',
-				end_time: '2019-12-01'
+				type: '0',
+				start_time: this.startDataValue,
+				end_time: this.endDataValue
 			};
+			this.getChartData(query);
+		},
 
+		getTableDataPayjybs() {
+			let query = {
+				agentid: util.cookies.get('agentid'),
+				type: '1',
+				start_time: this.startDataValue,
+				end_time: this.endDataValue
+			};
+			this.getChartData(query);
+		},
+
+		getChartData(query) {
 			getStatisticsHomePay(query).then(data => {
 				if (data != null && data != '') {
-					this.showPie();
-					// //循环遍历,将穿回来的list转换为chart需要的键值对形式
-					// let countlistmap = {};
-					// countlistmap['type'] = '微信: ' + data.wx_num_bf + '% | ' + data.wx_num_amount;
-					// countlistmap['percentage'] = data.wx_num_amount;
-					// countlistArray.push(countlistmap);
-					// let countlistmap2 = {};
-					// countlistmap2['type'] = '支付宝: ' + data.zfb_num_bf + '% | ' + data.zfb_num_amount;
-					// countlistmap2['percentage'] = data.zfb_num_amount;
-					// countlistArray.push(countlistmap2);
-					// let countlistmap3 = {};
-					// countlistmap3['type'] = '银行卡: ' + data.yhk_num_bf + '% | ' + data.yhk_num_amount;
-					// countlistmap3['percentage'] = data.yhk_num_amount;
-					// countlistArray.push(countlistmap3);
-					// let countlistmap4 = {};
-					// countlistmap4['type'] = '会员卡: ' + data.fyk_num_bf + '% | ' + data.fyk_num_amount;
-					// countlistmap4['percentage'] = data.fyk_num_amount;
-					// countlistArray.push(countlistmap4);
-					// let countlistmap5 = {};
-					// countlistmap5['type'] = '未知: ' + data.wz_num_bf + '% | ' + data.wz_num_amount;
-					// countlistmap5['percentage'] = data.wx_num_amount;
-					// countlistArray.push(countlistmap5);
-					// //将键值对形式加到array数组里
-					// //将行和列分别赋值给chartdata的行和列
-					// this.chartData.rows = countlistArray;
+					let series = [];
+					series.push({
+						name: `微信:${data.wx_num_bf}% | ${data.wx_num_amount}`,
+						key: '微信',
+						data: data.wx_num_bf
+					});
+					series.push({
+						name: `支付宝:${data.zfb_num_bf}% | ${data.zfb_num_amount}`,
+						key: '支付宝',
+						data: data.zfb_num_bf
+					});
+					series.push({
+						name: `银行卡:${data.yhk_num_bf}% | ${data.yhk_num_amount}`,
+						key: '银行卡',
+						data: data.yhk_num_bf
+					});
+					series.push({
+						name: `会员卡:${data.fyk_num_bf}% | ${data.fyk_num_amount}`,
+						key: '会员卡',
+						data: data.fyk_num_bf
+					});
+					series.push({
+						name: `未知:${data.wz_num_bf}% | ${data.wz_num_amount}`,
+						key: '未知',
+						data: data.wz_num_bf
+					});
+
+					for (let i = 0; i < series.length; i++) {
+						if (series[i].data) {
+							series[i].data = Number(series[i].data);
+						}
+						series[i].legendShape = 'rect';
+						series[i].format = () => {
+							return series[i].key + series[i].data + '%';
+						};
+					}
+
+					this.showRing(series);
 				}
 			});
 		},
 
-		showPie() {
-			console.log(11, this.chartData.series);
-			this.canvaPie = new uCharts({
+		showRing(series) {
+			this.canvaRing = new uCharts({
 				$this: this,
-				canvasId: 'canvasPie',
-				type: 'pie',
-				fontSize: 13,
-				padding: [20, 5, 5, 5],
+				canvasId: 'canvasRing',
+				type: 'ring',
+				fontSize: 11,
+				padding: [5, 5, 5, 5],
 				legend: {
-					show: false
+					show: true,
+					float: 'center',
+					itemGap: 10,
+					padding: 5,
+					lineHeight: 26,
+					margin: 20,
+					// backgroundColor:'rgba(41,198,90,0.2)',
+					// borderColor :'rgba(41,198,90,0.5)',
+					borderWidth: 1
 				},
 				background: '#FFFFFF',
 				pixelRatio: this.pixelRatio,
-				series: this.chartData.series,
-				animation: true,
+				series: series,
+				animation: false,
 				width: this.cWidth * this.pixelRatio,
 				height: this.cHeight * this.pixelRatio,
 				disablePieStroke: true,
-				dataPointShape:true,
 				dataLabel: true,
+				dataPointShape: true,
 				extra: {
 					pie: {
+						offsetAngle: 0,
+						ringWidth: 80 * this.pixelRatio,
 						labelWidth: 15
 					}
+				}
+			});
+		},
+		touchRing(e) {
+			this.canvaRing.touchLegend(e, {
+				animation: false
+			});
+			this.canvaRing.showToolTip(e, {
+				format: function(item) {
+					return item.name + ':' + item.data;
 				}
 			});
 		}
@@ -311,6 +335,7 @@ export default {
 .charts {
 	width: 750upx;
 	height: 500upx;
+	margin-top: 50rpx;
 	background-color: #ffffff;
 }
 
