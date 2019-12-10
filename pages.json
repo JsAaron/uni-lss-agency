@@ -8,8 +8,10 @@
 		{
 			"path": "pages/home/index",
 			"style": {
+				"disableScroll": true,
 				"navigationBarTitleText": "首页",
 				"app-plus": {
+					"bounce" : "none",
 					"titleNView": {
 						"tags": [{ 
 							"tag": "img",

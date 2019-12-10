@@ -9,11 +9,11 @@
 		<view class="header__data">
 			<view class="header__row">
 				<view class="header__col">
-					<view><text>¥{{order_amt}}</text></view>
+					<view><text>¥{{totalData.order_amt}}</text></view>
 					<view>总交易额</view>
 				</view>
 				<view class="header__col">
-					<view>{{one_agent_num}}</view>
+					<view>{{totalData.one_agent_num}}</view>
 					<view>一级代理商总数</view>
 				</view>
 			</view>
@@ -23,17 +23,17 @@
 					<view>佣金总额</view>
 				</view>
 				<view class="header__col">
-					<view>{{two_agent_num}}</view>
+					<view>{{totalData.two_agent_num}}</view>
 					<view>二级代理商总数</view>
 				</view>
 			</view>
 			<view class="header__row">
 				<view class="header__col">
-					<view>{{agent_num}}</view>
+					<view>{{totalData.agent_num}}</view>
 					<view>商户总数</view>
 				</view>
 				<view class="header__col">
-					<view>{{three_agent_num}}</view>
+					<view>{{totalData.three_agent_num}}</view>
 					<view>三级代理商总数</view>
 				</view>
 			</view>
@@ -46,6 +46,9 @@ import * as util from '@/utils';
 import { getStatisticsHomedl } from '@/api/agent';
 export default {
 	components: {},
+	props:{
+		totalData:Object
+	},
 	data() {
 		return {
 			one_agent_num:"",
@@ -56,22 +59,6 @@ export default {
 		};
 	},
 	mounted() {
-		this.getTableData();
-	},
-	methods: {
-		getTableData() {
-			getStatisticsHomedl({
-				agentid: util.cookies.get('agentid')
-			}).then(data => {
-				if (data != null && data != '') {
-					this.one_agent_num = data.one_agent_num;
-					this.two_agent_num = data.two_agent_num;
-					this.three_agent_num = data.three_agent_num;
-					this.agent_num = data.agent_num;
-					this.order_amt = data.order_amt;
-				}
-			});
-		}
 	}
 };
 </script>

@@ -1,84 +1,96 @@
 <template>
-	<view class="container">
-		<m-header></m-header>
+	<mescroll-uni @down="downCallback" :up="upOption">
+		
+		<view class="container">
+			<m-header :totalData.sync='totalData'></m-header>
 
-		<view class="content">
-			<view class="content__title">
-				<view class="content__line"></view>
-				<view class="content__text">支付通道占比</view>
+			<view class="content">
+				<view class="content__title">
+					<view class="content__line"></view>
+					<view class="content__text">支付通道占比</view>
 
-				<view class="filter-date-item">
-					<picker
-						class="filter-date-picker"
-						mode="date"
-						:value="startDataValue"
-						:start="startDate"
-						:end="endDate"
-						@change="bindStartDateChange"
+					<view class="filter-date-item">
+						<picker
+							class="filter-date-picker"
+							mode="date"
+							:value="startDataValue"
+							:start="startDate"
+							:end="endDate"
+							@change="bindStartDateChange"
+						>
+							<view>{{ startDataValue }}</view>
+						</picker>
+						<text class="filter-date-text">-</text>
+						<picker
+							class="filter-date-picker"
+							mode="date"
+							:value="endDataValue"
+							:start="startDate"
+							:end="endDate"
+							@change="bindEndDateChange"
+						>
+							<view>{{ endDataValue }}</view>
+						</picker>
+					</view>
+				</view>
+			</view>
+
+			<view class="header__date-item">
+				<div class="header__date">
+					<div
+						v-for="(item, index) in tooggleDate"
+						:key="index"
+						class="header__date-row"
+						:class="tooggleDateIndex === index ? 'header__date-row--active' : ''"
+						@click="onHandleToggleDate(item, index)"
 					>
-						<view>{{ startDataValue }}</view>
-					</picker>
-					<text class="filter-date-text">-</text>
-					<picker
-						class="filter-date-picker"
-						mode="date"
-						:value="endDataValue"
-						:start="startDate"
-						:end="endDate"
-						@change="bindEndDateChange"
-					>
-						<view>{{ endDataValue }}</view>
-					</picker>
+						{{ item }}
+					</div>
+				</div>
+			</view>
+
+			<view class="qiun-columns">
+				<view class="qiun-charts">
+					<canvas canvas-id="canvasRing" id="canvasRing" class="charts" @touchstart="touchRing"></canvas>
+				</view>
+			</view>
+
+			<view class="qiun-bottom">
+				<view class="qiun-names">
+					<block v-for="(item, index) in serieNames" :key="index">
+						<view class="qiun-row">
+							<text class="qiun-dot"></text>
+							<text>{{ item.name }}:{{ item.data }}%</text>
+						</view>
+					</block>
 				</view>
 			</view>
 		</view>
-
-		<view class="header__date-item">
-			<div class="header__date">
-				<div
-					v-for="(item, index) in tooggleDate"
-					:key="index"
-					class="header__date-row"
-					:class="tooggleDateIndex === index ? 'header__date-row--active' : ''"
-					@click="onHandleToggleDate(item, index)"
-				>
-					{{ item }}
-				</div>
-			</div>
-		</view>
-
-		<view class="qiun-columns">
-			<view class="qiun-charts">
-				<canvas canvas-id="canvasRing" id="canvasRing" class="charts" @touchstart="touchRing"></canvas>
-			</view>
-		</view>
-
-		<view class="qiun-bottom">
-			<view class="qiun-names">
-				<block v-for="(item, index) in serieNames" :key="index">
-					<view class="qiun-row">
-						<text class="qiun-dot"></text>
-						<text>{{ item.name }}:{{ item.data }}%</text>
-					</view>
-				</block>
-			</view>
-		</view>
-	</view>
+	</mescroll-uni>
 </template>
 
 <script>
 import * as util from '@/utils';
 import { mapState, mapActions } from 'vuex';
-import { getStatisticsHomedl, getStatisticsHomePay } from '@/api/agent';
+import { getStatisticsHomedl, getStatisticsHomePay} from '@/api/agent';
 import mHeader from './header.vue';
 import uCharts from '@/components/u-charts/u-charts.js';
-
+import MescrollUni from '@/components/mescroll-uni/mescroll-uni.vue';
 export default {
+	components: {
+		mHeader,
+		MescrollUni
+	},
 	data() {
 		const currentDate = this.getDate({
 			format: true
 		});
 		return {
+			upOption: {
+				use: false
+			},
+			
+			totalData:{},
 			tooggleDateIndex: 0,
 			tooggleDate: ['交易金额', '交易笔数'],
 			startDataValue: this.getDate('pre'),
@@ -90,14 +102,11 @@ export default {
 			serverData: ''
 		};
 	},
-	onLoad() {},
-	components: {
-		mHeader
-	},
 	onLoad() {
 		this.cWidth = uni.upx2px(750);
 		this.cHeight = uni.upx2px(550);
 		this.getTableDataPayjyje();
+		this.getTableData()
 	},
 	computed: {
 		startDate() {
@@ -108,27 +117,48 @@ export default {
 		}
 	},
 	methods: {
+		
+		downCallback(mescroll) {
+			this.getTableData()
+				.then(() => {
+					mescroll.endSuccess();
+				})
+				.catch(() => {
+					mescroll.endErr();
+				});
+		},
+		
+		getTableData() {
+			return getStatisticsHomedl({
+				agentid: util.cookies.get('agentid')
+			}).then(data => {
+				if (data != null && data != '') {
+					this.totalData = data
+				}
+			});
+		},
+		
 		onHandleToggleDate(item, index) {
 			this.tooggleDateIndex = index;
-			this.chartBandle()
+			this.updateCharts();
 		},
 
-		chartBandle(){
+		updateCharts() {
 			if (this.tooggleDateIndex == 0) {
-				this.getTableDataPayjyje();
+				return this.getTableDataPayjyje();
 			} else if (this.tooggleDateIndex == 1) {
-				this.getTableDataPayjybs();
+				return this.getTableDataPayjybs();
 			}
 		},
 
 		bindStartDateChange(e) {
 			this.startDataValue = e.target.value;
-			this.chartBandle()
+			this.updateCharts();
 		},
 
 		bindEndDateChange(e) {
 			this.endDataValue = e.target.value;
-			this.chartBandle()
+			this.updateCharts();
 		},
 
 		dateConversion(value) {
@@ -163,7 +193,7 @@ export default {
 				start_time: this.startDataValue,
 				end_time: this.endDataValue
 			};
-			this.getChartData(query);
+			return this.getChartData(query);
 		},
 
 		getTableDataPayjybs() {
@@ -173,11 +203,11 @@ export default {
 				start_time: this.startDataValue,
 				end_time: this.endDataValue
 			};
-			this.getChartData(query);
+			return this.getChartData(query);
 		},
 
 		getChartData(query) {
-			getStatisticsHomePay(query).then(data => {
+			return getStatisticsHomePay(query).then(data => {
 				if (data != null && data != '') {
 					let series = [];
 					series.push({
