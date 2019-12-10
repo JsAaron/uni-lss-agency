@@ -18,23 +18,23 @@
 			<view class="content__row lss-hairline--bottom">
 				<view>
 					<view>订单总数</view>
-					<view>{{ totalData.order_num }}笔</view>
+					<view class="content--gray">{{ totalData.order_num }}笔</view>
 				</view>
 				<view>
 					<view>订单总金额</view>
-					<view>{{ totalData.order_amount }}元</view>
+					<view class="content--gray">{{ totalData.order_amount }}元</view>
 				</view>
 				<view>
 					<view>退款总金额</view>
-					<view>{{ totalData.refund_amount }}元</view>
+					<view class="content--gray">{{ totalData.refund_amount }}元</view>
 				</view>
 				<view>
 					<view>顾客实付</view>
-					<view>{{ totalData.payment_amount }}元</view>
+					<view class="content--gray">{{ totalData.payment_amount }}元</view>
 				</view>
 				<view>
 					<view>优惠</view>
-					<view>{{ totalData.discount_amount }}元</view>
+					<view class="content--gray">{{ totalData.discount_amount }}元</view>
 				</view>
 			</view>
 
@@ -44,8 +44,8 @@
 				:key="index"
 			>
 				<view>
-					<view>单号:{{ item.mer_order_id }}</view>
 					<view>名称:{{ item.agentname }}</view>
+					<view>单号:{{ item.mer_order_id }}</view>
 					<view>时间:{{ item.order_time2 }}</view>
 				</view>
 				<view>
@@ -257,10 +257,16 @@ export default {
 }
 
 .content {
+	&--gray{
+		color: #7D7E80;
+	}
 	&__row {
 		@include flex-h-between;
 		padding: 20rpx 20rpx;
 		font-size: 25rpx;
+	}
+	&__first{
+		color: #7D7E80;
 	}
 	&__row:nth-of-type(odd) {
 		background-color: rgb(252, 252, 252);
