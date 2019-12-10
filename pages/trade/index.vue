@@ -1,315 +1,247 @@
 <template>
 	<view class="container">
-		<!-- 顶部选项卡 -->
-		<scroll-view id="nav-bar" class="nav-bar" scroll-x scroll-with-animation :scroll-left="scrollLeft">
-			<view
-				v-for="(item, index) in tabBars"
-				:key="item.id"
-				class="nav-item"
-				:class="{ current: index === tabCurrentIndex }"
-				:id="'tab' + index"
-				@click="changeTab(index)"
-			>
-				{{ item.name }}
-			</view>
-		</scroll-view>
-
-		<!-- 下拉刷新组件 -->
-		<mix-pulldown-refresh
-			ref="mixPulldownRefresh"
-			class="panel-content"
-			:top="90"
-			@refresh="onPulldownReresh"
-			@setEnableScroll="setEnableScroll"
+		<sl-filter
+			class="sl-filter"
+			:independence="true"
+			:color="titleColor"
+			:themeColor="themeColor"
+			:menuList.sync="menuList"
+			@result="onFilter"
+		></sl-filter>
+		<mescroll-uni
+			@down="downCallback"
+			:top="containerTop"
+			:up="upOption"
+			@up="upCallback"
+			@init="mescrollInit"
 		>
-			<!-- 内容部分 -->
-			<swiper id="swiper" class="swiper-box" :duration="300" :current="tabCurrentIndex" @change="changeTab">
-				<swiper-item v-for="tabItem in tabBars" :key="tabItem.id">
-					<scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadMore">
-						<view
-							v-for="(item, index) in tabItem.newsList"
-							:key="index"
-							class="content__row lss-hairline--bottom"
-							@click="navToDetails(index)"
-						>
-							<view class="content__left">
-								<view class="content__name">{{ item.agentname }}</view>
-								<view class="content__code">{{ item.userCode }}</view>
-							</view>
-							<view v-if="item.passName" class="content__right">
-								<view>{{ item.passName }}</view>
-								<uni-icon type="arrow" size="14" color="#c9c9c9"></uni-icon>
-							</view>
-						</view>
-						<!-- 上滑加载更多组件 -->
-						<mix-load-more :status="tabItem.loadMoreStatus"></mix-load-more>
-					</scroll-view>
-				</swiper-item>
-			</swiper>
-		</mix-pulldown-refresh>
+			<view class="content__row lss-hairline--bottom">
+				<view>
+					<view>订单总数</view>
+					<view>{{ totalData.order_num }}笔</view>
+				</view>
+				<view>
+					<view>订单总金额</view>
+					<view>{{ totalData.order_amount }}元</view>
+				</view>
+				<view>
+					<view>退款总金额</view>
+					<view>{{ totalData.refund_amount }}元</view>
+				</view>
+				<view>
+					<view>顾客实付</view>
+					<view>{{ totalData.payment_amount }}元</view>
+				</view>
+				<view>
+					<view>优惠</view>
+					<view>{{ totalData.discount_amount }}元</view>
+				</view>
+			</view>
+
+			<view
+				class="content__row lss-hairline--bottom"
+				v-for="(item, index) in agentData"
+				:key="index"
+			>
+				<view>
+					<view>单号:{{ item.mer_order_id }}</view>
+					<view>名称:{{ item.agentname }}</view>
+					<view>时间:{{ item.order_time2 }}</view>
+				</view>
+				<view>
+					<view>{{ item.order_amt }}元</view>
+					<view>{{ getPayName(item) }}</view>
+				</view>
+				<view>{{ getStateName(item) }}</view>
+			</view>
+		</mescroll-uni>
 	</view>
 </template>
 
 <script>
 import * as util from '@/utils';
-import { mapActions } from 'vuex';
-import uniIcon from '@/components/uni-icon/uni-icon';
-import { getAgentPagedList } from '@/api/agent';
-import mixPulldownRefresh from '@/components/mix-pulldown-refresh/mix-pulldown-refresh';
-import mixLoadMore from '@/components/mix-load-more/mix-load-more';
-
-let app = getApp();
-
-let windowWidth = 0,
-	scrollTimer = false,
-	tabBar;
-
-let tabList = [
-	{
-		name: '全部',
-		pass: ''
-	},
-	{
-		name: '未开通',
-		pass: '3'
-	},
-	{
-		name: '待审核',
-		pass: '2'
-	},
-	{
-		name: '已签约',
-		pass: '0'
-	},
-	{
-		name: '签约失败',
-		pass: '4'
-	}
-];
+import { getStatisticsHomedl, getStatisticsHomePay } from '@/api/agent';
+import MescrollUni from '@/components/mescroll-uni/mescroll-uni.vue';
+import MxDatePicker from '@/components/mx-datepicker/mx-datepicker.vue';
+import slFilter from '@/components/sl-filter/sl-filter.vue';
+import { getStatisticsJymx, getMobileOrderPagelistJymx } from '@/api/agent';
 
 export default {
 	components: {
-		uniIcon,
-		mixPulldownRefresh,
-		mixLoadMore
+		slFilter,
+		MxDatePicker,
+		MescrollUni
 	},
 	data() {
 		return {
-			tabCurrentIndex: 0, //当前选项卡索引
-			scrollLeft: 0, //顶部选项卡左滑距离
-			enableScroll: true,
-			tabBars: []
+			agentData: [],
+			totalData: {
+				order_amount: '0',
+				order_num: '0',
+				refund_amount: '0',
+				payment_amount: '0',
+				discount_amount: '0'
+			},
+			containerTop: '',
+			mescroll: null,
+			searchForm: {
+				pay_type: '',
+				pay_state: ''
+			},
+			upOption: {
+				// autoShowLoading:true,
+				// use: true,
+				page: {
+					size: 30
+				},
+				noMoreSize: 3,
+				empty: {
+					use: true,
+					tip: '~ 搜索无结果 ~'
+				},
+				textNoMore: '-- 数据全部加载完毕 --'
+			},
+
+			themeColor: '#00a6ff',
+			titleColor: '#666666',
+			filterResult: '',
+			menuList: [
+				// {
+				// 	title: '日期',
+				// 	key: 'pay_date',
+				// 	type: 'date',
+				// 	reflexTitle: true,
+				// 	detailTitle: '请输入搜索时间段',
+				// 	detailList: []
+				// },
+				{
+					title: '支付方式',
+					key: 'pay_type',
+					detailTitle: '请选择支付方式（单选）',
+					reflexTitle: true,
+					detailList: [
+						{
+							value: '支付宝刷脸',
+							title: '支付宝'
+						},
+						{
+							value: '微信刷脸',
+							title: '微信'
+						},
+						{
+							value: '银行卡',
+							title: '银行卡'
+						},
+						{
+							value: '会员卡',
+							title: '会员卡'
+						}
+					]
+				},
+				{
+					title: '支付状态',
+					key: 'pay_state',
+					detailTitle: '请选择支付状态（单选）',
+					reflexTitle: true,
+					detailList: [
+						{
+							value: '0000',
+							title: '支付成功'
+						},
+						{
+							value: '0001',
+							title: '支付失败'
+						},
+						{
+							value: '0002',
+							title: '全额退款成功'
+						}
+					]
+				}
+			]
 		};
 	},
-	computed: {},
-	onShow() {
-		// 强制更新状态
-		if (app.globalData.product.update) {
-			this.updateState(0);
-			this.updateState(1);
-			app.globalData.product = {}
-		}
-	},
-	async onLoad() {
+	onLoad() {
 		this.agentid = util.cookies.get('agentid');
-		this.dl_type = util.cookies.get('dl_type');
-		this.xt_id = util.cookies.get('xt_id');
-		// 获取屏幕宽度
-		windowWidth = uni.getSystemInfoSync().windowWidth;
-		this.initTabbars();
+		const query = wx.createSelectorQuery();
+		query.select('.sl-filter').boundingClientRect();
+		query.selectViewport().scrollOffset();
+		query.exec(res => {
+			this.containerTop = res[0].height * 2;
+			this.getTableDataMx();
+		});
 	},
+	computed: {},
 	methods: {
-		
-		updateState(index){
-			let tabItem = this.tabBars[index];
-			if (tabItem.newsList) {
-				tabItem.newsList.map(item => {
-					if (item.pass == 3 && item.agentid == app.globalData.product.agentid) {
-						item.passName = '待审核';
-						item.pass = 2;
-					}
-				});
-			}
+		mescrollInit(mescroll) {
+			this.mescroll = mescroll;
 		},
 
-		/**
-		 * 数据处理方法在vue和nvue中通用，可以直接用mixin混合
-		 * 这里直接写的
-		 * mixin使用方法看index.nuve
-		 */
-		//获取分类
-		initTabbars() {
-			tabList.forEach(item => {
-				item.pageIndex = 0; //页码索引
-				item.totalPages = 0; //总数码数
-				item.newsList = [];
-				item.loadMoreStatus = 0; //加载更多 0加载前，1加载中，2没有更多了
-				item.refreshing = 0;
-			});
-			this.tabBars = tabList;
-			this.loadNewsList('add');
+		downCallback(mescroll) {
+			mescroll.resetUpScroll();
 		},
-		//列表数据
-		loadNewsList(type) {
-			let tabItem = this.tabBars[this.tabCurrentIndex];
 
-			//type add 加载更多 refresh下拉刷新
-			if (type === 'add') {
-				if (tabItem.loadMoreStatus === 2) {
-					return;
-				}
-				tabItem.loadMoreStatus = 1;
-			} else if (type === 'refresh') {
-				tabItem.pageIndex = 0;
-				// #ifdef APP-PLUS
-				tabItem.refreshing = true;
-				// #endif
-			}
-
-			//获取指定列表数据
+		upCallback(mescroll) {
+			let pageNum = mescroll.num;
+			let pageSize = mescroll.size;
 			let query = {
-				pageIndex: ++tabItem.pageIndex,
-				pageSize: 50,
+				pageIndex: pageNum,
+				pageSize: pageSize,
 				sortBy: '',
 				agentid: this.agentid,
-				dl_type: this.dl_type,
-				xt_id: this.xt_id,
-				dl_type2: '4',
+				start_time: '2019-12-3',
+				end_time: '2019-12-10',
 				descending: false,
-				filter: {
-					pass: tabItem.pass,
-					userName: '',
-					userCode: ''
-				}
+				filter: this.searchForm
 			};
-			getAgentPagedList(query).then(async res => {
-				if (type === 'refresh') {
-					tabItem.newsList = []; //刷新前清空数组
-				}
-				res.rows.forEach(item => {
-					if (item.pass == '0') {
-						item.passName = '已签约';
-					} else if (item.pass == '1' || item.pass == '3') {
-						item.passName = '未开通';
-					} else if (item.pass == '2') {
-						item.passName = '待审核';
-					}
-					tabItem.newsList.push(item);
-				});
-				tabItem.totalPages = res.totalpage;
-
-				//下拉刷新 关闭刷新动画
-				if (type === 'refresh') {
-					this.$refs.mixPulldownRefresh && this.$refs.mixPulldownRefresh.endPulldownRefresh();
-					// #ifdef APP-PLUS
-					tabItem.refreshing = false;
-					// #endif
-					tabItem.loadMoreStatus = 0;
-				}
-
-				//上滑加载 处理状态
-				if (type === 'add') {
-					tabItem.loadMoreStatus = tabItem.pageIndex >= tabItem.totalPages ? 2 : 0;
-				}
+			getMobileOrderPagelistJymx(query).then(data => {
+				if (mescroll.num == 1) this.agentData = [];
+				this.agentData = this.agentData.concat(data.rows);
+				// console.log(data);
+				mescroll.endByPage(data.rows.length, data.totalCount);
 			});
 		},
 
-		//下拉刷新
-		onPulldownReresh() {
-			this.loadNewsList('refresh');
-		},
-
-		//上滑加载
-		loadMore() {
-			this.loadNewsList('add');
-		},
-
-		//================================
-
-		//新闻详情
-		navToDetails(index) {
-			let tabItem = this.tabBars[this.tabCurrentIndex];
-			let data = tabItem.newsList[index];
-			if (data.pass == '0' || data.pass == '2') {
-				util.gotoPage(`/pages/product/details/index?agentid=${data.agentid}`);
+		getPayName(item) {
+			if (item.refund_no != '') {
+				return '退款';
 			} else {
-				util.gotoPage(`/pages/product/type-in?agentid=${data.agentid}`);
-			}
-		},
-
-		//设置scroll-view是否允许滚动，在小程序里下拉刷新时避免列表可以滑动
-		setEnableScroll(enable) {
-			if (this.enableScroll !== enable) {
-				this.enableScroll = enable;
-			}
-		},
-
-		//tab切换
-		async changeTab(e) {
-			if (scrollTimer) {
-				//多次切换只执行最后一次
-				clearTimeout(scrollTimer);
-				scrollTimer = false;
-			}
-			let index = e;
-			//e=number为点击切换，e=object为swiper滑动切换
-			if (typeof e === 'object') {
-				index = e.detail.current;
-			}
-			if (typeof tabBar !== 'object') {
-				tabBar = await this.getElSize('nav-bar');
-			}
-			//计算宽度相关
-			let tabBarScrollLeft = tabBar.scrollLeft;
-			let width = 0;
-			let nowWidth = 0;
-			//获取可滑动总宽度
-			for (let i = 0; i <= index; i++) {
-				let result = await this.getElSize('tab' + i);
-				width += result.width;
-				if (i === index) {
-					nowWidth = result.width;
+				if (item.pay_type == '微信刷脸') {
+					return '微信';
+				} else if (item.pay_type == '支付宝刷脸') {
+					return '支付宝';
+				} else if (item.pay_type == '银行卡') {
+					return '银行卡';
+				} else if (item.pay_type == '会员卡') {
+					return '会员卡';
 				}
 			}
-			if (typeof e === 'number') {
-				//点击切换时先切换再滚动tabbar，避免同时切换视觉错位
-				this.tabCurrentIndex = index;
-			}
-			//延迟300ms,等待swiper动画结束再修改tabbar
-			scrollTimer = setTimeout(() => {
-				if (width - nowWidth / 2 > windowWidth / 2) {
-					//如果当前项越过中心点，将其放在屏幕中心
-					this.scrollLeft = width - nowWidth / 2 - windowWidth / 2;
+		},
+
+		getStateName(item) {
+			if (item.return_code == '0000') {
+				if (item.refund_no != '') {
+					return '全额退款成功';
 				} else {
-					this.scrollLeft = 0;
+					return '成功';
 				}
-				if (typeof e === 'object') {
-					this.tabCurrentIndex = index;
-				}
-				this.tabCurrentIndex = index;
-
-				//第一次切换tab，动画结束后需要加载数据
-				let tabItem = this.tabBars[this.tabCurrentIndex];
-				if (this.tabCurrentIndex !== 0 && tabItem.loaded !== true) {
-					this.loadNewsList('add');
-					tabItem.loaded = true;
-				}
-			}, 300);
+			} else {
+				return '失败';
+			}
 		},
-		//获得元素的size
-		getElSize(id) {
-			return new Promise((res, rej) => {
-				let el = uni.createSelectorQuery().select('#' + id);
-				el.fields(
-					{
-						size: true,
-						scrollOffset: true,
-						rect: true
-					},
-					data => {
-						res(data);
-					}
-				).exec();
+
+		onFilter() {},
+
+		getTableDataMx() {
+			let query = {
+				parent_agentid: this.agentid,
+				start_time: '2019-12-3',
+				end_time: '2019-12-10',
+				pay_type: this.searchForm.pay_type,
+				pay_state: this.searchForm.pay_state
+			};
+			getStatisticsJymx(query).then(data => {
+				this.totalData = data;
 			});
 		}
 	}
@@ -317,86 +249,21 @@ export default {
 </script>
 
 <style lang="scss">
-page,
 .container {
-	background-color: #fff;
-	height: 100%;
-	overflow: hidden;
-}
-
-/* 顶部tabbar */
-.nav-bar {
-	position: relative;
-	z-index: 10;
-	height: 90upx;
-	white-space: nowrap;
-	box-shadow: 0 2upx 8upx rgba(0, 0, 0, 0.06);
-	background-color: #fff;
-	.nav-item {
-		display: inline-block;
-		width: 150upx;
-		height: 90upx;
-		text-align: center;
-		line-height: 90upx;
-		font-size: 30upx;
-		color: #303133;
-		position: relative;
-		&:after {
-			content: '';
-			width: 0;
-			height: 0;
-			border-bottom: 4upx solid #007aff;
-			position: absolute;
-			left: 50%;
-			bottom: 0;
-			transform: translateX(-50%);
-			transition: 0.3s;
-		}
-	}
-	.current {
-		color: #007aff;
-		&:after {
-			width: 50%;
-		}
-	}
-}
-
-.swiper-box {
-	height: 100%;
-}
-
-.panel-scroll-box {
-	height: 100%;
-
-	.panel-item {
-		background: #fff;
-		padding: 30px 0;
-		border-bottom: 2px solid #000;
-	}
+	width: 100vw;
+	min-height: 100vh;
+	background: #fff;
+	overflow-y: scroll;
 }
 
 .content {
 	&__row {
-		// width: calc('100% - 40rpx');
 		@include flex-h-between;
 		padding: 20rpx 20rpx;
+		font-size: 25rpx;
 	}
 	&__row:nth-of-type(odd) {
 		background-color: rgb(252, 252, 252);
-	}
-	&__left {
-		font-size: 30rpx;
-	}
-	&__name {
-	}
-	&__code {
-		color: #999999;
-		margin-top: 5rpx;
-	}
-	&__right {
-		@include flex-h-left;
-		font-size: 28rpx;
-		color: #007aff;
 	}
 }
 </style>

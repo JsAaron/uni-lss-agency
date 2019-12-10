@@ -35,7 +35,6 @@ export function getStatisticsHomedl(data) {
 }
 
 export function saveAgentJjOne(data) {
-	console.log(data)
 	return request({
 		url: '/moblieapp/AgentSaveJjOne',
 		method: 'post',
@@ -115,5 +114,22 @@ export function saveShareAgent(data) {
 		url: '/moblieapp/ShareAgentSave',
 		method: 'post',
 		data: data
+	})
+}
+
+
+export function getStatisticsJymx(data) {
+	return request({
+		url: '/moblieapp/getStatisticsJymx',
+		method: 'post',
+		params: data
+	})
+}
+
+export function getMobileOrderPagelistJymx(query) {
+	return request({
+		url: '/moblieapp/mobileOrderPagelistJymx',
+		method: 'post',
+		params: query
 	})
 }
