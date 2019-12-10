@@ -7,6 +7,7 @@
 					<view class="downwarp-content">
 						<view class="downwarp-progress" :class="{'mescroll-rotate':isDownLoading}" :style="{'transform':downRotate}"></view>
 						<view class="downwarp-tip">{{downText}}</view>
+						<view class="downwarp-mascot"></view>
 					</view>
 				</view>
 
@@ -291,4 +292,31 @@
 
 <style>
 	@import "./mescroll-uni.css";
+	
+	/*下拉刷新--吉祥物*/
+	.mescroll-downwarp .downwarp-mascot{
+		position: absolute;
+		right: 16upx;
+		bottom: 0;
+		width: 100upx;
+		height: 100upx;
+		background-size: contain;
+		background-repeat: no-repeat;
+		-webkit-animation: animMascot .6s steps(1,end) infinite;
+		animation: animMascot .6s steps(1,end) infinite;
+	}
+	@-webkit-keyframes animMascot {
+		0% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb1.png)}
+		25% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb2.png)}
+		50% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb3.png)}
+		75% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb4.png)}
+		100% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb1.png)}
+	}
+	@keyframes animMascot {
+		0% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb1.png)}
+		25% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb2.png)}
+		50% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb3.png)}
+		75% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb4.png)}
+		100% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb1.png)}
+	}
 </style>
