@@ -71,7 +71,13 @@ export default {
 		MescrollUni
 	},
 	data() {
+		const currentDate = this.getDate({
+			format: true
+		});
 		return {
+			startDataValue: this.getDate('last'),
+			endDataValue: currentDate,
+
 			agentData: [],
 			totalData: {
 				order_amount: '0',
@@ -104,6 +110,14 @@ export default {
 			titleColor: '#666666',
 			filterResult: '',
 			menuList: [
+				{
+					title: '支付日期',
+					key: 'pay_date',
+					detailTitle: '请选择支付时间段',
+					isMutiple: false,
+					reflexTitle: true,
+					detailList: []
+				},
 				{
 					title: '支付方式',
 					key: 'pay_type',
@@ -189,8 +203,8 @@ export default {
 				pageSize: pageSize,
 				sortBy: '',
 				parent_agentid: this.agentid,
-				start_time: '2019-12-04',
-				end_time: '2019-12-15',
+				start_time: this.startDataValue,
+				end_time: this.endDataValue,
 				descending: false,
 				filter: this.searchForm
 			};
@@ -239,6 +253,15 @@ export default {
 		},
 
 		onFilter(val) {
+			if (val.hasOwnProperty('pay_date')) {
+				if (val.pay_date.start) {
+					this.startDataValue = val.pay_date.start;
+				}
+				if (val.pay_date.end) {
+					this.endDataValue = val.pay_date.end;
+				}
+				this.resetPageData();
+			}
 			if (val.hasOwnProperty('pay_type')) {
 				this.searchForm.pay_type = val.pay_type;
 				this.resetPageData();
@@ -248,18 +271,37 @@ export default {
 				this.resetPageData();
 			}
 		},
- 
+
 		getTableDataMx() {
 			let query = {
 				parent_agentid: this.agentid,
-				start_time: '2019-12-04',
-				end_time: '2019-12-15',
+				start_time: this.startDataValue,
+				end_time: this.endDataValue,
 				pay_type: this.searchForm.pay_type,
 				pay_state: this.searchForm.pay_state
 			};
 			getStatisticsJymx(query).then(data => {
 				this.totalData = data;
 			});
+		},
+
+		getDate(type) {
+			const date = new Date();
+			let year = date.getFullYear();
+			let month = date.getMonth() + 1;
+			let day = date.getDate();
+
+			if (type === 'start') {
+				year = year - 60;
+			} else if (type === 'end') {
+				year = year + 2;
+			} else if (type === 'last') {
+				month = month - 1;
+			}
+
+			month = month > 9 ? month : '0' + month;
+			day = day > 9 ? day : '0' + day;
+			return `${year}-${month}-${day}`;
 		}
 	}
 };
