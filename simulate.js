@@ -12,6 +12,7 @@ function simulate() {
 		"typeIn": "/pages/product/type-in",
 		"product": "/pages/product/index",
 		"product-details": "/pages/product/details/index",
+		"product-entry": "/pages/product/details/entry",
 		"center": "/pages/center/index",
 		"agency": "/pages/agency/index",
 		"agency-amend": "/pages/agency/amend",
@@ -22,6 +23,7 @@ function simulate() {
 	// return pages["agency-share"]
 	// return pages["agency-amend"]
 	// return pages["typeIn"]
+	return pages["product-entry"]
 	return pages["product"]
 	// return pages["product-details"]
 	// return pages["center"]

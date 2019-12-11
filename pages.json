@@ -91,6 +91,12 @@
 			}
 		},
 		{
+			"path": "pages/product/details/entry",
+			"style": {
+				"navigationBarTitleText": "录入资料"
+			}
+		},
+		{
 			"path": "pages/product/index",
 			"style": {
 				"navigationBarTitleText": "进件"

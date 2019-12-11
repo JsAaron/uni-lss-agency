@@ -125,7 +125,7 @@ export default {
 
 		onAmend() {
 			if (this.showRightText) {
-				console.log(123); 
+					util.gotoPage(`/pages/product/details/entry?agentData=${JSON.stringify(this.agentData)}`);
 			}
 		},
 
