@@ -1,7 +1,13 @@
 <template>
 	<view class="container">
 		<!-- 顶部选项卡 -->
-		<scroll-view id="nav-bar" class="nav-bar" scroll-x scroll-with-animation :scroll-left="scrollLeft">
+		<scroll-view
+			id="nav-bar"
+			class="nav-bar"
+			scroll-x
+			scroll-with-animation
+			:scroll-left="scrollLeft"
+		>
 			<view
 				v-for="(item, index) in tabBars"
 				:key="item.id"
@@ -23,7 +29,13 @@
 			@setEnableScroll="setEnableScroll"
 		>
 			<!-- 内容部分 -->
-			<swiper id="swiper" class="swiper-box" :duration="300" :current="tabCurrentIndex" @change="changeTab">
+			<swiper
+				id="swiper"
+				class="swiper-box"
+				:duration="300"
+				:current="tabCurrentIndex"
+				@change="changeTab"
+			>
 				<swiper-item v-for="tabItem in tabBars" :key="tabItem.id">
 					<scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadMore">
 						<view
@@ -107,7 +119,7 @@ export default {
 		if (app.globalData.product.update) {
 			this.updateState(0);
 			this.updateState(1);
-			app.globalData.product = {}
+			app.globalData.product = {};
 		}
 	},
 	async onLoad() {
@@ -119,8 +131,7 @@ export default {
 		this.initTabbars();
 	},
 	methods: {
-		
-		updateState(index){
+		updateState(index) {
 			let tabItem = this.tabBars[index];
 			if (tabItem.newsList) {
 				tabItem.newsList.map(item => {
@@ -149,7 +160,7 @@ export default {
 			this.tabBars = tabList;
 			this.loadNewsList('add');
 		},
-		
+
 		//列表数据
 		loadNewsList(type) {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
@@ -231,8 +242,10 @@ export default {
 		navToDetails(index) {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
 			let data = tabItem.newsList[index];
-			if (data.pass == '0' || data.pass == '2') {
+			if (data.pass == '0') {
 				util.gotoPage(`/pages/product/details/index?agentid=${data.agentid}`);
+			} else if (data.pass == '2') {
+				util.gotoPage(`/pages/product/details/index?agentid=${data.agentid}&typein=true`);
 			} else {
 				util.gotoPage(`/pages/product/type-in?agentid=${data.agentid}`);
 			}

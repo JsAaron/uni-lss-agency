@@ -99,7 +99,7 @@
 		{
 			"path": "pages/product/details/index",
 			"style": {
-				"navigationBarTitleText": "进件详情"
+					"navigationStyle": "custom"
 			}
 		}
 	],

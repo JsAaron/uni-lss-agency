@@ -1,7 +1,25 @@
 <template>
 	<view class="container">
+		<uni-nav-bar
+			left-icon="arrowleft"
+			fixed
+			status-bar
+			:right-text="showRightText ? '进件' : ''"
+			background-color="#2F85FC"
+			title="进件详情"
+			color="#ffffff"
+			@click-left="onBack"
+			@click-right="onAmend"
+		/>
+
 		<!-- 顶部选项卡 -->
-		<scroll-view id="nav-bar" class="nav-bar" scroll-x scroll-with-animation :scroll-left="scrollLeft">
+		<scroll-view
+			id="nav-bar"
+			class="nav-bar"
+			scroll-x
+			scroll-with-animation
+			:scroll-left="scrollLeft"
+		>
 			<view
 				v-for="(item, index) in tabBars"
 				:key="item.id"
@@ -14,7 +32,13 @@
 			</view>
 		</scroll-view>
 
-		<swiper id="swiper" class="swiper-box" :duration="300" :current="tabCurrentIndex" @change="changeTab">
+		<swiper
+			id="swiper"
+			class="swiper-box"
+			:duration="300"
+			:current="tabCurrentIndex"
+			@change="changeTab"
+		>
 			<swiper-item v-for="(item, index) in tabBars" :key="index">
 				<scroll-view class="panel-scroll-box" scroll-y="true">
 					<child1 :agentData="agentData" v-if="index == 0"></child1>
@@ -34,6 +58,7 @@ import uniIcon from '@/components/uni-icon/uni-icon';
 import { getAgentPagedList, getPerfectAgent } from '@/api/agent';
 import mixPulldownRefresh from '@/components/mix-pulldown-refresh/mix-pulldown-refresh';
 import mixLoadMore from '@/components/mix-load-more/mix-load-more';
+import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
 import child1 from './child1';
 import child2 from './child2';
 import child3 from './child3';
@@ -71,10 +96,12 @@ export default {
 		child5,
 		uniIcon,
 		mixPulldownRefresh,
-		mixLoadMore
+		mixLoadMore,
+		uniNavBar
 	},
 	data() {
 		return {
+			showRightText: false,
 			agentid: '',
 			agentData: {},
 			tabCurrentIndex: 0, //当前选项卡索引
@@ -85,10 +112,23 @@ export default {
 	},
 	onLoad(options) {
 		this.agentid = options.agentid;
+		if (options.typein == 'true') {
+			this.showRightText = true;
+		}
 		this.initTabbars();
 	},
 	computed: {},
 	methods: {
+		onBack() {
+			util.gotoPage('back');
+		},
+
+		onAmend() {
+			if (this.showRightText) {
+				console.log(123); 
+			}
+		},
+
 		/**
 		 * 数据处理方法在vue和nvue中通用，可以直接用mixin混合
 		 * 这里直接写的
@@ -101,7 +141,7 @@ export default {
 				item.loadMoreStatus = 0; //加载更多 0加载前，1加载中，2没有更多了
 			});
 			this.tabBars = tabList;
-			this.getTableData()
+			this.getTableData();
 		},
 
 		getTableData() {
