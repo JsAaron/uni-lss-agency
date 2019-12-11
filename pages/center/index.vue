@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="header">
-			<text class="header__text">{{info.name}}</text>
+			<text class="header__text">{{user_name}}</text>
 			<!-- <view class="header__password" @click="onAmend">修改密码</view> -->
 		</view>
 
@@ -34,11 +34,10 @@ import { mapState, mapActions } from "vuex";
 
 export default {
 	components: {},
-  computed: {
-    ...mapState("d2admin/user", ["info"])
-  },
 	data() {
-		return {};
+		return {
+			user_name:util.cookies.get('user_name')
+		};
 	},
 	props: {},
 	created() {},

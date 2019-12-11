@@ -34,7 +34,8 @@ export default {
 						util.cookies.set('dl_type', res.dl_type)
 						util.cookies.set('xt_id', res.xt_id)
 						util.cookies.set('token', res.accessToken)
-
+						util.cookies.set('user_name',res.name)
+						
 						// 设置 vuex 用户信息
 						await dispatch('user/set', {
 							name: res.name
@@ -62,6 +63,7 @@ export default {
 			util.cookies.remove('agentid')
 			util.cookies.remove('dl_type')
 			util.cookies.remove('xt_id')
+			util.cookies.remove('user_name')
 		},
 
 		/**
