@@ -415,7 +415,7 @@ export default {
 	margin: 20rpx 0;
 	&__title {
 		@include flex-h-left;
-		font-weight: bold;
+		// font-weight: bold;
 		font-size: 30rpx;
 		position: relative;
 	}

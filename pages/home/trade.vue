@@ -68,7 +68,7 @@ export default {
 		background: #ffffff;
 		width: 700rpx;
 		border-radius: 10px;
-		font-weight: bold;
+		// font-weight: bold;
 		margin: 0 auto;
 	}
 	&__row {

@@ -104,7 +104,7 @@ export default {
 		width: 700rpx;
 		border-radius: 10px;
 		left: 25rpx;
-		font-weight: bold;
+		// font-weight: bold;
 	}
 	&__row {
 		width: 100%;
