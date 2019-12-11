@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="header">
-			<text class="header__text">{{user_name}}</text>
+			<text class="header__text">{{ user_name }}</text>
 			<!-- <view class="header__password" @click="onAmend">修改密码</view> -->
 		</view>
 
@@ -24,23 +24,25 @@
 			</view>
 		</view>
 
-		<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onExit">退出登录</QSWavesButton>
+		<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onExit">
+			退出登录
+		</QSWavesButton>
 	</view>
 </template>
 
 <script>
 import * as util from '@/utils';
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex';
 
 export default {
 	components: {},
 	data() {
 		return {
-			user_name:""
+			user_name: ''
 		};
 	},
-	onShow(){
-		this.user_name = util.cookies.get('user_name')
+	onShow() {
+		this.user_name = util.cookies.get('user_name');
 	},
 	props: {},
 	created() {},
@@ -56,7 +58,7 @@ export default {
 				success: res => {
 					if (res.confirm) {
 						this.logout();
-						util.gotoPage('/pages/login/index');
+						util.gotoPage('reLaunch', '/pages/login/index');
 					}
 				}
 			});
