@@ -191,7 +191,7 @@
 				type: Object,
 				default () {
 					return {
-						openInputDebounce: true,
+						openInputDebounce: false,
 						delay: 200
 					};
 				}

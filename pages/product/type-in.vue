@@ -504,7 +504,6 @@
 				variableName="organization_code"
 				ref="ref_organization_code"
 				title="组织机构代码"
-				required
 				v-model="fromValue3.organization_code"
 			></QSInput>
 
@@ -515,7 +514,6 @@
 				:dataSet="fromValue3.dataSet"
 				ref="ref_organization_start"
 				title="有效期开始"
-				required
 				v-model="fromValue3.organization_start"
 				placherhold="请选择"
 			/>
@@ -526,7 +524,6 @@
 				variableName="organization_end"
 				:dataSet="fromValue3.dataSet"
 				ref="ref_organization_end"
-				required
 				title="有效期结束"
 				v-model="fromValue3.organization_end"
 				placherhold="请选择"
@@ -537,7 +534,6 @@
 				variableName="organization_img"
 				ref="ref_organization_img"
 				customId="typein"
-				required
 				title="组织机构代码证照片"
 				v-model="fromValue3.organization_img"
 			></QSPics>
