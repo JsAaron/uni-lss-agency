@@ -439,9 +439,11 @@
 		align-items: center;
 		font-size: 16px;
 	}
+	.filter-content-footer-item:first-child:active{
+		color: #00a6ff !important;
+	}
 
 	.filter-content-list {
-
 		padding: 5px 15px;
 	}
 

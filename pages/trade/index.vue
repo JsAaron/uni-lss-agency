@@ -16,41 +16,39 @@
 			@init="mescrollInit"
 		>
 			<view class="content__row lss-hairline--bottom">
-				<view>
+				<view class="content__col">
 					<view>订单总数</view>
 					<view class="content--gray">{{ totalData.order_num }}笔</view>
 				</view>
-				<view>
+				<view class="content__col">
 					<view>订单总金额</view>
 					<view class="content--gray">{{ totalData.order_amount }}元</view>
 				</view>
-				<view>
+				<view class="content__col">
 					<view>退款总金额</view>
 					<view class="content--gray">{{ totalData.refund_amount }}元</view>
 				</view>
-				<view>
+				<view class="content__col">
 					<view>顾客实付</view>
 					<view class="content--gray">{{ totalData.payment_amount }}元</view>
 				</view>
-				<view>
+				<view class="content__col">
 					<view>优惠</view>
 					<view class="content--gray">{{ totalData.discount_amount }}元</view>
 				</view>
 			</view>
 
-			<view
-				class="content__row lss-hairline--bottom"
-				v-for="(item, index) in agentData"
-				:key="index"
-			>
+			<view class="content__row lss-hairline--bottom" v-for="(item, index) in agentData" :key="index">
 				<view>
 					<view>名称:{{ item.agentname }}</view>
 					<view>单号:{{ item.mer_order_id }}</view>
 					<view>时间:{{ item.order_time2 }}</view>
 				</view>
 				<view>
-					<view>{{ item.order_amt }}元</view>
-					<view>{{ getPayName(item) }}</view>
+					<view class="content__col">
+						<view>{{ item.order_amt }}元</view>
+						<view>{{ getPayName(item) }}</view>
+					</view>
 				</view>
 				<view>{{ getStateName(item) }}</view>
 			</view>
@@ -94,7 +92,7 @@ export default {
 				page: {
 					size: 30
 				},
-				noMoreSize: 3,
+				noMoreSize: 1,
 				empty: {
 					use: true,
 					tip: '~ 搜索无结果 ~'
@@ -106,20 +104,17 @@ export default {
 			titleColor: '#666666',
 			filterResult: '',
 			menuList: [
-				// {
-				// 	title: '日期',
-				// 	key: 'pay_date',
-				// 	type: 'date',
-				// 	reflexTitle: true,
-				// 	detailTitle: '请输入搜索时间段',
-				// 	detailList: []
-				// },
 				{
 					title: '支付方式',
 					key: 'pay_type',
 					detailTitle: '请选择支付方式（单选）',
+					isMutiple: false,
 					reflexTitle: true,
 					detailList: [
+						{
+							title: '全部',
+							value: ''
+						},
 						{
 							value: '支付宝刷脸',
 							title: '支付宝'
@@ -142,8 +137,13 @@ export default {
 					title: '支付状态',
 					key: 'pay_state',
 					detailTitle: '请选择支付状态（单选）',
+					isMutiple: false,
 					reflexTitle: true,
 					detailList: [
+						{
+							title: '全部',
+							value: ''
+						},
 						{
 							value: '0000',
 							title: '支付成功'
@@ -188,18 +188,21 @@ export default {
 				pageIndex: pageNum,
 				pageSize: pageSize,
 				sortBy: '',
-				agentid: this.agentid,
-				start_time: '2019-12-3',
+				parent_agentid: this.agentid,
+				start_time: '2019-11-04',
 				end_time: '2019-12-10',
 				descending: false,
 				filter: this.searchForm
 			};
-			getMobileOrderPagelistJymx(query).then(data => {
-				if (mescroll.num == 1) this.agentData = [];
-				this.agentData = this.agentData.concat(data.rows);
-				// console.log(data);
-				mescroll.endByPage(data.rows.length, data.totalCount);
-			});
+			getMobileOrderPagelistJymx(query)
+				.then(data => {
+					if (mescroll.num == 1) this.agentData = [];
+					this.agentData = this.agentData.concat(data.rows);
+					mescroll.endByPage(data.rows.length, data.totalpage);
+				})
+				.catch(() => {
+					mescroll.endErr();
+				});
 		},
 
 		getPayName(item) {
@@ -221,21 +224,35 @@ export default {
 		getStateName(item) {
 			if (item.return_code == '0000') {
 				if (item.refund_no != '') {
-					return '全额退款成功';
+					return '退款成功';
 				} else {
-					return '成功';
+					return '支付成功';
 				}
 			} else {
-				return '失败';
+				return '支付失败';
 			}
 		},
 
-		onFilter() {},
+		resetPageData() {
+			this.getTableDataMx();
+			this.mescroll.resetUpScroll();
+		},
+
+		onFilter(val) {
+			if (val.hasOwnProperty('pay_type')) {
+				this.searchForm.pay_type = val.pay_type;
+				this.resetPageData();
+			}
+			if (val.hasOwnProperty('pay_state')) {
+				this.searchForm.pay_state = val.pay_state;
+				this.resetPageData();
+			}
+		},
 
 		getTableDataMx() {
 			let query = {
 				parent_agentid: this.agentid,
-				start_time: '2019-12-3',
+				start_time: '2019-11-04',
 				end_time: '2019-12-10',
 				pay_type: this.searchForm.pay_type,
 				pay_state: this.searchForm.pay_state
@@ -257,16 +274,21 @@ export default {
 }
 
 .content {
-	&--gray{
-		color: #7D7E80;
+	&--gray {
+		color: #7d7e80;
 	}
 	&__row {
 		@include flex-h-between;
 		padding: 20rpx 20rpx;
 		font-size: 25rpx;
 	}
-	&__first{
-		color: #7D7E80;
+	&__col {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	&__first {
+		color: #7d7e80;
 	}
 	&__row:nth-of-type(odd) {
 		background-color: rgb(252, 252, 252);
