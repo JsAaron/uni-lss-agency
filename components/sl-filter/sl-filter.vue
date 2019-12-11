@@ -293,6 +293,7 @@ export default {
 	background-color: #ffffff;
 	/* #ifndef APP-NVUE */
 	display: flex;
+	z-index: 999999;
 	/* #endif */
 	width: 100%;
 	position: fixed;

@@ -6,6 +6,15 @@
 			<view class="content">
 				<view class="content__title">
 					<view class="content__line"></view>
+					<view class="content__text">数据统计(近一年)</view>
+				</view>
+			</view>
+
+			<m-statistics :statisticsData.sync="statisticsData"></m-statistics>
+
+			<view class="content">
+				<view class="content__title">
+					<view class="content__line"></view>
 					<view class="content__text">交易数据</view>
 					<view class="filter-date-item">
 						<picker
@@ -82,7 +91,12 @@
 
 			<view class="qiun-columns">
 				<view class="qiun-charts">
-					<canvas canvas-id="canvasRing" id="canvasRing" class="charts" @touchstart="touchRing"></canvas>
+					<canvas
+						canvas-id="canvasRing"
+						id="canvasRing"
+						class="charts"
+						@touchstart="touchRing"
+					></canvas>
 				</view>
 			</view>
 
@@ -103,15 +117,22 @@
 <script>
 import * as util from '@/utils';
 import { mapState, mapActions } from 'vuex';
-import { getStatisticsHomedl, getStatisticsHomePay, getStatisticsHome } from '@/api/agent';
+import {
+	getStatisticsHomedl,
+	getStatisticsHomePay,
+	getStatisticsHome,
+	getStatisticsOrderYj
+} from '@/api/agent';
 import mHeader from './header.vue';
 import mTrade from './trade.vue';
+import mStatistics from './statistics.vue';
 import uCharts from '@/components/u-charts/u-charts.js';
 import MescrollUni from '@/components/mescroll-uni/mescroll-uni.vue';
 export default {
 	components: {
 		mTrade,
 		mHeader,
+		mStatistics,
 		MescrollUni
 	},
 	data() {
@@ -122,6 +143,7 @@ export default {
 
 			tradeData: {},
 			totalData: {},
+			statisticsData: {},
 
 			tooggleDateIndex: 0,
 			tooggleDate: ['交易金额', '交易笔数'],
@@ -146,7 +168,8 @@ export default {
 		this.cHeight = uni.upx2px(550);
 		this.getTableDataPayjyje();
 		this.getTableData();
-		this.getTradeData()
+		this.getTradeData();
+		this.getStatisticsData();
 	},
 	computed: {
 		startDate() {
@@ -158,6 +181,7 @@ export default {
 	},
 	methods: {
 		downCallback(mescroll) {
+			this.getStatisticsData();
 			this.getTableData()
 				.then(() => {
 					mescroll.endSuccess();
@@ -188,6 +212,16 @@ export default {
 			} else if (this.tooggleDateIndex == 1) {
 				return this.getTableDataPayjybs();
 			}
+		},
+
+		getStatisticsData() {
+			return getStatisticsOrderYj({
+				agentid: util.cookies.get('agentid')
+			}).then(data => {
+				if (data != null && data != '') {
+					this.statisticsData = data;
+				}
+			});
 		},
 
 		getTradeData() {

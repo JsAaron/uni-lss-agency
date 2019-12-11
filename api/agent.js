@@ -141,3 +141,11 @@ export function getStatisticsHome(data) {
 		params: data
 	})
 }
+
+export function getStatisticsOrderYj(data) {
+	return request({
+		url: '/moblieapp/getStatisticsOrderYj',
+		method: 'post',
+		params: data
+	})
+}

@@ -35,11 +35,7 @@
 		{
 			"path": "pages/trade/index",
 			"style": {
-				"navigationBarTitleText": "交易流水",
-				"disableScroll": true,
-				"app-plus" : {
-					"bounce" : "none"
-				}
+				"navigationBarTitleText": "交易流水"
 			}
 		},
 		{

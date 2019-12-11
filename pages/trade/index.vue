@@ -6,53 +6,64 @@
 			:color="titleColor"
 			:themeColor="themeColor"
 			:menuList.sync="menuList"
+			:topFixed="true"
 			@result="onFilter"
 		></sl-filter>
-		<mescroll-uni
-			@down="downCallback"
-			:top="containerTop"
-			:up="upOption"
-			@up="upCallback"
-			@init="mescrollInit"
+		<mix-pulldown-refresh
+			ref="mixPulldownRefresh"
+			class="panel-content"
+			:top="panelTop"
+			@refresh="onPulldownReresh"
+			@setEnableScroll="setEnableScroll"
 		>
-			<view class="content__row lss-hairline--bottom">
-				<view class="content__col">
-					<view>订单总数</view>
-					<view class="content--gray">{{ totalData.order_num }}笔</view>
-				</view>
-				<view class="content__col">
-					<view>订单总金额</view>
-					<view class="content--gray">{{ totalData.order_amount }}元</view>
-				</view>
-				<view class="content__col">
-					<view>退款总金额</view>
-					<view class="content--gray">{{ totalData.refund_amount }}元</view>
-				</view>
-				<view class="content__col">
-					<view>顾客实付</view>
-					<view class="content--gray">{{ totalData.payment_amount }}元</view>
-				</view>
-				<view class="content__col">
-					<view>优惠</view>
-					<view class="content--gray">{{ totalData.discount_amount }}元</view>
-				</view>
-			</view>
-
-			<view class="content__row lss-hairline--bottom" v-for="(item, index) in agentData" :key="index">
-				<view>
-					<view>{{ item.agentname }}</view>
-					<view>{{ item.mer_order_id }}</view>
-					<view>{{ item.order_time2 }}</view>
-				</view>
-				<view>
-					<view class="content__col">
-						<view>{{ item.order_amt }}元</view>
-						<view>{{ getPayName(item) }}</view>
+			<view class="swiper-box">
+				<scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadMore">
+					<view class="content__row lss-hairline--bottom">
+						<view class="content__col">
+							<view>订单总数</view>
+							<view class="content--gray">{{ totalData.order_num }}笔</view>
+						</view>
+						<view class="content__col">
+							<view>订单总金额</view>
+							<view class="content--gray">{{ totalData.order_amount }}元</view>
+						</view>
+						<view class="content__col">
+							<view>退款总金额</view>
+							<view class="content--gray">{{ totalData.refund_amount }}元</view>
+						</view>
+						<view class="content__col">
+							<view>顾客实付</view>
+							<view class="content--gray">{{ totalData.payment_amount }}元</view>
+						</view>
+						<view class="content__col">
+							<view>优惠</view>
+							<view class="content--gray">{{ totalData.discount_amount }}元</view>
+						</view>
 					</view>
-				</view>
-				<view>{{ getStateName(item) }}</view>
+
+					<view
+						class="content__row lss-hairline--bottom"
+						v-for="(item, index) in agentData.newsList"
+						:key="index"
+					>
+						<view>
+							<view>{{ item.agentname }}</view>
+							<view>{{ item.mer_order_id }}</view>
+							<view>{{ item.order_time2 }}</view>
+						</view>
+						<view>
+							<view class="content__col">
+								<view>{{ item.order_amt }}元</view>
+								<view>{{ getPayName(item) }}</view>
+							</view>
+						</view>
+						<view>{{ getStateName(item) }}</view>
+					</view>
+					<!-- 上滑加载更多组件 -->
+					<mix-load-more :status="agentData.loadMoreStatus"></mix-load-more>
+				</scroll-view>
 			</view>
-		</mescroll-uni>
+		</mix-pulldown-refresh>
 	</view>
 </template>
 
@@ -62,23 +73,37 @@ import { getStatisticsHomedl, getStatisticsHomePay } from '@/api/agent';
 import MescrollUni from '@/components/mescroll-uni/mescroll-uni.vue';
 import MxDatePicker from '@/components/mx-datepicker/mx-datepicker.vue';
 import slFilter from '@/components/sl-filter/sl-filter.vue';
+import mixPulldownRefresh from '@/components/mix-pulldown-refresh/mix-pulldown-refresh';
+import mixLoadMore from '@/components/mix-load-more/mix-load-more';
+
 import { getStatisticsJymx, getMobileOrderPagelistJymx } from '@/api/agent';
 
 export default {
 	components: {
 		slFilter,
 		MxDatePicker,
-		MescrollUni
+		MescrollUni,
+		mixLoadMore,
+		mixPulldownRefresh
 	},
 	data() {
 		const currentDate = this.getDate({
 			format: true
 		});
 		return {
+			panelTop: 0,
+			enableScroll: true,
+			agentData: {
+				pageIndex: 0,
+				totalPages: 0,
+				newsList: [],
+				loadMoreStatus: 0,
+				refreshing: 0
+			},
+
 			startDataValue: this.getDate('last'),
 			endDataValue: currentDate,
 
-			agentData: [],
 			totalData: {
 				order_amount: '0',
 				order_num: '0',
@@ -87,25 +112,10 @@ export default {
 				discount_amount: '0'
 			},
 			containerTop: '',
-			mescroll: null,
 			searchForm: {
 				pay_type: '',
 				pay_state: ''
 			},
-			upOption: {
-				// autoShowLoading:true,
-				// use: true,
-				page: {
-					size: 30
-				},
-				noMoreSize: 1,
-				empty: {
-					use: true,
-					tip: '~ 搜索无结果 ~'
-				},
-				textNoMore: '-- 数据全部加载完毕 --'
-			},
-
 			themeColor: '#00a6ff',
 			titleColor: '#666666',
 			filterResult: '',
@@ -181,26 +191,50 @@ export default {
 		query.select('.sl-filter').boundingClientRect();
 		query.selectViewport().scrollOffset();
 		query.exec(res => {
-			this.containerTop = res[0].height * 2;
+			this.panelTop = res[0].height * 2;
 			this.getTableDataMx();
+			this.loadNewsList('add');
 		});
 	},
 	computed: {},
 	methods: {
-		mescrollInit(mescroll) {
-			this.mescroll = mescroll;
+		//设置scroll-view是否允许滚动，在小程序里下拉刷新时避免列表可以滑动
+		setEnableScroll(enable) {
+			if (this.enableScroll !== enable) {
+				this.enableScroll = enable;
+			}
 		},
 
-		downCallback(mescroll) {
-			mescroll.resetUpScroll();
+		//下拉刷新
+		onPulldownReresh() {
+			this.loadNewsList('refresh');
 		},
 
-		upCallback(mescroll) {
-			let pageNum = mescroll.num;
-			let pageSize = mescroll.size;
+		//上滑加载
+		loadMore() {
+			this.loadNewsList('add');
+		},
+
+		//列表数据
+		loadNewsList(type) {
+			let agentItem = this.agentData;
+
+			//type add 加载更多 refresh下拉刷新
+			if (type === 'add') {
+				if (agentItem.loadMoreStatus === 2) {
+					return;
+				}
+				agentItem.loadMoreStatus = 1;
+			} else if (type === 'refresh') {
+				agentItem.pageIndex = 0;
+				// #ifdef APP-PLUS
+				agentItem.refreshing = true;
+				// #endif
+			}
+
 			let query = {
-				pageIndex: pageNum,
-				pageSize: pageSize,
+				pageIndex: ++agentItem.pageIndex,
+				pageSize: 30,
 				sortBy: '',
 				parent_agentid: this.agentid,
 				start_time: this.startDataValue,
@@ -208,15 +242,30 @@ export default {
 				descending: false,
 				filter: this.searchForm
 			};
-			getMobileOrderPagelistJymx(query)
-				.then(data => {
-					if (mescroll.num == 1) this.agentData = [];
-					this.agentData = this.agentData.concat(data.rows);
-					mescroll.endByPage(data.rows.length, data.totalpage);
-				})
-				.catch(() => {
-					mescroll.endErr();
+
+			getMobileOrderPagelistJymx(query).then(async res => {
+				if (type === 'refresh') {
+					agentItem.newsList = []; //刷新前清空数组
+				}
+				res.rows.forEach(item => {
+					agentItem.newsList.push(item);
 				});
+				agentItem.totalPages = res.totalpage;
+
+				//下拉刷新 关闭刷新动画
+				if (type === 'refresh') {
+					this.$refs.mixPulldownRefresh && this.$refs.mixPulldownRefresh.endPulldownRefresh();
+					// #ifdef APP-PLUS
+					agentItem.refreshing = false;
+					// #endif
+					agentItem.loadMoreStatus = 0;
+				} 
+
+				//上滑加载 处理状态
+				if (type === 'add') {
+					agentItem.loadMoreStatus = agentItem.pageIndex >= agentItem.totalPages ? 2 : 0;
+				}
+			});
 		},
 
 		getPayName(item) {
@@ -249,7 +298,7 @@ export default {
 
 		resetPageData() {
 			this.getTableDataMx();
-			this.mescroll.resetUpScroll();
+			this.loadNewsList('refresh');
 		},
 
 		onFilter(val) {
@@ -334,6 +383,20 @@ export default {
 	}
 	&__row:nth-of-type(odd) {
 		background-color: rgb(252, 252, 252);
+	}
+}
+
+.swiper-box {
+	height: 100%;
+}
+
+.panel-scroll-box {
+	height: 100%;
+
+	.panel-item {
+		background: #fff;
+		padding: 30px 0;
+		border-bottom: 2px solid #000;
 	}
 }
 </style>

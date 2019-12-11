@@ -149,6 +149,7 @@ export default {
 			this.tabBars = tabList;
 			this.loadNewsList('add');
 		},
+		
 		//列表数据
 		loadNewsList(type) {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
