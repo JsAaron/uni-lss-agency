@@ -107,7 +107,7 @@ export default {
 		this.cHeight = uni.upx2px(550);
 		this.getTableDataPayjyje();
 		this.getTableData()
-	},
+	},	
 	computed: {
 		startDate() {
 			return this.getDate('start');

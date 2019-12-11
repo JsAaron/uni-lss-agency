@@ -9,32 +9,24 @@
 		<view class="header__data">
 			<view class="header__row">
 				<view class="header__col">
-					<view><text>¥{{totalData.order_amt}}</text></view>
+					<view>¥{{ totalData.order_amt }}</view>
 					<view>总交易额</view>
 				</view>
-				<view class="header__col">
-					<view>{{totalData.one_agent_num}}</view>
+				<view class="header__col" v-if="showOneAgent">
+					<view>{{ totalData.one_agent_num }}</view>
 					<view>一级代理商总数</view>
 				</view>
-			</view>
-			<view class="header__row">
-				<view class="header__col">
-					<view>¥1399.49</view>
-					<view>佣金总额</view>
-				</view>
-				<view class="header__col">
-					<view>{{totalData.two_agent_num}}</view>
+				<view class="header__col" v-if="twoOneAgent">
+					<view>{{ totalData.two_agent_num }}</view>
 					<view>二级代理商总数</view>
 				</view>
-			</view>
-			<view class="header__row">
 				<view class="header__col">
-					<view>{{totalData.agent_num}}</view>
-					<view>商户总数</view>
+					<view>{{ totalData.three_agent_num }}</view>
+					<view>三级代理商总数</view>
 				</view>
 				<view class="header__col">
-					<view>{{totalData.three_agent_num}}</view>
-					<view>三级代理商总数</view>
+					<view>{{ totalData.agent_num }}</view>
+					<view>商户总数</view>
 				</view>
 			</view>
 		</view>
@@ -46,20 +38,35 @@ import * as util from '@/utils';
 import { getStatisticsHomedl } from '@/api/agent';
 export default {
 	components: {},
-	props:{
-		totalData:Object
+	props: {
+		totalData: Object
 	},
 	data() {
-		return {
-			one_agent_num:"",
-			two_agent_num:"",
-			three_agent_num:"",
-			agent_num:"",
-			order_amt:"",
+		return { 
+			dl_type: util.cookies.get('dl_type'),
+			one_agent_num: '',
+			two_agent_num: '',
+			three_agent_num: '',
+			agent_num: '',
+			order_amt: ''
 		};
 	},
-	mounted() {
-	}
+	computed: {
+		showOneAgent() {
+			if (this.dl_type == -1 || this.dl_type == 0) {
+				return true;
+			}
+			return false;
+		},
+		twoOneAgent() { 
+			//三级不能显示
+			if (this.dl_type == 2) {
+				return false;
+			}
+			return true;
+		}
+	},
+	mounted() {}
 };
 </script>
 
@@ -101,9 +108,13 @@ export default {
 		font-weight: bold;
 	}
 	&__row {
+		width: 100%;
 		padding: 20rpx 0;
+		display: flex;
+		flex-wrap: wrap;
 	}
 	&__col {
+		width: 33%;
 		padding: 20rpx 0;
 		line-height: 200%;
 		@include flex-v;

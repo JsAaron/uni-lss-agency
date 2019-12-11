@@ -31,6 +31,8 @@ export default {
 					.then(async res => {
 						util.cookies.set('uuid', res.id)
 						util.cookies.set('agentid', res.agentid)
+						
+						//dl_type（-1窝单方，0-一级代理商，1-二级代理商，2-三级代理商，4商家）
 						util.cookies.set('dl_type', res.dl_type)
 						util.cookies.set('xt_id', res.xt_id)
 						util.cookies.set('token', res.accessToken)
