@@ -20,7 +20,7 @@
 					<view>{{ totalData.two_agent_num }}</view>
 					<view>二级代理商总数</view>
 				</view>
-				<view class="header__col">
+				<view class="header__col" v-if="threeOneAgent">
 					<view>{{ totalData.three_agent_num }}</view>
 					<view>三级代理商总数</view>
 				</view>
@@ -42,7 +42,7 @@ export default {
 		totalData: Object
 	},
 	data() {
-		return { 
+		return {
 			dl_type: util.cookies.get('dl_type'),
 			one_agent_num: '',
 			two_agent_num: '',
@@ -53,18 +53,22 @@ export default {
 	},
 	computed: {
 		showOneAgent() {
+			if (this.dl_type == -1) {
+				return true;
+			}
+		},
+		twoOneAgent() {
 			if (this.dl_type == -1 || this.dl_type == 0) {
 				return true;
 			}
 			return false;
 		},
-		twoOneAgent() { 
-			//三级不能显示
-			if (this.dl_type == 2) {
-				return false;
+		threeOneAgent(){
+			if (this.dl_type == -1 || this.dl_type == 0 || this.dl_type == 1) {
+				return true;
 			}
-			return true;
-		}
+			return false;
+		},
 	},
 	mounted() {}
 };

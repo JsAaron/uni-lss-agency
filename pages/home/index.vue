@@ -103,6 +103,9 @@ export default {
 		};
 	},
 	onLoad() {
+		uni.setNavigationBarTitle({
+		　　title:util.cookies.get('user_name')
+		})
 		this.cWidth = uni.upx2px(750);
 		this.cHeight = uni.upx2px(550);
 		this.getTableDataPayjyje();
@@ -239,13 +242,14 @@ export default {
 					for (let i = 0; i < series.length; i++) {
 						if (series[i].data) {
 							series[i].data = Number(series[i].data);
+						}else{
+							series[i].data = 0
 						}
 						series[i].legendShape = 'rect';
 						series[i].format = () => {
 							return series[i].key + series[i].data + '%';
 						};
 					}
-
 					this.showRing(series);
 				}
 			});
