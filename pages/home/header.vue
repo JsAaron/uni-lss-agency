@@ -9,7 +9,7 @@
 		<view class="header__data">
 			<view class="header__row">
 				<view class="header__col">
-					<view>¥{{ totalData.order_amt }}</view>
+					<view>{{ totalData.order_amt }}元</view>
 					<view>总交易额</view>
 				</view>
 				<view class="header__col" v-if="showOneAgent">
@@ -44,11 +44,6 @@ export default {
 	data() {
 		return {
 			dl_type: util.cookies.get('dl_type'),
-			one_agent_num: '',
-			two_agent_num: '',
-			three_agent_num: '',
-			agent_num: '',
-			order_amt: ''
 		};
 	},
 	computed: {

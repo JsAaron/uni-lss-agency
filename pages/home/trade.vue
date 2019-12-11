@@ -3,7 +3,7 @@
 		<view class="header__data">
 			<view class="header__row">
 				<view class="header__col">
-					<view>¥{{ tradeData.order_amount }}</view>
+					<view>{{ tradeData.order_amount }}元</view>
 					<view>交易额</view>
 				</view>
 				<view class="header__col">
@@ -11,7 +11,7 @@
 					<view>交易笔数</view>
 				</view>
 				<view class="header__col">
-					<view>{{ tradeData.refund_amount }}</view>
+					<view>{{ tradeData.refund_amount }}元</view>
 					<view>退款金额</view>
 				</view>
 				<view class="header__col">
@@ -19,11 +19,11 @@
 					<view>退款笔数</view>
 				</view>
 				<view class="header__col">
-					<view>{{ tradeData.yx_order_amount }}</view>
+					<view>{{ tradeData.yx_order_amount }}元</view>
 					<view>实际营收</view>
 				</view>
 				<view class="header__col">
-					<view>{{ tradeData.serve_agent_amt }}</view>
+					<view>{{ tradeData.serve_agent_amt }}元</view>
 					<view>我的佣金</view>
 				</view>
 			</view> 
