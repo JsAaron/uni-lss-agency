@@ -36,8 +36,11 @@ export default {
 	components: {},
 	data() {
 		return {
-			user_name:util.cookies.get('user_name')
+			user_name:""
 		};
+	},
+	onShow(){
+		this.user_name = util.cookies.get('user_name')
 	},
 	props: {},
 	created() {},
