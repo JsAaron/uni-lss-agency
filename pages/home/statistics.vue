@@ -3,23 +3,23 @@
 		<view class="header__data">
 			<view class="header__row">
 				<view class="header__col">
-					<view>{{ statisticsData.yx_order_amount }}元/{{ statisticsData.yx_yj_amount }}元</view>
-					<view>交易总额</view>
+					<view>{{ statisticsData.yx_order_amount }}/{{ statisticsData.yx_yj_amount }}</view>
+					<view>交易总额(元)</view>
 				</view>
 				<view class="header__col">
-					<view>{{ statisticsData.wx_num_amount }}元/{{ statisticsData.wx_yj_amount }}元</view>
+					<view>{{ statisticsData.wx_num_amount }}/{{ statisticsData.wx_yj_amount }}</view>
 					<view>微信/佣金总额</view>
 				</view>
 				<view class="header__col">
-					<view>{{ statisticsData.zfb_num_amount }}元/{{ statisticsData.zfb_yj_amount }}元</view>
+					<view>{{ statisticsData.zfb_num_amount }}/{{ statisticsData.zfb_yj_amount }}</view>
 					<view>支付宝/佣金总额</view>
 				</view>
 				<view class="header__col">
-					<view>{{ statisticsData.sxf_num_amount }}元/{{ statisticsData.sxf_yj_amount }}元</view>
+					<view>{{ statisticsData.sxf_num_amount }}/{{ statisticsData.sxf_yj_amount }}</view>
 					<view>随行付/佣金总额</view>
 				</view>
 				<view class="header__col">
-					<view>{{ statisticsData.fy_num_amount }}元/{{ statisticsData.fy_yj_amount }}元</view>
+					<view>{{ statisticsData.fy_num_amount }}/{{ statisticsData.fy_yj_amount }}</view>
 					<view>富友/佣金总额</view>
 				</view>
 			</view>
