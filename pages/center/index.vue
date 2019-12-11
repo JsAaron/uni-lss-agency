@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<view class="header">
-			<text class="header__text">测试</text>
-			<view class="header__password" @click="onAmend">修改密码</view>
+			<text class="header__text">{{info.name}}</text>
+			<!-- <view class="header__password" @click="onAmend">修改密码</view> -->
 		</view>
 
 		<view class="list">
@@ -30,11 +30,13 @@
 
 <script>
 import * as util from '@/utils';
-import { mapActions } from 'vuex';
-import { $$set, $$get } from '@/common/global';
+import { mapState, mapActions } from "vuex";
 
 export default {
 	components: {},
+  computed: {
+    ...mapState("d2admin/user", ["info"])
+  },
 	data() {
 		return {};
 	},

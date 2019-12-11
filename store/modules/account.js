@@ -25,7 +25,8 @@ export default {
 				// 开始请求登录接口
 				AccountLogin({
 						username,
-						password
+						password,
+						type: "0"
 					})
 					.then(async res => {
 						util.cookies.set('uuid', res.id)

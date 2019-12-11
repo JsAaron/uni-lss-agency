@@ -40,9 +40,9 @@
 
 			<view class="content__row lss-hairline--bottom" v-for="(item, index) in agentData" :key="index">
 				<view>
-					<view>名称:{{ item.agentname }}</view>
-					<view>单号:{{ item.mer_order_id }}</view>
-					<view>时间:{{ item.order_time2 }}</view>
+					<view>{{ item.agentname }}</view>
+					<view>{{ item.mer_order_id }}</view>
+					<view>{{ item.order_time2 }}</view>
 				</view>
 				<view>
 					<view class="content__col">
@@ -189,8 +189,8 @@ export default {
 				pageSize: pageSize,
 				sortBy: '',
 				parent_agentid: this.agentid,
-				start_time: '2019-11-04',
-				end_time: '2019-12-10',
+				start_time: '2019-12-04',
+				end_time: '2019-12-15',
 				descending: false,
 				filter: this.searchForm
 			};
@@ -248,12 +248,12 @@ export default {
 				this.resetPageData();
 			}
 		},
-
+ 
 		getTableDataMx() {
 			let query = {
 				parent_agentid: this.agentid,
-				start_time: '2019-11-04',
-				end_time: '2019-12-10',
+				start_time: '2019-12-04',
+				end_time: '2019-12-15',
 				pay_type: this.searchForm.pay_type,
 				pay_state: this.searchForm.pay_state
 			};
