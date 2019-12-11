@@ -76,7 +76,7 @@ export default {
 
 <style lang="scss">
 .header {
-	height: 500rpx;
+	height:460rpx;
 	position: relative;
 	&__line {
 		margin: 0 20rpx;
@@ -93,18 +93,18 @@ export default {
 	}
 	&__top-content {
 		@include flex-h-left;
-		padding-top: 60rpx;
+		padding-top: 30rpx;
 	}
 	&__text {
-		font-size: 20px;
+		font-size: 30rpx;
 	}
 
 	&__data {
-		box-shadow: 0px 10px 10px #ccc;
+		box-shadow: 0px 10px 20px #ccc;
 		@include flex-h-around;
 		font-size: 25rpx;
 		position: absolute;
-		top: 150rpx;
+		top: 100rpx;
 		background: #ffffff;
 		width: 700rpx;
 		border-radius: 10px;

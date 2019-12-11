@@ -1,14 +1,45 @@
 <template>
 	<mescroll-uni @down="downCallback" :up="upOption">
-		
 		<view class="container">
-			<m-header :totalData.sync='totalData'></m-header>
+			<m-header :totalData.sync="totalData"></m-header>
+
+			<view class="content">
+				<view class="content__title">
+					<view class="content__line"></view>
+					<view class="content__text">交易数据</view>
+					<view class="filter-date-item">
+						<picker
+							class="filter-date-picker"
+							mode="date"
+							:value="tradeStartDataValue"
+							:start="startDate"
+							:end="endDate"
+							@change="tradeBindStartDateChange"
+						>
+							<view>{{ tradeStartDataValue }}</view>
+						</picker>
+						<text class="filter-date-text">-</text>
+						<picker
+							class="filter-date-picker"
+							mode="date"
+							:value="tradeEndDataValue"
+							:start="startDate"
+							:end="endDate"
+							@change="tradeBindEndDateChange"
+						>
+							<view>{{ tradeEndDataValue }}</view>
+						</picker>
+					</view>
+				</view>
+			</view>
+
+			<!-- 交易 -->
+			<m-trade :tradeData.sync="tradeData"></m-trade>
 
 			<view class="content">
 				<view class="content__title">
 					<view class="content__line"></view>
 					<view class="content__text">支付通道占比</view>
-
 					<view class="filter-date-item">
 						<picker
 							class="filter-date-picker"
@@ -72,29 +103,34 @@
 <script>
 import * as util from '@/utils';
 import { mapState, mapActions } from 'vuex';
-import { getStatisticsHomedl, getStatisticsHomePay} from '@/api/agent';
+import { getStatisticsHomedl, getStatisticsHomePay, getStatisticsHome } from '@/api/agent';
 import mHeader from './header.vue';
+import mTrade from './trade.vue';
 import uCharts from '@/components/u-charts/u-charts.js';
 import MescrollUni from '@/components/mescroll-uni/mescroll-uni.vue';
 export default {
 	components: {
+		mTrade,
 		mHeader,
 		MescrollUni
 	},
 	data() {
-		const currentDate = this.getDate({
-			format: true
-		});
 		return {
 			upOption: {
 				use: false
 			},
-			
-			totalData:{},
+
+			tradeData: {},
+			totalData: {},
+
 			tooggleDateIndex: 0,
 			tooggleDate: ['交易金额', '交易笔数'],
-			startDataValue: this.getDate('pre'),
-			endDataValue: currentDate,
+
+			startDataValue: this.getFormatDate(7),
+			endDataValue: this.getFormatDate(),
+
+			tradeStartDataValue: this.getFormatDate(7),
+			tradeEndDataValue: this.getFormatDate(),
 
 			cWidth: '',
 			cHeight: '',
@@ -104,13 +140,14 @@ export default {
 	},
 	onLoad() {
 		uni.setNavigationBarTitle({
-		　　title:util.cookies.get('user_name')
-		})
+			title: util.cookies.get('user_name')
+		});
 		this.cWidth = uni.upx2px(750);
 		this.cHeight = uni.upx2px(550);
 		this.getTableDataPayjyje();
-		this.getTableData()
-	},	
+		this.getTableData();
+		this.getTradeData()
+	},
 	computed: {
 		startDate() {
 			return this.getDate('start');
@@ -120,7 +157,6 @@ export default {
 		}
 	},
 	methods: {
-		
 		downCallback(mescroll) {
 			this.getTableData()
 				.then(() => {
@@ -130,17 +166,17 @@ export default {
 					mescroll.endErr();
 				});
 		},
-		
+
 		getTableData() {
 			return getStatisticsHomedl({
 				agentid: util.cookies.get('agentid')
 			}).then(data => {
 				if (data != null && data != '') {
-					this.totalData = data
+					this.totalData = data;
 				}
 			});
 		},
-		
+
 		onHandleToggleDate(item, index) {
 			this.tooggleDateIndex = index;
 			this.updateCharts();
@@ -154,6 +190,28 @@ export default {
 			}
 		},
 
+		getTradeData() {
+			return getStatisticsHome({
+				agentid: util.cookies.get('agentid'),
+				start_time: this.tradeStartDataValue,
+				end_time: this.tradeEndDataValue
+			}).then(data => {
+				if (data != null && data != '') {
+					this.tradeData = data;
+				}
+			});
+		},
+
+		tradeBindStartDateChange(e) {
+			this.tradeStartDataValue = e.target.value;
+			this.getTradeData();
+		},
+
+		tradeBindEndDateChange(e) {
+			this.tradeEndDataValue = e.target.value;
+			this.getTradeData();
+		},
+
 		bindStartDateChange(e) {
 			this.startDataValue = e.target.value;
 			this.updateCharts();
@@ -162,6 +220,12 @@ export default {
 		bindEndDateChange(e) {
 			this.endDataValue = e.target.value;
 			this.updateCharts();
+		},
+
+		getFormatDate(index = 1) {
+			var date = new Date(); //获取当前时间
+			date.setDate(date.getDate() - index); //设置天数 -1 天
+			return date.Format('yyyy-MM-dd');
 		},
 
 		dateConversion(value) {
@@ -242,8 +306,8 @@ export default {
 					for (let i = 0; i < series.length; i++) {
 						if (series[i].data) {
 							series[i].data = Number(series[i].data);
-						}else{
-							series[i].data = 0
+						} else {
+							series[i].data = 0;
 						}
 						series[i].legendShape = 'rect';
 						series[i].format = () => {

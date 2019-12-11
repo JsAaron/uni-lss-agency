@@ -126,7 +126,7 @@
 				variableName="shop_tel"
 				ref="ref_shop_tel"
 				required
-				title="客服电话"
+				title="客服手机"
 				verifyType="Tel"
 				v-model="fromValue0.shop_tel"
 			></QSInput>
@@ -628,8 +628,7 @@ export default {
 				itemArray: [
 					{
 						name: '线下',
-						value: '线下',
-						disabled: true
+						value: '线下'
 					},
 					{
 						name: '公众号',
@@ -758,7 +757,7 @@ export default {
 			getPerfectAgent({
 				agentid: this.agentid
 			}).then(data => {
-				console.log('data', data);
+				// console.log('data', data);
 				this.agentData = data;
 				this.initStep0();
 			});
@@ -1267,10 +1266,6 @@ export default {
 		getStep3() {
 			QSApp.getForm(this.formName3)
 				.then(res => {
-					if (res.verifyErr.length > 0) {
-						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
-						return;
-					}
 					this.saveRequest4(res.data);
 				})
 				.catch(err => {
@@ -1305,6 +1300,12 @@ export default {
 		 * 获取上传图片的url
 		 */
 		getUploadUrl(key, data) {
+			//如果没有任何图片
+			let upLoadResult = data[key][0].upLoadResult;
+			if(!upLoadResult){
+				return ''
+			}
+
 			//只允许一个/开头
 			function splits(url) {
 				if (!url) {
@@ -1313,7 +1314,7 @@ export default {
 				let path = url.split('tgimg')[1];
 				return '/tgimg' + path;
 			}
-			let upLoadResult = data[key][0].upLoadResult;
+
 			//是新上传
 			if (upLoadResult.length > 0) {
 				let data1 = JSON.parse(upLoadResult[1].data);
@@ -1337,6 +1338,7 @@ export default {
 				organization_end: data.organization_end.data,
 				organization_img: this.getUploadUrl('organization_img', data)
 			};
+			console.log(query)
 			saveAgentJjFour(query)
 				.then(data => {
 					this.fromValue3.isRotate = false;

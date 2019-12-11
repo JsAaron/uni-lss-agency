@@ -133,3 +133,11 @@ export function getMobileOrderPagelistJymx(query) {
 		params: query
 	})
 }
+
+export function getStatisticsHome(data) {
+	return request({
+		url: '/moblieapp/getStatisticsHome',
+		method: 'post',
+		params: data
+	})
+}
