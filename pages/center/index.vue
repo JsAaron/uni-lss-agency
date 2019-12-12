@@ -14,13 +14,13 @@
 				<text>加入时间</text>
 				<text>{{create_date}}</text>
 			</view>
-			<view class="list__row lss-hairline--bottom">
+			<view v-if="show" class="list__row lss-hairline--bottom">
 				<text>微信分润</text>
-				<text>{{wx}}</text>
+				<text>{{wx}}%</text>
 			</view>
-			<view class="list__row lss-hairline--bottom">
+			<view v-if="show" class="list__row lss-hairline--bottom">
 				<text>支付宝分润</text>
-				<text>{{zfb}}</text>
+				<text>{{zfb}}%</text>
 			</view>
 			<view class="list__row lss-hairline--bottom">
 				<text>版本号</text>
@@ -45,6 +45,7 @@ export default {
 	components: {},
 	data() {	
 		return {
+			show:false,
 			version:setting.releases.version,
 			create_date:'',
 			wx:'',
@@ -53,7 +54,11 @@ export default {
 			user_name: ''
 		};
 	},
-	onShow() {
+	onLoad() {
+		this.dl_type = util.cookies.get('dl_type');
+		if(this.dl_type != '-1'){
+			this.show = true
+		}
 		this.user_name = util.cookies.get('user_name')
 		this.create_date= util.cookies.get('create_date')
 		this.wx= util.cookies.get('wx')
@@ -62,7 +67,6 @@ export default {
 	},
 	props: {},
 	created() {},
-	onLoad() {},
 	methods: {
 		...mapActions('account', ['logout']),
 		onAmend() {

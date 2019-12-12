@@ -3,7 +3,7 @@
 		<message ref="Message"></message>
 		<view class="status_bar"></view>
 		<image src="../../static/img/login.png" mode="aspectFit" class="zai-logo"></image>
-		<view class="zai-title">纯支付代理商APP</view>
+		<view class="zai-title">纯支付代理商</view>
 		<view class="zai-form">
 			<input
 				class="zai-input"
