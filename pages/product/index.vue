@@ -1,7 +1,13 @@
 <template>
 	<view class="container">
 		<!-- 顶部选项卡 -->
-		<scroll-view id="nav-bar" class="nav-bar" scroll-x scroll-with-animation :scroll-left="scrollLeft">
+		<scroll-view
+			id="nav-bar"
+			class="nav-bar"
+			scroll-x
+			scroll-with-animation
+			:scroll-left="scrollLeft"
+		>
 			<view
 				v-for="(item, index) in tabBars"
 				:key="item.id"
@@ -23,7 +29,13 @@
 			@setEnableScroll="setEnableScroll"
 		>
 			<!-- 内容部分 -->
-			<swiper id="swiper" class="swiper-box" :duration="300" :current="tabCurrentIndex" @change="changeTab">
+			<swiper
+				id="swiper"
+				class="swiper-box"
+				:duration="300"
+				:current="tabCurrentIndex"
+				@change="changeTab"
+			>
 				<swiper-item v-for="tabItem in tabBars" :key="tabItem.id">
 					<scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadMore">
 						<view
@@ -210,7 +222,10 @@ export default {
 						item.passName = '未开通';
 					} else if (item.pass == '2') {
 						item.passName = '待审核';
+					} else if (item.pass == '5') {
+						item.passName = '待服务商审核签约';
 					}
+
 					tabItem.newsList.push(item);
 				});
 				tabItem.totalPages = res.totalpage;
@@ -251,7 +266,7 @@ export default {
 				util.gotoPage(`/pages/product/details/index?agentid=${data.agentid}`);
 			} else if (data.pass == '2') {
 				util.gotoPage(`/pages/product/details/index?agentid=${data.agentid}&typein=true`);
-			} else {
+			} else if (data.pass == '1' || data.pass == '3') {
 				util.gotoPage(`/pages/product/type-in?agentid=${data.agentid}`);
 			}
 		},
@@ -262,7 +277,7 @@ export default {
 				this.enableScroll = enable;
 			}
 		},
-
+ 
 		//tab切换
 		async changeTab(e) {
 			if (scrollTimer) {

@@ -22,6 +22,10 @@
 				<text>支付宝分润</text>
 				<text>{{zfb}}</text>
 			</view>
+			<view class="list__row lss-hairline--bottom">
+				<text>版本号</text>
+				<text>{{version}}</text>
+			</view>
 		</view>
 
 		<WButton
@@ -36,11 +40,12 @@
 <script>
 import * as util from '@/utils';
 import { mapState, mapActions } from 'vuex';
-
+import setting from '@/setting.js'
 export default {
 	components: {},
 	data() {	
 		return {
+			version:setting.releases.version,
 			create_date:'',
 			wx:'',
 			zfb:'',

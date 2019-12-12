@@ -427,7 +427,6 @@ export default {
 				if (type === 'refresh') {
 					tabItem.newsList = []; //刷新前清空数组
 				}
-				console.log(res)
 				res.rows.forEach(item => {
 					if (item.pass == '0') {
 						item.passName = '已签约';
@@ -435,6 +434,8 @@ export default {
 						item.passName = '未开通';
 					} else if (item.pass == '2') {
 						item.passName = this.segmented.current == 3 ? '未签约' : '待审核';
+					} else if (item.pass == '5') {
+						item.passName = '待服务商审核签约';
 					}
 					tabItem.newsList.push(item);
 				});
@@ -506,7 +507,7 @@ export default {
 			}
 
 			if (this.segmented.type == 'three') {
-				if (this.segmented.current == 1) {
+				if (this.segmented.current == 0) {
 					title = '商户信息';
 					pageType = 'business';
 				}
@@ -523,6 +524,7 @@ export default {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
 			let data = tabItem.newsList[index];
 			let param = this.getDetailsParam();
+			console.log(param)
 			util.gotoPage(
 				`/pages/agency/access?agentData=${JSON.stringify(data)}&title=${param.title}&pageType=${
 					param.pageType
@@ -624,8 +626,9 @@ page,
 		position: absolute;
 		right: 10rpx;
 		top: 32rpx;
+		color: #007aff;
 		&:active {
-			color: #007aff;
+			color: #000000;
 		}
 	}
 }
