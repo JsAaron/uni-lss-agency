@@ -8,19 +8,19 @@
 		<view class="list">
 			<view class="list__row lss-hairline--bottom">
 				<text>手机</text>
-				<text>13888888888</text>
+				<text>{{mobileno}}</text>
 			</view>
 			<view class="list__row lss-hairline--bottom">
 				<text>加入时间</text>
-				<text>2019-11-11 11:11:11</text>
+				<text>{{create_date}}</text>
 			</view>
 			<view class="list__row lss-hairline--bottom">
 				<text>微信分润</text>
-				<text>100%</text>
+				<text>{{wx}}</text>
 			</view>
 			<view class="list__row lss-hairline--bottom">
 				<text>支付宝分润</text>
-				<text>100%</text>
+				<text>{{zfb}}</text>
 			</view>
 		</view>
 
@@ -39,8 +39,12 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
 	components: {},
-	data() {
+	data() {	
 		return {
+			create_date:util.cookies.get('create_date'),
+			wx:util.cookies.get('wx'),
+			zfb:util.cookies.get('zfb'),
+			mobileno:util.cookies.get('mobileno'),
 			user_name: ''
 		};
 	},

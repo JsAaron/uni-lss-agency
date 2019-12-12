@@ -166,7 +166,9 @@ export default {
 		this.getTableData();
 		this.getTradeData();
 		this.getStatisticsData();
+		//#ifdef APP-PLUS
 		this.requestAndroidPermission('android.permission.CAMERA');
+		//#endif
 	},
 	computed: {
 		startDate() {
@@ -177,13 +179,23 @@ export default {
 		}
 	},
 	methods: {
-		// vue的method里编写如下代码
+
 		async requestAndroidPermission(permisionID) {
 			var result = await permision.requestAndroidPermission(permisionID);
 			var strStatus;
 			if (result == 1) {
 				// strStatus = '已获得授权';
 			} else if (result == 0) {
+				uni.showModal({
+					title: '特别提示',
+					content: '请授权摄像头,否则上传图片将无法直接用摄像头拍照图',
+					success: function(res) {
+						if (res.confirm) {
+							permision.gotoAppPermissionSetting();
+						}
+					}
+				});
+			} else {
 				uni.showModal({
 					title: '特别提示',
 					content: '请授权摄像头,否则上传图片将无法直接用摄像头拍照图',

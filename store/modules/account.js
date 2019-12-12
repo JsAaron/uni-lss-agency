@@ -37,6 +37,12 @@ export default {
 						util.cookies.set('xt_id', res.xt_id)
 						util.cookies.set('token', res.accessToken)
 						util.cookies.set('user_name',res.name)
+						console.log(res)
+										
+						util.cookies.set('create_date', res.create_date)
+						util.cookies.set('wx', res.wx)
+						util.cookies.set('zfb', res.zfb)
+						util.cookies.set('mobileno',res.mobileno)
 						
 						// 设置 vuex 用户信息
 						await dispatch('user/set', {
@@ -66,6 +72,11 @@ export default {
 			util.cookies.remove('dl_type')
 			util.cookies.remove('xt_id')
 			util.cookies.remove('user_name')
+			
+			util.cookies.remove('create_date', res.create_date)
+			util.cookies.remove('wx', res.wx)
+			util.cookies.remove('zfb', res.zfb)
+			util.cookies.remove('mobileno',res.mobileno)
 		},
 
 		/**
