@@ -1,11 +1,11 @@
 <template>
 	<view class="header">
-		<view class="header__top">
+	<!-- 	<view class="header__top">
 			<view class="header__top-content">
 				<view class="header__line"></view>
 				<text class="header__text">数据总览</text>
 			</view>
-		</view>
+		</view> -->
 		<view class="header__data">
 			<view class="header__row">
 				<view class="header__col">
@@ -69,42 +69,31 @@ export default {
 };
 </script>
 
+
 <style lang="scss">
+	
 .header {
-	height:460rpx;
-	position: relative;
+	margin-bottom: 70rpx;
 	&__line {
 		margin: 0 20rpx;
 		width: 10rpx;
 		height: 40rpx;
 		background: #ffffff;
 	}
-	&__top {
-		height: 300rpx;
-		width: 100%;
-		background-image: url('~@/static/img/logo.jpg');
-		background-size: cover;
-		color: #ffffff;
-	}
-	&__top-content {
-		@include flex-h-left;
-		padding-top: 30rpx;
-	}
+
 	&__text {
-		font-size: 30rpx;
+		font-size: 20px;
 	}
 
 	&__data {
 		box-shadow: 0px 10px 20px #ccc;
 		@include flex-h-around;
 		font-size: 25rpx;
-		position: absolute;
-		top: 100rpx;
 		background: #ffffff;
 		width: 700rpx;
 		border-radius: 10px;
-		left: 25rpx;
 		// font-weight: bold;
+		margin: 0 auto;
 	}
 	&__row {
 		width: 100%;

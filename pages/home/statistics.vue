@@ -43,6 +43,7 @@ export default {
 </script>
 
 <style lang="scss">
+	
 .header {
 	margin-bottom: 70rpx;
 	&__line {

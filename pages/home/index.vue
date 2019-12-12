@@ -1,108 +1,124 @@
 <template>
 	<mescroll-uni @down="downCallback" :up="upOption">
 		<view class="container">
-			<m-header :totalData.sync="totalData"></m-header>
+			<view class="container__logo"></view>
 
-			<view class="content">
-				<view class="content__title">
-					<view class="content__line"></view>
-					<view class="content__text">佣金统计(近一年)</view>
-				</view>
-			</view>
-
-			<m-statistics :statisticsData.sync="statisticsData"></m-statistics>
-
-			<view class="content">
-				<view class="content__title">
-					<view class="content__line"></view>
-					<view class="content__text">交易数据</view>
-					<view class="filter-date-item">
-						<picker
-							class="filter-date-picker"
-							mode="date"
-							:value="tradeStartDataValue"
-							:start="startDate"
-							:end="endDate"
-							@change="tradeBindStartDateChange"
-						>
-							<view>{{ tradeStartDataValue }}</view>
-						</picker>
-						<text class="filter-date-text">-</text>
-						<picker
-							class="filter-date-picker"
-							mode="date"
-							:value="tradeEndDataValue"
-							:start="startDate"
-							:end="endDate"
-							@change="tradeBindEndDateChange"
-						>
-							<view>{{ tradeEndDataValue }}</view>
-						</picker>
+			<view class="container__content">
+				<view class="content">
+					<view class="content__title">
+						<view class="content__line content__line--w"></view>
+						<view class="content__text">数据总览</view>
 					</view>
 				</view>
-			</view>
 
-			<!-- 交易 -->
-			<m-trade :tradeData.sync="tradeData"></m-trade>
+				<m-header :totalData.sync="totalData"></m-header>
 
-			<view class="content">
-				<view class="content__title">
-					<view class="content__line"></view>
-					<view class="content__text">支付通道占比</view>
-					<view class="filter-date-item">
-						<picker
-							class="filter-date-picker"
-							mode="date"
-							:value="startDataValue"
-							:start="startDate"
-							:end="endDate"
-							@change="bindStartDateChange"
-						>
-							<view>{{ startDataValue }}</view>
-						</picker>
-						<text class="filter-date-text">-</text>
-						<picker
-							class="filter-date-picker"
-							mode="date"
-							:value="endDataValue"
-							:start="startDate"
-							:end="endDate"
-							@change="bindEndDateChange"
-						>
-							<view>{{ endDataValue }}</view>
-						</picker>
+				<view class="content">
+					<view class="content__title">
+						<view class="content__line"></view>
+						<view class="content__text">佣金统计(近一年)</view>
 					</view>
 				</view>
-			</view>
 
-			<view class="header__date-item">
-				<div class="header__date">
-					<div
-						v-for="(item, index) in tooggleDate"
-						:key="index"
-						class="header__date-row"
-						:class="tooggleDateIndex === index ? 'header__date-row--active' : ''"
-						@click="onHandleToggleDate(item, index)"
-					>
-						{{ item }}
-					</div>
-				</div>
-			</view>
+				<m-statistics :statisticsData.sync="statisticsData"></m-statistics>
 
-			<view class="qiun-columns">
-				<view class="qiun-charts">
-					<canvas canvas-id="canvasRing" id="canvasRing" class="charts" @touchstart="touchRing"></canvas>
-				</view>
-			</view>
-
-			<view class="qiun-bottom">
-				<view class="qiun-names">
-					<block v-for="(item, index) in serieNames" :key="index">
-						<view class="qiun-row">
-							<text class="qiun-dot"></text>
-							<text>{{ item.name }}:{{ item.data }}%</text>
+				<view class="content">
+					<view class="content__title">
+						<view class="content__line"></view>
+						<view class="content__text">交易数据</view>
+						<view class="filter-date-item">
+							<picker
+								class="filter-date-picker"
+								mode="date"
+								:value="tradeStartDataValue"
+								:start="startDate"
+								:end="endDate"
+								@change="tradeBindStartDateChange"
+							>
+								<view>{{ tradeStartDataValue }}</view>
+							</picker>
+							<text class="filter-date-text">-</text>
+							<picker
+								class="filter-date-picker"
+								mode="date"
+								:value="tradeEndDataValue"
+								:start="startDate"
+								:end="endDate"
+								@change="tradeBindEndDateChange"
+							>
+								<view>{{ tradeEndDataValue }}</view>
+							</picker>
 						</view>
-					</block>
+					</view>
+				</view>
+
+				<!-- 交易 -->
+				<m-trade :tradeData.sync="tradeData"></m-trade>
+
+				<view class="content">
+					<view class="content__title">
+						<view class="content__line"></view>
+						<view class="content__text">支付通道占比</view>
+						<view class="filter-date-item">
+							<picker
+								class="filter-date-picker"
+								mode="date"
+								:value="startDataValue"
+								:start="startDate"
+								:end="endDate"
+								@change="bindStartDateChange"
+							>
+								<view>{{ startDataValue }}</view>
+							</picker>
+							<text class="filter-date-text">-</text>
+							<picker
+								class="filter-date-picker"
+								mode="date"
+								:value="endDataValue"
+								:start="startDate"
+								:end="endDate"
+								@change="bindEndDateChange"
+							>
+								<view>{{ endDataValue }}</view>
+							</picker>
+						</view>
+					</view>
+				</view>
+
+				<view class="header__date-item">
+					<div class="header__date">
+						<div
+							v-for="(item, index) in tooggleDate"
+							:key="index"
+							class="header__date-row"
+							:class="tooggleDateIndex === index ? 'header__date-row--active' : ''"
+							@click="onHandleToggleDate(item, index)"
+						>
+							{{ item }}
+						</div>
+					</div>
+				</view>
+
+				<view class="qiun-columns">
+					<view class="qiun-charts">
+						<canvas
+							canvas-id="canvasRing"
+							id="canvasRing"
+							class="charts"
+							@touchstart="touchRing"
+						></canvas>
+					</view>
+				</view>
+
+				<view class="qiun-bottom">
+					<view class="qiun-names">
+						<block v-for="(item, index) in serieNames" :key="index">
+							<view class="qiun-row">
+								<text class="qiun-dot"></text>
+								<text>{{ item.name }}:{{ item.data }}%</text>
+							</view>
+						</block>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -179,7 +195,6 @@ export default {
 		}
 	},
 	methods: {
-
 		async requestAndroidPermission(permisionID) {
 			var result = await permision.requestAndroidPermission(permisionID);
 			var strStatus;
@@ -427,10 +442,25 @@ export default {
 	min-height: 100vh;
 	background: #fff;
 	overflow-y: scroll;
+	position: relative;
+	&__logo {
+		height: 300rpx;
+		width: 100%;
+		background-image: url('~@/static/img/logo.jpg');
+		background-size: cover;
+		color: #ffffff;
+		position: absolute;
+		z-index: 1;
+	}
+	&__content {
+		position: absolute;
+		z-index: 2;
+	}
 }
 
 .content {
 	margin: 20rpx 0;
+
 	&__title {
 		@include flex-h-left;
 		// font-weight: bold;
@@ -442,6 +472,9 @@ export default {
 		width: 10rpx;
 		height: 30rpx;
 		background: rgb(96, 168, 252);
+		&--w{
+			background: #fff;
+		}
 	}
 }
 .qiun-padding {
