@@ -1,5 +1,14 @@
 import request from '@/plugin/axios'
 
+export function getPassword(data) {
+	return request({
+		url: '/moblieapp/getPassword',
+		method: 'post',
+		data: data
+	})
+}
+
+
 export function getAgentPagedList(query) {
 	return request({
 		url: '/moblieapp/agentPagedlist',
@@ -159,17 +168,17 @@ export function saveAgentNewJjOne(data) {
 }
 
 export function saveAgentNewJjTwo(data) {
-    return request({
-        url: '/moblieapp/AgentSaveNewJjTwo',
-        method: 'post',
-        data: data
-    })
+	return request({
+		url: '/moblieapp/AgentSaveNewJjTwo',
+		method: 'post',
+		data: data
+	})
 }
 
 export function saveAgentNewJjThree(data) {
-    return request({
-        url: '/moblieapp/AgentSaveNewJjThree',
-        method: 'post',
-        data: data
-    })
+	return request({
+		url: '/moblieapp/AgentSaveNewJjThree',
+		method: 'post',
+		data: data
+	})
 }

@@ -65,13 +65,6 @@
 			/>
 
 
-			<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onEnsure">
-				确定
-			</QSWavesButton>
-
-			<QSWavesButton btnStyle="margin-top:50rpx;width:700rpx;background:#2F85FC" @click="getStep1">
-				确定并提交审核
-			</QSWavesButton>
 		</block>
 
 		<!-- 商户 -->
@@ -155,9 +148,7 @@
 				variableName="category"
 				title="经营类别"
 			/>
-			<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onEnsure">
-				确定
-			</QSWavesButton>
+
 		</block>
 	</view>
 </template>

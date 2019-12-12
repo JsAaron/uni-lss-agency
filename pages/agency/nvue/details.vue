@@ -95,9 +95,6 @@
 				</view>
 			</view>
 
-			<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="getStep1">
-				重置密码
-			</QSWavesButton>
 		</block>
 	</view>
 </template>

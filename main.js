@@ -2,12 +2,10 @@ import Vue from 'vue'
 import App from './App'
 import store from './store'
 import config from '@/common/config'
+
 // 使用自定义消息提示
 import boboMessage from '@/components/bobo-message/bobo-message.vue'
-
 import WButton from '@/components/watch-login/watch-button.vue'; //button
-
-import QSWavesButton from '@/components/QS-WavesButton/QS-WavesButton.vue';
 
 /* 全局注册QS-inputs-split组件 */
 import QSInput from '@/components/QS-inputs-split/elements/QS-input/index.vue';
@@ -23,7 +21,6 @@ import QSInfinitePics from '@/components/QS-inputs-split/elements/QS-infinitePic
 import QSwitch from '@/components/QS-inputs-split/elements/QS-switch/index.vue';
 
 Vue.component('WButton', WButton);
-Vue.component('QSWavesButton', QSWavesButton);
 Vue.component('message', boboMessage)
 Vue.component('QSInput', QSInput);
 Vue.component('QSRadio', QSRadio);

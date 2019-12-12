@@ -2,7 +2,7 @@
 	<view>
 		<view class="header">
 			<text class="header__text">{{ user_name }}</text>
-			<!-- <view class="header__password" @click="onAmend">修改密码</view> -->
+			<view class="header__password" @click="onAmend">修改密码</view>
 		</view>
 
 		<view class="list">
@@ -24,9 +24,12 @@
 			</view>
 		</view>
 
-		<QSWavesButton btnStyle="margin-top:100rpx;width:700rpx;background:#2F85FC" @click="onExit">
-			退出登录
-		</QSWavesButton>
+		<WButton
+			text="退出登录"
+			@click.native="onExit()"
+			bgColor="rgb(47, 133, 252)"
+		></WButton>
+		
 	</view>
 </template>
 
