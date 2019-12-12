@@ -2,8 +2,8 @@
     "name" : "脸刷刷代理商版",
     "appid" : "__UNI__097F247",
     "description" : "脸刷刷代理商版",
-    "versionName" : "1.1.5",
-    "versionCode" : 115,
+    "versionName" : "1.1.6",
+    "versionCode" : 116,
     "transformPx" : false,
     "uniStatistics" : {
         "enable" : true
@@ -36,10 +36,10 @@
             "sdkConfigs" : {},
             "icons" : {
                 "android" : {
-                    "hdpi" : "",
-                    "xhdpi" : "",
-                    "xxhdpi" : "",
-                    "xxxhdpi" : ""
+                    "hdpi" : "/Users/wen/资料/新建文件夹 (2)/刷就刷/hdpi应用图标（72）.png",
+                    "xhdpi" : "/Users/wen/资料/新建文件夹 (2)/刷就刷/xhdpi应用图标（96）.png",
+                    "xxhdpi" : "/Users/wen/资料/新建文件夹 (2)/刷就刷/xxhdpi分屏程序图标（144）.png",
+                    "xxxhdpi" : "/Users/wen/资料/新建文件夹 (2)/刷就刷/xxxhdpi分屏程序图标（192）.png"
                 }
             },
             "splashscreen" : {

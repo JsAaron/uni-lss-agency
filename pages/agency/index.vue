@@ -524,7 +524,6 @@ export default {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
 			let data = tabItem.newsList[index];
 			let param = this.getDetailsParam();
-			console.log(param)
 			util.gotoPage(
 				`/pages/agency/access?agentData=${JSON.stringify(data)}&title=${param.title}&pageType=${
 					param.pageType

@@ -7,7 +7,7 @@
 				<view class="content">
 					<view class="content__title">
 						<view class="content__line content__line--w"></view>
-						<view class="content__text">数据总览</view>
+						<view class="content__text content__text--w">数据总览</view>
 					</view>
 				</view>
 

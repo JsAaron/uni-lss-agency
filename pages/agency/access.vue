@@ -213,6 +213,7 @@ import QSApp from '@/components/QS-inputs-split/js/app.js';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
 import { getProvcd, saveAgent, getShopsType, delAgent } from '@/api/agent';
+import * as userService from '@/api/user';
 
 export default {
 	components: {
@@ -702,28 +703,36 @@ export default {
 					: '';
 			}
 
-			saveAgent(query)
-				.then(data => {
-					this.fromValue0.isRotate = false;
-					this.onAmend()
-					if (this.action == 'add') {
-						this.$refs['Message'].success('新增成功');
-						this.resetInit();
-						getApp().globalData.agency = {
-							action: 'add'
-						};
+			userService
+				.getCheckUser({ userCode: data.userCode || this.agentData.userCode })
+				.then(data2 => {
+					if (data2 == 'true') {
+						saveAgent(query)
+							.then(data => {
+								this.fromValue0.isRotate = false;
+								this.onAmend();
+								if (this.action == 'add') {
+									this.$refs['Message'].success('新增成功');
+									this.resetInit();
+									getApp().globalData.agency = {
+										action: 'add'
+									};
+								} else {
+									this.$refs['Message'].success('修改成功');
+									getApp().globalData.agency = {
+										agentid: this.agentData.agentid,
+										agentData: query,
+										action: 'update'
+									};
+								}
+							})
+							.catch(err => {
+								this.fromValue0.isRotate = false;
+								this.$refs['Message'].error(err);
+							});
 					} else {
-						this.$refs['Message'].success('修改成功');
-						getApp().globalData.agency = {
-							agentid: this.agentData.agentid,
-							agentData: query,
-							action: 'update'
-						};
+						this.$refs['Message'].error('该账号已存在,请更换账号试试');
 					}
-				})
-				.catch(err => {
-					this.fromValue0.isRotate = false;
-					this.$refs['Message'].error(err);
 				});
 		}
 	}
@@ -731,7 +740,7 @@ export default {
 </script>
 
 <style lang="scss">
-	page {
-		background-color: #fff;
-	}
+page {
+	background-color: #fff;
+}
 </style>
