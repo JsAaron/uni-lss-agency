@@ -149,3 +149,27 @@ export function getStatisticsOrderYj(data) {
 		params: data
 	})
 }
+
+export function saveAgentNewJjOne(data) {
+	return request({
+		url: '/moblieapp/AgentSaveNewJjOne',
+		method: 'post',
+		data: data
+	})
+}
+
+export function saveAgentNewJjTwo(data) {
+    return request({
+        url: '/moblieapp/AgentSaveNewJjTwo',
+        method: 'post',
+        data: data
+    })
+}
+
+export function saveAgentNewJjThree(data) {
+    return request({
+        url: '/moblieapp/AgentSaveNewJjThree',
+        method: 'post',
+        data: data
+    })
+}

@@ -1287,7 +1287,7 @@ export default {
 							this.submit_success = true;
 							getApp().globalData.product = {
 								agentid: this.agentData.agentid,
-								update: true,
+								action: 'update-typeIn',
 								pass: 2
 							};
 						});

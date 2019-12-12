@@ -2,6 +2,19 @@
 	<view class="container">
 		<message ref="Message"></message>
 
+		<uni-nav-bar
+			left-icon="arrowleft"
+			fixed
+			status-bar
+			:right-text="barText"
+			left-text="返回"
+			background-color="#2F85FC"
+			:title="title"
+			color="#ffffff"
+			@click-left="onBackPage"
+			@click-right="onPrevStep"
+		/>
+
 		<block v-if="stepActive == 0">
 			<view class="type-title">可上传照片进行资料识别</view>
 
@@ -53,16 +66,18 @@
 				title="证件有效期开始"
 				v-model="fromValue0.identification_start"
 				placherhold="请选择"
+				required
 			/>
 
 			<QSPickerDate
-				:name="fromValue0"
+				:name="formName0"
 				variableName="identification_end"
 				:dataSet="fromValue0.dataSet"
 				ref="ref_identification_end"
 				title="证件有效期结束"
 				v-model="fromValue0.identification_end"
 				placherhold="请选择"
+				required
 			/>
 
 			<QSInput
@@ -142,6 +157,7 @@
 				title="营业期限开始"
 				v-model="fromValue0.contractstdate"
 				placherhold="请选择"
+				required
 			/>
 
 			<QSPickerDate
@@ -153,12 +169,294 @@
 				:value="dateValue"
 				v-model="fromValue0.contractendate"
 				placherhold="请选择"
+				required
 			/>
 
 			<WButton
 				text="下一步"
 				:rotate="fromValue0.isRotate"
 				@click.native="getStep0()"
+				bgColor="rgb(47, 133, 252)"
+			></WButton>
+		</block>
+
+		<block v-if="stepActive == 1">
+			<view class="type-title">结算信息</view>
+
+			<QSPics
+				:name="formName1"
+				variableName="industry_license"
+				ref="ref_industry_license"
+				customId="typein"
+				required
+				title="请上传经营者银行卡"
+				v-model="fromValue1.industry_license"
+			></QSPics>
+
+			<QSInput
+				:name="formName1"
+				variableName="deposit_bank"
+				ref="ref_deposit_bank"
+				title="开户总行银行"
+				required
+				v-model="fromValue1.deposit_bank"
+			></QSInput>
+
+			<QSInput
+				:name="formName1"
+				variableName="account_city"
+				ref="ref_account_city"
+				title="开户支行城市"
+				required
+				v-model="fromValue1.account_city"
+			></QSInput>
+
+			<QSInput
+				:name="formName1"
+				variableName="bank_branch"
+				ref="ref_bank_branch"
+				title="开户行所在支行"
+				required
+				v-model="fromValue1.bank_branch"
+			></QSInput>
+
+			<QSInput
+				:name="formName1"
+				variableName="account_name"
+				ref="ref_account_name"
+				title="开户名称"
+				required
+				v-model="fromValue1.account_name"
+			></QSInput>
+
+			<QSInput
+				:name="formName1"
+				variableName="bank_account"
+				ref="ref_bank_account"
+				title="开户账号"
+				required
+				v-model="fromValue1.bank_account"
+			></QSInput>
+
+			<view class="type-title">基本信息</view>
+
+			<QSPics
+				:name="formName1"
+				variableName="agent_face"
+				ref="ref_agent_face"
+				customId="typein"
+				required
+				title="店铺门头照"
+				v-model="fromValue1.agent_face"
+			></QSPics>
+
+			<QSPics
+				:name="formName1"
+				variableName="agent_shop"
+				ref="ref_agent_shop"
+				customId="typein"
+				required
+				title="店内环境照片"
+				v-model="fromValue1.agent_shop"
+			></QSPics>
+
+			<QSPickerCustom
+				:name="formName1"
+				variableName="prov_cd"
+				ref="ref_prov_cd"
+				required
+				:steps="fromValue1.steps"
+				v-model="fromValue1.prov_cd"
+				@change="onChangeProv"
+				title="省"
+			/>
+
+			<QSPickerCustom
+				:name="formName1"
+				variableName="city"
+				ref="ref_city"
+				:steps="fromValue1.steps"
+				v-model="fromValue1.city"
+				title="市"
+				@change="onChangeCity"
+			/>
+
+			<QSPickerCustom
+				:name="formName1"
+				variableName="areaid"
+				ref="ref_areaid"
+				:steps="fromValue1.steps"
+				v-model="fromValue1.areaid"
+				title="区"
+			/>
+
+			<QSInput
+				:name="formName1"
+				variableName="compaddress"
+				ref="ref_compaddress"
+				required
+				titleLayout="left"
+				title="经营地址"
+				v-model="fromValue1.compaddress"
+			></QSInput>
+
+			<QSInput
+				:name="formName1"
+				variableName="legal"
+				ref="ref_legal"
+				required
+				titleLayout="left"
+				title="联系人"
+				v-model="fromValue1.legal"
+			></QSInput>
+
+			<QSInput
+				:name="formName1"
+				variableName="mobileNo"
+				ref="ref_mobileNo"
+				required
+				titleLayout="left"
+				title="手机号码"
+				v-model="fromValue1.mobileNo"
+			></QSInput>
+
+			<QSInput
+				:name="formName1"
+				variableName="email"
+				ref="ref_email"
+				required
+				title="常用邮箱"
+				verifyType="Email"
+				v-model="fromValue1.email"
+			></QSInput>
+
+			<QSInput
+				:name="formName1"
+				variableName="shop_tel"
+				ref="ref_shop_tel"
+				required
+				title="客服手机"
+				verifyType="Tel"
+				v-model="fromValue1.shop_tel"
+			></QSInput>
+
+			<QSInput
+				:name="formName1"
+				variableName="shortername"
+				ref="ref_shortername"
+				required
+				title="商户简称"
+				v-model="fromValue1.shortername"
+			></QSInput>
+
+			<WButton
+				text="下一步"
+				:rotate="fromValue1.isRotate"
+				@click.native="getStep1()"
+				bgColor="rgb(47, 133, 252)"
+			></WButton>
+		</block>
+
+		<block v-if="stepActive == 2">
+			<view class="type-title">随行付通道</view>
+
+			<QSPickerCustom
+				:name="formName2"
+				variableName="jy_lm_sxf"
+				ref="ref_jy_lm_sxf"
+				v-model="fromValue2.jy_lm_sxf"
+				title="经营类目"
+			/>
+
+			<view class="step2-row">
+				<view class="step2-title">费率(%)</view>
+				<uni-number-box
+					:min="0"
+					:max="100"
+					:step="1"
+					:value="fromValue2.rate_sxf"
+					@change="onchange_rate_sxf"
+				/>
+			</view>
+
+			<view class="type-title">微信官方通道</view>
+
+			<QSPickerCustom
+				:name="formName2"
+				variableName="business_description"
+				ref="ref_business_description"
+				v-model="fromValue2.business_description"
+				title="经营描述"
+			/>
+
+			<QSPickerCustom
+				:name="formName2"
+				variableName="business_sector"
+				ref="ref_business_sector"
+				v-model="fromValue2.business_sector"
+				title="经营行业"
+			/>
+
+			<QSPics
+				:name="formName2"
+				variableName="special_qualification"
+				ref="ref_special_qualification"
+				customId="typein"
+				title="特殊资质"
+				v-model="fromValue2.special_qualification"
+			></QSPics>
+
+			<view class="type-title">支付宝</view>
+
+			<QSInput
+				:name="formName2"
+				variableName="alipay_account"
+				ref="ref_alipay_account"
+				title="商家支付宝账号"
+				v-model="fromValue2.alipay_account"
+			></QSInput>
+
+			<view class="type-title">银盛通道</view>
+
+			<QSPickerCustom
+				:name="formName2"
+				variableName="jy_lm_ys"
+				ref="ref_jy_lm_ys"
+				v-model="fromValue2.jy_lm_ys"
+				title="经营类目"
+			/>
+
+			<view class="step2-row">
+				<view class="step2-title">结算费率(%)</view>
+				<uni-number-box
+					:min="0"
+					:max="100"
+					:step="1"
+					:value="fromValue2.rate_ys"
+					@change="onchange_rate_ys"
+				/>
+			</view>
+
+			<QSPics
+				:name="formName2"
+				variableName="merchant_agreement"
+				ref="ref_merchant_agreement"
+				customId="typein"
+				title="商家协议"
+				v-model="fromValue2.merchant_agreement"
+			></QSPics>
+
+			<WButton
+				v-if="submit_success"
+				text="完成"
+				@click.native="onBackPage"
+				bgColor="rgb(47, 133, 252)"
+			></WButton>
+			<WButton
+				v-else
+				text="下一步"
+				:rotate="fromValue2.isRotate"
+				@click.native="getStep2()"
 				bgColor="rgb(47, 133, 252)"
 			></WButton>
 		</block>
@@ -172,7 +470,14 @@ import uniSteps from '@/components/uni-steps/uni-steps.vue';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
 import uniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
-import { getPerfectAgent, getShopsType , saveAgentNewJjOne } from '@/api/agent';
+import {
+	getProvcd,
+	getPerfectAgent,
+	getShopsType,
+	saveAgentNewJjOne,
+	saveAgentNewJjTwo,
+	saveAgentNewJjThree
+} from '@/api/agent';
 
 export default {
 	components: {
@@ -183,6 +488,8 @@ export default {
 	},
 	data() {
 		return {
+			title: '',
+			agentid: '',
 			stepActive: 0,
 			agentData: {},
 			typeOptions: {},
@@ -210,152 +517,55 @@ export default {
 				holder_name: '',
 				contractstdate: '',
 				contractendate: ''
+			},
+
+			// ============ 结算 ==============
+			formName1: 'step1',
+			fromValue1: {
+				isRotate: false,
+				steps: {
+					step_1_value: 'name'
+				},
+				industry_license: [{ required: true, path: '' }],
+				deposit_bank: '',
+				account_city: '',
+				bank_branch: '',
+				account_name: '',
+				bank_account: '',
+				agent_face: [{ required: true, path: '' }],
+				agent_shop: [{ required: true, path: '' }],
+				prov_cd: '',
+				city: '',
+				areaid: '',
+				compaddress: '',
+				legal: '',
+				mobileNo: '',
+				email: '',
+				shop_tel: '',
+				shortername: ''
+			},
+
+			// ============ 随行付通道 ==============
+			formName2: 'step2',
+			fromValue2: {
+				isRotate: false,
+				jy_lm_sxf: '',
+				zfb_num_fy: '',
+				business_description: '',
+				business_sector: '',
+				special_qualification: [{ required: true, path: '' }],
+				alipay_account: '',
+				jy_lm_ys: '',
+				rate_sxf: '',
+				rate_ys: '',
+				merchant_agreement: [{ required: true, path: '' }]
 			}
 		};
 	},
 
 	onLoad(options) {
-		this.options = {
-			cityareaid: '420100',
-			organization_code: '',
-			appid: '',
-			qkey: 'BSBPPOQCILBIPNFELQMH',
-			document_type: '身份证',
-			comm_amt: 0,
-			jy_lm_ys: '',
-			fws_type: '',
-			deposit_bank: '',
-			is_sole: '',
-			businessid_two: '',
-			agentchanneltype: 1,
-			workkey: '',
-			sum_amt: 0,
-			wx_num_fy: '',
-			agent_shop: '',
-			identification_start: 'null',
-			municipal_agent: '',
-			mobkey: '',
-			basCashCouponlist: [],
-			special_qualification: '/tgimg/201912/8c36697b-0eb1-4d1b-81a3-139b7c256ddf.png',
-			wx_num_gf: '',
-			qy_agent: '',
-			proareaid: '420000',
-			agenttype: 2,
-			latitude: '',
-			rate_ys: '',
-			region: '',
-			shop_tel: '15098980000',
-			holder_name: '123',
-			business_description: '',
-			distancecd: '',
-			business_license: '454664',
-			tradingareaid: '',
-			provcdId: '',
-			agent_face: '',
-			distance: '',
-			pingkey: '',
-			zfb_pz_type: '',
-			zfb_num_gf: '',
-			jy_lm_sxf: '',
-			bank_account: '',
-			one_type_name: '个体工商户',
-			business_sector: '',
-			contractendate: 'null',
-			zfb_num_sxf: '',
-			shop_reminder: '',
-			goods_list: [],
-			rate_sxf: '',
-			is_discount: '',
-			areaid: '420101',
-			idcards_back: '/tgimg/201912/e29a2a0b-75ac-497b-bada-7f48557b20d9.png',
-			identitynum: '',
-			zfb_num_fy: '',
-			bank_branch: '',
-			type_id: 1,
-			businessid: '',
-			identification_end: 'null',
-			packtype: 0,
-			is_tea_water: '',
-			three_type: '60',
-			is_fws: '',
-			accessIp: '',
-			is_stop: '',
-			supple_materials: '/tgimg/201912/8006dfe2-97fd-4363-b240-6c28d962f649.png',
-			mobileNo: '13000000000',
-			is_children_seat: '',
-			wx_num_sxf: '',
-			contractno: '',
-			business_scope: '123',
-			areaname: '市辖区',
-			cityId: '',
-			freeze_amt: 0,
-			agentlogo: '',
-			zflxtype: '',
-			pay_type: '',
-			userId: '4244',
-			organization_img: '',
-			province: '湖北省',
-			idcards_hand: '',
-			organization_end: '',
-			compaddress: '来了解',
-			agentaccount: '0',
-			longitude: '',
-			openid: '',
-			shop_scene: '线下',
-			basGroupBuyinglist: [],
-			wx_pz_type: '',
-			lm_agent: '',
-			deviceId: '',
-			cards: [],
-			is_wifi: '',
-			one_type: '1',
-			is_balcony: '',
-			isfact: 0,
-			shortername: '123',
-			per_capita: '',
-			agentid: '70800072265528',
-			account_name: '',
-			business_number: '123',
-			industry_license: '',
-			end_time: '',
-			email: '1343646@qq.com',
-			alipay_account: '',
-			business_hours: '',
-			legal: '易江峰',
-			provincial_agent: '70800072265528',
-			desc_content: '',
-			is_subscribe: '',
-			dl_type: '4',
-			order_id: '',
-			total_check_out_num: 0,
-			electronic_invoice: '是',
-			fws_agentid: '',
-			is_sofa: '',
-			account_city: '',
-			identification_number: '4546466767677',
-			merchant_agreement: '',
-			discount_list: [],
-			contractstdate: 'null',
-			poskey: '',
-			holder_type: '法人',
-			shop_introduction: '',
-			qq_amt: 0,
-			agentname: '小亮',
-			two_type: '10',
-			real_shop: '',
-			organization_start: '',
-			pass: '2',
-			merchant_total: '',
-			pagentid: '70800072265441',
-			start_time: '',
-			business_img: '/tgimg/201912/c4127f70-a621-4911-9599-c08bb321636c.png',
-			cityname: '武汉市',
-			idcards_front: '/tgimg/201912/cfe95d89-a03b-4050-830f-2e3e41472a1c.png'
-		};
-
-		uni.setNavigationBarTitle({
-			title: `录入资料(${this.options.agentname})`
-		});
+		this.agentid = options.agentid;
+		this.title = `录入资料(${options.agentname})`;
 	},
 
 	onReady() {
@@ -376,7 +586,7 @@ export default {
 	methods: {
 		initData() {
 			getPerfectAgent({
-				agentid: this.options.agentid
+				agentid: this.agentid
 			}).then(data => {
 				// console.log('data', data);
 				this.agentData = data;
@@ -385,7 +595,13 @@ export default {
 		},
 
 		onBackPage() {
-			gotoPage('back');
+			if (this.submit_success) {
+				uni.navigateBack({
+					delta: 2
+				});
+			} else {
+				gotoPage('back');
+			}
 		},
 
 		setIntputValueFc(name, data) {
@@ -396,14 +612,69 @@ export default {
 			this.$refs[name].setData(data);
 		},
 
+		hasUserValue(data) {
+			if (data && data != null && data != 'null') {
+				return true;
+			}
+			return false;
+		},
+
+		/**
+		 * 获取上传图片的url
+		 */
+		getUploadUrl(key, data) {
+			//如果没有任何图片
+			let upLoadResult = data[key][0].upLoadResult;
+			if (!upLoadResult) {
+				return '';
+			}
+
+			//只允许一个/开头
+			function splits(url) {
+				if (!url) {
+					return '';
+				}
+				let path = url.split('tgimg')[1];
+				return '/tgimg' + path;
+			}
+
+			//是新上传
+			if (upLoadResult.length > 0) {
+				let data1 = JSON.parse(upLoadResult[1].data);
+				return splits(data1.url);
+			} else {
+				//已存在
+				return splits(upLoadResult.data);
+			}
+		},
+
+		onPrevStep() {
+			if (this.submit_success) {
+				return;
+			}
+			this.stepActive -= 1;
+			setTimeout(() => {
+				this[`initData${this.stepActive}`]();
+			}, 0);
+		},
+
+		onNextStep() {
+			this.stepActive += 1;
+			setTimeout(() => {
+				this[`initData${this.stepActive}`]();
+			}, 0);
+		},
+
+		// =====================  第一步 =========================
+
 		initData0() {
 			let data = this.agentData;
-			if (data.idcards_front != null && data.idcards_front != '' && data.idcards_front != 'null') {
+			if (this.hasUserValue(data.idcards_front)) {
 				this.setInputDataFc('ref_idcards_front', [
 					{ required: true, path: 'https://img.facess.net/' + data.idcards_front }
 				]);
 			}
-			if (data.idcards_back != null && data.idcards_back != '' && data.idcards_back != 'null') {
+			if (this.hasUserValue(data.idcards_back)) {
 				this.setInputDataFc('ref_idcards_back', [
 					{ required: true, path: 'https://img.facess.net/' + data.idcards_back }
 				]);
@@ -416,29 +687,29 @@ export default {
 			this.setIntputValueFc('ref_holder_name', data.holder_name);
 			this.setIntputValueFc('ref_identification_number', data.identification_number);
 
-			if (data.contractstdate) {
+			if (this.hasUserValue(data.contractstdate)) {
 				this.$refs['ref_contractstdate'].confirm({
 					data: data.contractstdate
 				});
 			}
-			if (data.contractendate) {
+			if (this.hasUserValue(data.contractendate)) {
 				this.$refs['ref_contractendate'].confirm({
 					data: data.contractendate
 				});
 			}
 
-			if (data.identification_start) {
+			if (this.hasUserValue(data.identification_start)) {
 				this.$refs['ref_identification_start'].confirm({
 					data: data.identification_start
 				});
 			}
-			if (data.identification_end) {
+			if (this.hasUserValue(data.identification_end)) {
 				this.$refs['ref_identification_end'].confirm({
 					data: data.identification_end
 				});
 			}
 
-			if (data.business_img != null && data.business_img != '') {
+			if (this.hasUserValue(data.business_img)) {
 				this.setInputDataFc('ref_business_img', [
 					{ required: true, path: 'https://img.facess.net/' + data.business_img }
 				]);
@@ -480,6 +751,206 @@ export default {
 						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
 						return;
 					}
+					this.saveRequest0(res.data);
+				})
+				.catch(err => {
+					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
+				});
+		},
+
+		saveRequest0(data) {
+			if (this.fromValue0.isRotate) {
+				return;
+			}
+			this.fromValue0.isRotate = true;
+			let query = {
+				agentid: this.agentid,
+				userId: this.agentData.userId,
+				agentname: data.agentname,
+				business_img: this.getUploadUrl('business_img', data),
+				business_number: data.business_number,
+				compaddress: data.compaddress,
+				contractendate: data.contractendate.data,
+				contractstdate: data.contractstdate.data,
+				holder_name: data.holder_name,
+				idcards_back: this.getUploadUrl('idcards_back', data),
+				idcards_front: this.getUploadUrl('idcards_front', data),
+				identification_start: data.identification_start.data,
+				identification_end: data.identification_end.data,
+				identification_number: data.identification_number,
+				legal: data.legal,
+				mobileNo: data.mobileNo,
+				one_type: data.one_type.data[0].value.typeid
+			};
+			saveAgentNewJjOne(query)
+				.then(data => {
+					this.fromValue0.isRotate = false;
+					this.onNextStep();
+				})
+				.catch(() => {
+					this.fromValue0.isRotate = false;
+				});
+		},
+
+		// =====================  第二步 =========================
+
+		initData1() {
+			let data = this.agentData;
+			this.initRangeData();
+			if (this.hasUserValue(data.industry_license)) {
+				this.setInputDataFc('ref_industry_license', [
+					{ required: true, path: 'https://img.facess.net/' + data.industry_license }
+				]);
+			}
+			this.setIntputValueFc('ref_deposit_bank', data.deposit_bank);
+			this.setIntputValueFc('ref_account_city', data.account_city);
+			this.setIntputValueFc('ref_bank_branch', data.bank_branch);
+			this.setIntputValueFc('ref_account_name', data.account_name);
+			this.setIntputValueFc('ref_bank_account', data.bank_account);
+
+			if (this.hasUserValue(data.agent_face)) {
+				this.setInputDataFc('ref_agent_face', [
+					{ required: true, path: 'https://img.facess.net/' + data.agent_face }
+				]);
+			}
+			if (this.hasUserValue(data.agent_shop)) {
+				this.setInputDataFc('ref_agent_shop', [
+					{ required: true, path: 'https://img.facess.net/' + data.agent_shop }
+				]);
+			}
+
+			this.setIntputValueFc('ref_compaddress', data.compaddress);
+			this.setIntputValueFc('ref_legal', data.legal);
+			this.setIntputValueFc('ref_mobileNo', data.mobileNo);
+			this.setIntputValueFc('ref_email', data.email);
+			this.setIntputValueFc('ref_shop_tel', data.shop_tel);
+			this.setIntputValueFc('ref_shortername', data.shortername);
+		},
+
+		initRangeData() {
+			this.updateProvType(this.agentData.proareaid).then(() => {
+				this.updateCityType(this.agentData.proareaid, this.agentData.cityareaid).then(() => {
+					this.updateAreaType(this.agentData.cityareaid, this.agentData.areaid);
+				});
+			});
+		},
+
+		onChangeProv(item) {
+			if (this.fromValue1.provInit) {
+				this.fromValue1.provInit = false;
+				return;
+			}
+			this.updateCityType(item.data[0].value.areaid, '', true).then(() => {
+				this.updateAreaType(this.fromValue1.city.data[0].value.areaid, '', true);
+			});
+		},
+
+		onChangeCity(item) {
+			if (this.fromValue1.cityInit) {
+				this.fromValue1.cityInit = false;
+				return;
+			}
+			this.updateAreaType(this.fromValue1.city.data[0].value.areaid, '', true);
+		},
+
+		// 省会
+		updateProvType(proareaid, change) {
+			return getProvcd().then(data => {
+				let arr = [];
+				data.map(item => {
+					if (item.areaid == proareaid) {
+						this.fromValue1.provInit = true;
+						this.$refs['ref_prov_cd'].confirm({
+							data: [
+								{
+									name: item.areaname,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.areaname,
+						value: item
+					});
+				});
+				this.setInputDataFc('ref_prov_cd', [arr]);
+			});
+		},
+
+		// 市
+		updateCityType(proareaid, cityareaid, change) {
+			return getProvcd({
+				type: 'city',
+				areaid: proareaid
+			}).then(data => {
+				let arr = [];
+				data.map(item => {
+					if (item.areaid == cityareaid) {
+						this.fromValue1.cityInit = true;
+						this.$refs['ref_city'].confirm({
+							data: [
+								{
+									name: item.areaname,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.areaname,
+						value: item
+					});
+				});
+				// 如果是改变的处理，默认赋第一个值
+				if (change) {
+					this.$refs['ref_city'].confirm({
+						data: [arr[0]]
+					});
+				}
+				this.setInputDataFc('ref_city', [arr]);
+			});
+		},
+
+		// 区
+		updateAreaType(cityareaid, areaid, change) {
+			return getProvcd({
+				type: 'area',
+				areaid: cityareaid
+			}).then(data => {
+				let arr = [];
+				data.map(item => {
+					if (item.areaid == areaid) {
+						this.$refs['ref_areaid'].confirm({
+							data: [
+								{
+									name: item.areaname,
+									value: item
+								}
+							]
+						});
+					}
+					arr.push({
+						name: item.areaname,
+						value: item
+					});
+				});
+				if (change) {
+					this.$refs['ref_areaid'].confirm({
+						data: [arr[0]]
+					});
+				}
+				this.setInputDataFc('ref_areaid', [arr]);
+			});
+		},
+
+		getStep1() {
+			QSApp.getForm(this.formName1)
+				.then(res => {
+					if (res.verifyErr.length > 0) {
+						this.$refs['Message'].error(res.verifyErr[0].title + '输入错误');
+						return;
+					}
 					this.saveRequest1(res.data);
 				})
 				.catch(err => {
@@ -487,38 +958,154 @@ export default {
 				});
 		},
 
-		saveRequest1() { 
-			if (this.fromValue0.isRotate) {
+		saveRequest1(data) {
+			if (this.fromValue1.isRotate) {
 				return;
 			}
-			this.fromValue0.isRotate = true;
+			this.fromValue1.isRotate = true;
+
 			let query = {
+				account_city: data.account_city,
+				account_name: data.account_name,
+				agent_face: this.getUploadUrl('agent_face', data),
+				agent_shop: this.getUploadUrl('agent_shop', data),
 				agentid: this.agentid,
-				agentname: data.agentname,
-				areaid: '',
-				city: '',
+				areaid: data.areaid.data ? data.areaid.data[0].value.areaid : '',
+				bank_account: data.bank_account,
+				bank_branch: data.bank_branch,
+				city: data.city.data[0].value.areaid,
 				compaddress: data.compaddress,
+				deposit_bank: data.deposit_bank,
 				email: data.email,
+				industry_license: this.getUploadUrl('industry_license', data),
 				legal: data.legal,
 				mobileNo: data.mobileNo,
-				shop_scene: data.shop_scene,
+				prov_cd: data.prov_cd.data[0].value.areaid,
 				shop_tel: data.shop_tel,
 				shortername: data.shortername,
-				special_qualification: this.getUploadUrl('pic_1', data),
-				supple_materials: this.getUploadUrl('pic_2', data),
-				one_type: this.fromValue0.picker1.data[0].value.typeid,
-				two_type: this.fromValue0.picker2.data[0].value.typeid,
-				three_type: this.fromValue0.picker3.data[0].value.typeid,
 				userId: this.agentData.userId
 			};
-			// saveAgentNewJjOne(query)
-			// 	.then(data => {
-			// 		this.fromValue0.isRotate = false;
-			// 		this.onPrevNext();
-			// 	})
-			// 	.catch(() => {
-			// 		this.fromValue0.isRotate = false;
-			// 	});
+
+			saveAgentNewJjTwo(query)
+				.then(data => {
+					this.fromValue1.isRotate = false;
+					this.onNextStep();
+				})
+				.catch(() => {
+					this.fromValue1.isRotate = false;
+				});
+		},
+
+		// =====================  第三步 =========================
+		initData2() {
+			let data = this.agentData;
+
+			this.fromValue2.zfb_num_fy = data.zfb_num_fy;
+			this.fromValue2.rate_ys = data.rate_ys;
+
+			this.setInputDataFc('ref_jy_lm_sxf', [['公益类', '餐娱类', '民生类', '一般类']]);
+			this.$refs['ref_jy_lm_sxf'].confirm({
+				data: [data.jy_lm_sxf]
+			});
+
+			this.setInputDataFc('ref_business_description', [
+				['餐饮', '线下零售', '居民生活服务', '休闲娱乐', '交通出行', '其他']
+			]);
+			this.$refs['ref_business_description'].confirm({
+				data: [data.business_description]
+			});
+
+			this.setInputDataFc('ref_business_sector', [
+				['餐饮', '加油', '食品生鲜', '游艺厅/KTV/网吧', '零售批发/生活娱乐/其他']
+			]);
+			this.$refs['ref_business_sector'].confirm({
+				data: [data.business_sector]
+			});
+
+			if (this.hasUserValue(data.special_qualification)) {
+				this.setInputDataFc('ref_special_qualification', [
+					{ required: true, path: 'https://img.facess.net/' + data.special_qualification }
+				]);
+			}
+
+			this.setIntputValueFc('ref_alipay_account', data.alipay_account);
+
+			this.setInputDataFc('ref_jy_lm_ys', [
+				[
+					'零售业',
+					'住宿、餐饮和休闲娱乐业',
+					'居民服务与商业服务',
+					'教育、卫生、福利及其他政府服务',
+					'房地产与金融业'
+				]
+			]);
+			this.$refs['ref_jy_lm_ys'].confirm({
+				data: [data.jy_lm_ys]
+			});
+
+			if (this.hasUserValue(data.merchant_agreement)) {
+				this.setInputDataFc('ref_merchant_agreement', [
+					{ required: true, path: 'https://img.facess.net/' + data.merchant_agreement }
+				]);
+			}
+		},
+
+		onchange_rate_sxf(value) {
+			this.fromValue2.rate_sxf = value;
+		},
+
+		onchange_rate_ys(value) {
+			this.fromValue2.rate_ys = value;
+		},
+
+		getStep2(res) {
+			QSApp.getForm(this.formName2)
+				.then(res => {
+					uni.showModal({
+						content: '确认进件操作？',
+						success: data => {
+							if (data.confirm) {
+								this.saveRequest2(res.data);
+							}
+						}
+					});
+				})
+				.catch(err => {
+					console.log(`获取表单数据失败: ${JSON.stringify(err)}`);
+				});
+		},
+
+		saveRequest2(data) {
+			if (this.fromValue2.isRotate) {
+				return;
+			}
+			this.fromValue2.isRotate = true;
+			let query = {
+				agentid: this.agentid,
+				jy_lm_sxf: data.jy_lm_sxf.data[0],
+				rate_sxf: this.fromValue2.rate_sxf,
+				business_description: data.business_description.data[0],
+				business_sector: data.business_sector.data[0],
+				special_qualification: this.getUploadUrl('special_qualification', data),
+				alipay_account: data.alipay_account,
+				jy_lm_ys: data.jy_lm_ys.data[0],
+				rate_ys: this.fromValue2.rate_ys,
+				merchant_agreement: this.getUploadUrl('merchant_agreement', data),
+				userId: this.agentData.userId
+			};
+
+			saveAgentNewJjThree(query)
+				.then(data => {
+					this.fromValue1.isRotate = false;
+					this.$refs['Message'].success('提交成功');
+					this.submit_success = true;
+					getApp().globalData.product = {
+						action: 'update-entry'
+					};
+				})
+				.catch(() => {
+					this.fromValue1.isRotate = false;
+				});
 		}
 	}
 };
