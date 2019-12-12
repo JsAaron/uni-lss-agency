@@ -2,8 +2,8 @@
     "name" : "脸刷刷代理商版",
     "appid" : "__UNI__097F247",
     "description" : "脸刷刷代理商版",
-    "versionName" : "1.0.9",
-    "versionCode" : 109,
+    "versionName" : "1.1.0",
+    "versionCode" : 110,
     "transformPx" : false,
     "uniStatistics" : {
         "enable" : true

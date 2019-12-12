@@ -9,7 +9,7 @@
 			:topFixed="true"
 			@result="onFilter"
 		></sl-filter>
-		<mix-pulldown-refresh
+		<mix-pulldown-refresh 
 			ref="mixPulldownRefresh"
 			class="panel-content"
 			:top="panelTop"
@@ -57,7 +57,7 @@
 								<view>{{ getPayName(item) }}</view>
 							</view>
 						</view>
-						<view>{{ getStateName(item) }}</view>
+						<view v-bind:style="{ color: getColor(item) }">{{ getStateName(item) }}</view>
 					</view>
 					<!-- 上滑加载更多组件 -->
 					<mix-load-more :status="agentData.loadMoreStatus"></mix-load-more>
@@ -295,6 +295,19 @@ export default {
 				return '支付失败';
 			}
 		},
+		
+		getColor(item) {
+			if (item.return_code == '0000') {
+				if (item.refund_no != '') {
+					return '#FF7F24';
+				} else {
+					return '#6495ED';
+				}
+			} else {
+				return 'red';
+			}
+		},
+		
 
 		resetPageData() {
 			this.getTableDataMx();
@@ -362,6 +375,7 @@ export default {
 	min-height: 100vh;
 	background: #fff;
 	overflow-y: scroll;
+
 }
 
 .content {
@@ -372,6 +386,7 @@ export default {
 		@include flex-h-between;
 		padding: 20rpx 20rpx;
 		font-size: 25rpx;
+		color: #363636;
 	}
 	&__col {
 		display: flex;
