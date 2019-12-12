@@ -41,15 +41,19 @@ export default {
 	components: {},
 	data() {	
 		return {
-			create_date:util.cookies.get('create_date'),
-			wx:util.cookies.get('wx'),
-			zfb:util.cookies.get('zfb'),
-			mobileno:util.cookies.get('mobileno'),
+			create_date:'',
+			wx:'',
+			zfb:'',
+			mobileno:'',
 			user_name: ''
 		};
 	},
 	onShow() {
-		this.user_name = util.cookies.get('user_name');
+		this.user_name = util.cookies.get('user_name')
+		this.create_date= util.cookies.get('create_date')
+		this.wx= util.cookies.get('wx')
+		this.zfb= util.cookies.get('zfb')
+		this.mobileno= util.cookies.get('mobileno')
 	},
 	props: {},
 	created() {},

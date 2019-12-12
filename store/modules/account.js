@@ -73,10 +73,10 @@ export default {
 			util.cookies.remove('xt_id')
 			util.cookies.remove('user_name')
 			
-			util.cookies.remove('create_date', res.create_date)
-			util.cookies.remove('wx', res.wx)
-			util.cookies.remove('zfb', res.zfb)
-			util.cookies.remove('mobileno',res.mobileno)
+			util.cookies.remove('create_date')
+			util.cookies.remove('wx')
+			util.cookies.remove('zfb')
+			util.cookies.remove('mobileno')
 		},
 
 		/**
