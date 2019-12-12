@@ -9,7 +9,7 @@
 			:topFixed="true"
 			@result="onFilter"
 		></sl-filter>
-		<mix-pulldown-refresh 
+		<mix-pulldown-refresh
 			ref="mixPulldownRefresh"
 			class="panel-content"
 			:top="panelTop"
@@ -185,16 +185,12 @@ export default {
 			]
 		};
 	},
-	onLoad() {
+	async onLoad() {
 		this.agentid = util.cookies.get('agentid');
-		const query = wx.createSelectorQuery();
-		query.select('.sl-filter').boundingClientRect();
-		query.selectViewport().scrollOffset();
-		query.exec(res => {
-			this.panelTop = res[0].height * 2;
-			this.getTableDataMx();
-			this.loadNewsList('add');
-		});
+		let height = await util.getContainerHeight('.sl-filter');
+		this.panelTop = height * 2;
+		this.getTableDataMx();
+		this.loadNewsList('add');
 	},
 	computed: {},
 	methods: {
@@ -234,7 +230,7 @@ export default {
 
 			let query = {
 				pageIndex: ++agentItem.pageIndex,
-				pageSize: 30,
+				pageSize: 10,
 				sortBy: '',
 				parent_agentid: this.agentid,
 				start_time: this.startDataValue,
@@ -259,7 +255,7 @@ export default {
 					agentItem.refreshing = false;
 					// #endif
 					agentItem.loadMoreStatus = 0;
-				} 
+				}
 
 				//上滑加载 处理状态
 				if (type === 'add') {
@@ -269,7 +265,7 @@ export default {
 		},
 
 		getPayName(item) {
-			if (item.refund_no != '') {
+			if (item.refund_no) {
 				return '退款';
 			} else {
 				if (item.pay_type == '微信刷脸') {
@@ -295,7 +291,7 @@ export default {
 				return '支付失败';
 			}
 		},
-		
+
 		getColor(item) {
 			if (item.return_code == '0000') {
 				if (item.refund_no != '') {
@@ -307,7 +303,6 @@ export default {
 				return 'red';
 			}
 		},
-		
 
 		resetPageData() {
 			this.getTableDataMx();
@@ -375,7 +370,6 @@ export default {
 	min-height: 100vh;
 	background: #fff;
 	overflow-y: scroll;
-
 }
 
 .content {

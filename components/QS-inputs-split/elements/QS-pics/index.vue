@@ -99,6 +99,7 @@ export default {
 				});
 			} else {
 				uni.chooseImage({
+					sizeType: ['original', 'compressed'],
 					success: res => {
 						this.$set(this.itemArray[picsindex], 'path', res.tempFilePaths[0]);
 						this.setValue(this.itemArray);

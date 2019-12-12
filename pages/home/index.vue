@@ -6,7 +6,7 @@
 			<view class="content">
 				<view class="content__title">
 					<view class="content__line"></view>
-					<view class="content__text">数据统计(近一年)</view>
+					<view class="content__text">佣金统计(近一年)</view>
 				</view>
 			</view>
 

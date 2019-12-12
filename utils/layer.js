@@ -6,8 +6,8 @@
  * @Description: 
  */
 function getSystemInfo(arg) {
-  var res = uni.getSystemInfoSync()
-  return res[arg]
+	var res = uni.getSystemInfoSync()
+	return res[arg]
 }
 
 /**
@@ -15,19 +15,19 @@ function getSystemInfo(arg) {
  * ios 
  */
 export function getPlatform() {
-  const plat = getSystemInfo("platform")
-  return plat
+	const plat = getSystemInfo("platform")
+	return plat
 }
 
 /**
  * 获取窗口高度
  */
 export function getWindowHeight() {
-  return getSystemInfo("windowHeight")
+	return getSystemInfo("windowHeight")
 }
 
 export function getWindowWidth() {
-  return getSystemInfo("windowWidth")
+	return getSystemInfo("windowWidth")
 }
 
 
@@ -36,9 +36,9 @@ export function getWindowWidth() {
  * @param {*} e 
  */
 export function getRect(selector, callback) {
-  uni.createSelectorQuery().select(selector).boundingClientRect(function(rect) {
-    callback(rect)
-  }).exec()
+	uni.createSelectorQuery().select(selector).boundingClientRect(function(rect) {
+		callback(rect)
+	}).exec()
 }
 
 /**
@@ -47,7 +47,12 @@ export function getRect(selector, callback) {
  * @param {*} e 
  */
 export function getContainerHeight(selector, callback) {
-  getRect(selector, rect => {
-    callback(getWindowHeight() - rect.height - rect.top)
-  });
+	return new Promise((resolve) => {
+		const query = wx.createSelectorQuery();
+		query.select(selector).boundingClientRect();
+		query.selectViewport().scrollOffset();
+		query.exec(res => {
+			resolve(res[0].height)
+		});
+	});
 }

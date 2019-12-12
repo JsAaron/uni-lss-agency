@@ -9,7 +9,7 @@
 					:active-color="segmented.activeColor"
 					@clickItem="onClickSegmented"
 				/>
-				<view v-if="showAdd" class="container__add" @click="onAdd">新增</view>
+				<view v-if="showAdd" class="container__add" @click="onAdd">{{ addTitle }}</view>
 			</view>
 
 			<!-- 顶部选项卡 -->
@@ -101,10 +101,32 @@ export default {
 		uniSegmentedControl
 	},
 	data() {
+		//-1窝单方，0-一级代理商，1-二级代理商，2-三级代理商，4商家
+		let dl_type = util.cookies.get('dl_type');
+
+		let items = [];
+		let type;
+		if (dl_type == -1) {
+			type = 'all';
+			items = ['一级代理', '二级代理', '三级代理', '商户'];
+		}
+		if (dl_type == 0) {
+			type = 'one';
+			items = ['二级代理', '三级代理', '商户'];
+		}
+		if (dl_type == 1) {
+			type = 'two';
+			items = ['三级代理', '商户'];
+		}
+		if (dl_type == 2) {
+			type = 'three';
+			items = ['商户'];
+		}
 		return {
 			segmented: {
+				type: type,
 				top: 0,
-				items: ['一级代理', '二级代理', '三级代理', '商户'],
+				items: items,
 				current: 0,
 				activeColor: '#007aff',
 				styleType: 'button'
@@ -120,9 +142,40 @@ export default {
 		};
 	},
 	computed: {
-		showAdd(){
-			return this.tabCurrentIndex == 0 ? true:false
+		showAdd() {
+			return this.tabCurrentIndex == 0 ? true : false;
 		},
+		addTitle() {
+			if (this.segmented.type == 'all') {
+				if (this.segmented.current == 0) {
+					return '新增代理';
+				} else if (this.segmented.current == 1) {
+					return '新增代理';
+				} else if (this.segmented.current == 2) {
+					return '新增代理';
+				} else if (this.segmented.current == 3) {
+					return '新增商户';
+				}
+			} else if (this.segmented.type == 'one') {
+				if (this.segmented.current == 0) {
+					return '新增代理';
+				} else if (this.segmented.current == 1) {
+					return '新增代理';
+				} else if (this.segmented.current == 2) {
+					return '新增商户';
+				}
+			} else if (this.segmented.type == 'two') {
+				if (this.segmented.current == 0) {
+					return '新增代理';
+				} else if (this.segmented.current == 1) {
+					return '新增商户';
+				}
+			} else if (this.segmented.type == 'three') {
+				if (this.segmented.current == 0) {
+					return '新增商户';
+				}
+			}
+		}
 	},
 	onShow() {
 		// 强制更新状态
@@ -145,15 +198,10 @@ export default {
 		this.agentid = util.cookies.get('agentid');
 		this.dl_type = util.cookies.get('dl_type');
 		this.xt_id = util.cookies.get('xt_id');
-		// 获取屏幕宽度
 		windowWidth = uni.getSystemInfoSync().windowWidth;
-		const query = wx.createSelectorQuery();
-		query.select('.container-top').boundingClientRect();
-		query.selectViewport().scrollOffset();
-		query.exec(res => {
-			this.segmented.top = res[0].height * 2;
-			this.initTabbars();
-		});
+		let height = await util.getContainerHeight('.container-top');
+		this.segmented.top = height * 2;
+		this.initTabbars();
 	},
 	methods: {
 		updateState() {
@@ -174,19 +222,49 @@ export default {
 			let title;
 			let pageType = 'agency';
 			let dl_type = '';
-			if (this.segmented.current == 0) {
-				title = '新增一级代理商';
-				dl_type = 0;
-			} else if (this.segmented.current == 1) {
-				title = '新增二级代理商';
-				dl_type = 1;
-			} else if (this.segmented.current == 2) {
-				title = '新增三级代理商';
-				dl_type = 2;
-			} else if (this.segmented.current == 3) {
-				title = '新增商户';
-				dl_type = 4;
-				pageType = 'business';
+
+			if (this.segmented.type == 'all') {
+				if (this.segmented.current == 0) {
+					title = '新增一级代理商';
+					dl_type = 0;
+				} else if (this.segmented.current == 1) {
+					title = '新增二级代理商';
+					dl_type = 1;
+				} else if (this.segmented.current == 2) {
+					title = '新增三级代理商';
+					dl_type = 2;
+				} else if (this.segmented.current == 3) {
+					title = '新增商户';
+					dl_type = 4;
+					pageType = 'business';
+				}
+			} else if (this.segmented.type == 'one') {
+				if (this.segmented.current == 0) {
+					title = '新增二级代理商';
+					dl_type = 1;
+				} else if (this.segmented.current == 1) {
+					title = '新增三级代理商';
+					dl_type = 2;
+				} else if (this.segmented.current == 2) {
+					title = '新增商户';
+					dl_type = 4;
+					pageType = 'business';
+				}
+			} else if (this.segmented.type == 'two') {
+				if (this.segmented.current == 0) {
+					title = '新增三级代理商';
+					dl_type = 2;
+				} else if (this.segmented.current == 1) {
+					title = '新增商户';
+					dl_type = 4;
+					pageType = 'business';
+				}
+			} else if (this.segmented.type == 'three') {
+				if (this.segmented.current == 0) {
+					title = '新增商户';
+					dl_type = 4;
+					pageType = 'business';
+				}
 			}
 			util.gotoPage(`/pages/agency/access?title=${title}&pageType=${pageType}&action=add&dl_type=${dl_type}`);
 		},
@@ -227,6 +305,88 @@ export default {
 			this.loadNewsList('add');
 		},
 
+		oneParam(param) {
+			param.dl_type2 = '0';
+			if (this.tabCurrentIndex == 0) {
+			} else if (this.tabCurrentIndex == 1) {
+				param.state_type = '0';
+			} else if (this.tabCurrentIndex == 2) {
+				param.state_type = '2';
+			}
+		},
+
+		twoParam(param) {
+			param.dl_type2 = '1';
+			if (this.tabCurrentIndex == 1) {
+				param.state_type = '0';
+			} else if (this.tabCurrentIndex == 2) {
+				param.state_type = '2';
+			}
+		},
+
+		threeParam(param) {
+			param.dl_type2 = '2';
+			if (this.tabCurrentIndex == 1) {
+				param.state_type = '0';
+			} else if (this.tabCurrentIndex == 2) {
+				param.state_type = '2';
+			}
+		},
+
+		shopParam(param) {
+			param.dl_type2 = '4';
+			if (this.tabCurrentIndex == 1) {
+				param.state_type = '0';
+			} else if (this.tabCurrentIndex == 2) {
+				param.state_type = '2';
+			}
+		},
+
+		getQueryParam() {
+			let param = {};
+
+			if (this.segmented.type == 'all') {
+				if (this.segmented.current == 0) {
+					this.oneParam(param);
+				} else if (this.segmented.current == 1) {
+					this.twoParam(param);
+				} else if (this.segmented.current == 2) {
+					this.threeParam(param);
+				} else if (this.segmented.current == 3) {
+					this.shopParam(param);
+				}
+			}
+
+			//一级
+			if (this.segmented.type == 'one') {
+				if (this.segmented.current == 0) {
+					this.twoParam(param);
+				} else if (this.segmented.current == 1) {
+					this.threeParam(param);
+				} else if (this.segmented.current == 2) {
+					this.shopParam(param);
+				}
+			}
+
+			//二级代理商，二项
+			if (this.segmented.type == 'two') {
+				if (this.segmented.current == 0) {
+					this.threeParam(param);
+				} else if (this.segmented.current == 1) {
+					this.shopParam(param);
+				}
+			}
+
+			//三级代理商，一项
+			if (this.segmented.type == 'three') {
+				if (this.segmented.current == 0) {
+					this.shopParam(param);
+				}
+			}
+
+			return param;
+		},
+
 		//列表数据
 		loadNewsList(type) {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
@@ -261,38 +421,7 @@ export default {
 				sortBy: ''
 			};
 
-			if (this.segmented.current == 0) {
-				query.dl_type2 = '0';
-				if (this.tabCurrentIndex == 0) {
-				} else if (this.tabCurrentIndex == 1) {
-					query.state_type = '0';
-				} else if (this.tabCurrentIndex == 2) {
-					query.state_type = '2';
-				}
-			} else if (this.segmented.current == 1) {
-				query.dl_type2 = '1';
-				if (this.tabCurrentIndex == 1) {
-					query.state_type = '0';
-				} else if (this.tabCurrentIndex == 2) {
-					query.state_type = '2';
-				}
-			} else if (this.segmented.current == 2) {
-				query.dl_type2 = '2';
-				if (this.tabCurrentIndex == 1) {
-					query.state_type = '0';
-				} else if (this.tabCurrentIndex == 2) {
-					query.state_type = '2';
-				}
-			} else if (this.segmented.current == 3) {
-				query.dl_type2 = '4';
-				if (this.tabCurrentIndex == 1) {
-					query.state_type = '0';
-				} else if (this.tabCurrentIndex == 2) {
-					query.state_type = '2';
-				}
-			}
-
-			// console.log(query);
+			Object.assign(query, this.getQueryParam());
 
 			getAgentPagedList(query).then(async res => {
 				if (type === 'refresh') {
@@ -340,24 +469,64 @@ export default {
 
 		//================================
 
+		getDetailsParam() {
+			let title;
+			let pageType = 'agency';
+			if (this.segmented.type == 'all') {
+				if (this.segmented.current == 0) {
+					title = '一级代理商信息';
+				} else if (this.segmented.current == 1) {
+					title = '二级代理商信息';
+				} else if (this.segmented.current == 2) {
+					title = '三级代理商信息';
+				} else if (this.segmented.current == 3) {
+					title = '商户信息';
+					pageType = 'business';
+				}
+			}
+
+			if (this.segmented.type == 'one') {
+				if (this.segmented.current == 0) {
+					title = '二级代理商信息';
+				} else if (this.segmented.current == 1) {
+					title = '三级代理商信息';
+				} else if (this.segmented.current == 2) {
+					title = '商户信息';
+					pageType = 'business';
+				}
+			}
+
+			if (this.segmented.type == 'two') {
+				if (this.segmented.current == 0) {
+					title = '三级代理商信息';
+				} else if (this.segmented.current == 1) {
+					title = '商户信息';
+					pageType = 'business';
+				}
+			}
+
+			if (this.segmented.type == 'three') {
+				if (this.segmented.current == 1) {
+					title = '商户信息';
+					pageType = 'business';
+				}
+			}
+
+			return {
+				title,
+				pageType
+			};
+		},
+
 		//新闻详情
 		navToDetails(index) {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
 			let data = tabItem.newsList[index];
-			let title;
-			let pageType = 'agency';
-			if (this.segmented.current == 0) {
-				title = '一级代理商信息';
-			} else if (this.segmented.current == 1) {
-				title = '二级代理商信息';
-			} else if (this.segmented.current == 2) {
-				title = '三级代理商信息';
-			} else if (this.segmented.current == 3) {
-				title = '商户信息';
-				pageType = 'business';
-			}
+			let param = this.getDetailsParam();
 			util.gotoPage(
-				`/pages/agency/access?agentData=${JSON.stringify(data)}&title=${title}&pageType=${pageType}`
+				`/pages/agency/access?agentData=${JSON.stringify(data)}&title=${param.title}&pageType=${
+					param.pageType
+				}`
 			);
 		},
 
@@ -453,7 +622,7 @@ page,
 	&__add {
 		font-size: 22rpx;
 		position: absolute;
-		right: 30rpx;
+		right: 10rpx;
 		top: 32rpx;
 		&:active {
 			color: #007aff;
