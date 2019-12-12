@@ -106,13 +106,13 @@ export default {
 					if (data == '000') {
 						this.$refs['Message'].success('修改成功');
 					} else if (data == '001') {
-						this.$refs['Message'].success('用户未登陆');
+						this.$refs['Message'].error('用户未登陆');
 					} else if (data == '002') {
-						this.$refs['Message'].success('两次新密码不一致');
+						this.$refs['Message'].error('两次新密码不一致');
 					} else if (data == '003') {
-						this.$refs['Message'].success('原密码错误');
+						this.$refs['Message'].error('原密码错误');
 					} else if (data == '004') {
-						this.$refs['Message'].success('修改失败');
+						this.$refs['Message'].error('修改失败');
 					}
 				})
 				.catch(err => {

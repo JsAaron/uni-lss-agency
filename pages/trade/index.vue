@@ -46,7 +46,7 @@
 						v-for="(item, index) in agentData.newsList"
 						:key="index"
 					>
-						<view>
+						<view class="content__row-left">
 							<view>{{ item.agentname }}</view>
 							<view>{{ item.mer_order_id }}</view>
 							<view>{{ item.order_time2 }}</view>
@@ -230,7 +230,7 @@ export default {
 
 			let query = {
 				pageIndex: ++agentItem.pageIndex,
-				pageSize: 10,
+				pageSize: 30,
 				sortBy: '',
 				parent_agentid: this.agentid,
 				start_time: this.startDataValue,
@@ -295,12 +295,12 @@ export default {
 		getColor(item) {
 			if (item.return_code == '0000') {
 				if (item.refund_no != '') {
-					return '#FF7F24';
+					return '#FFA500';
 				} else {
 					return '#6495ED';
 				}
 			} else {
-				return 'red';
+				return '#FF4040';
 			}
 		},
 
@@ -379,8 +379,14 @@ export default {
 	&__row {
 		@include flex-h-between;
 		padding: 20rpx 20rpx;
-		font-size: 25rpx;
+		font-size: 28rpx;
 		color: #363636;
+	}
+	&__row-left{
+		line-height: 150%;
+		view:not(:first-child){
+			color: #999;
+		}
 	}
 	&__col {
 		display: flex;

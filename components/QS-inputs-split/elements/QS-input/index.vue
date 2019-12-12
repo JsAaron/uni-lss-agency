@@ -192,7 +192,7 @@
 				default () {
 					return {
 						openInputDebounce: false,
-						delay: 200
+						delay: 0
 					};
 				}
 			}
