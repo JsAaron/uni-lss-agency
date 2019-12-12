@@ -15,6 +15,7 @@ export default {
 	props: {},
 	created() {},
 	onLoad() {
+
 		//跳过广告
 		let testUrl = simulate();
 		if (testUrl) {
