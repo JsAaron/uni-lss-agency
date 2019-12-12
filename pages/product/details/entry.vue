@@ -412,6 +412,7 @@
 				:name="formName2"
 				variableName="alipay_account"
 				ref="ref_alipay_account"
+				required
 				title="商家支付宝账号"
 				v-model="fromValue2.alipay_account"
 			></QSInput>
@@ -1061,6 +1062,10 @@ export default {
 		getStep2(res) {
 			QSApp.getForm(this.formName2)
 				.then(res => {
+					if (!res.data.alipay_account) {
+						this.$refs['Message'].error('商家支付宝账号输入错误');
+						return
+					}
 					uni.showModal({
 						content: '确认进件操作？',
 						success: data => {

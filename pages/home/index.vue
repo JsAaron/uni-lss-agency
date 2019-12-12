@@ -195,16 +195,6 @@ export default {
 						}
 					}
 				});
-			} else {
-				uni.showModal({
-					title: '特别提示',
-					content: '请授权摄像头,否则上传图片将无法直接用摄像头拍照图',
-					success: function(res) {
-						if (res.confirm) {
-							permision.gotoAppPermissionSetting();
-						}
-					}
-				});
 			}
 		},
 

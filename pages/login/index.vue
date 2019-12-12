@@ -20,7 +20,7 @@
 				password
 				placeholder="请输入密码"
 			/>
-			<view class="zai-label" @click="onFindPasswrod">忘记密码？</view>
+			<!-- <view class="zai-label" @click="onFindPasswrod">忘记密码？</view> -->
 
 			<WButton
 				text="立即登录"
