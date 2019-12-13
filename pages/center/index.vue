@@ -37,122 +37,145 @@
 			</view>
 		</view>
 
-		<WButton
-			text="退出登录"
-			@click.native="onExit()"
-			bgColor="rgb(47, 133, 252)"
-		></WButton>
-		
+		<WButton text="退出登录" @click.native="onExit()" bgColor="rgb(47, 133, 252)"></WButton>
+
 	</view>
 </template>
 
 <script>
-import * as util from '@/utils';
-import { mapState, mapActions } from 'vuex';
-import setting from '@/setting.js'
+	import * as util from '@/utils';
+	import {
+		mapState,
+		mapActions
+	} from 'vuex';
+	import setting from '@/setting.js'
+	import {
+		upgrade
+	} from '@/api/user';
+	export default {
 
-export default {
-	components: {},
-	data() {	
-		return {
-			hasUpdate:false,
-			show:false,
-			version:setting.releases.version,
-			create_date:'',
-			wx:'',
-			zfb:'',
-			mobileno:'',
-			user_name: ''
-		};
-	},
-	onLoad() {
-		if(getApp().globalData.update.has){
-			this.hasUpdate = true
-		}
-		this.dl_type = util.cookies.get('dl_type');
-		if(this.dl_type != '-1'){
-			this.show = true
-		} 
-		this.user_name = util.cookies.get('user_name')
-		this.create_date= util.cookies.get('create_date')
-		this.wx= util.cookies.get('wx')
-		this.zfb= util.cookies.get('zfb')
-		this.mobileno= util.cookies.get('mobileno')
-	},
-	props: {},
-	created() {},
-	methods: {
-		...mapActions('account', ['logout']),
-		onAmend() {
-			util.gotoPage('/pages/center/amend');
+		components: {},
+		data() {
+			return {
+				hasUpdate: false,
+				show: false,
+				version: setting.releases.version,
+				create_date: '',
+				wx: '',
+				zfb: '',
+				mobileno: '',
+				user_name: ''
+			};
 		},
-		onExit() {
-			uni.showModal({
-				content: '退出登录?',
-				success: res => {
-					if (res.confirm) {
-						this.logout();
-						util.gotoPage('reLaunch', '/pages/login/index');
+		onLoad() {
+			this.androidCheckUpdate()
+			this.dl_type = util.cookies.get('dl_type');
+			if (this.dl_type != '-1') {
+				this.show = true
+			}
+			this.user_name = util.cookies.get('user_name')
+			this.create_date = util.cookies.get('create_date')
+			this.wx = util.cookies.get('wx')
+			this.zfb = util.cookies.get('zfb')
+			this.mobileno = util.cookies.get('mobileno')
+		},
+		props: {},
+		created() {},
+		methods: {
+			...mapActions('account', ['logout']),
+			onAmend() {
+				util.gotoPage('/pages/center/amend');
+			},
+			onExit() {
+				uni.showModal({
+					content: '退出登录?',
+					success: res => {
+						if (res.confirm) {
+							this.logout();
+							util.gotoPage('reLaunch', '/pages/login/index');
+						}
 					}
-				}
-			});
-		},
-		onGoToUpdate(){
-			util.gotoPage('/pages/center/update');
+				});
+			},
+			onGoToUpdate() {
+				util.gotoPage('/pages/center/update?url=' + this.hasUpdateUrl);
+			},
+			/**
+			 * 安卓应用的检测更新实现
+			 */
+			androidCheckUpdate() {
+				upgrade({
+					appType: '3',
+					appVersion: setting.releases.version.split('.').join(''),
+					xt_id: util.cookies.get('xt_id')
+				}).then(data => {
+					console.log(data)
+					data = JSON.parse(data);
+					if (data.ssupdate == 1) {
+						this.hasUpdateUrl = data.url
+						this.hasUpdate = true
+					}
+				}).catch((res) => {
+					console.log(res)
+				})
+			}
 		}
-	}
-};
+	};
 </script>
 
 <style lang="scss">
-.header {
-	@include flex-v;
-	height: 350rpx;
-	width: 100%;
-	background-image: url('~@/static/img/logo.jpg');
-	background-size: cover;
-	color: #ffffff;
+	.header {
+		@include flex-v;
+		height: 350rpx;
+		width: 100%;
+		background-image: url('~@/static/img/logo.jpg');
+		background-size: cover;
+		color: #ffffff;
 
-	&__password {
-		margin-top: 30rpx;
-		color: #007aff;
-		background: #fff;
-		border-radius: 20px;
-		padding: 7rpx 25rpx;
-		font-size: 25rpx;
-	}
-	&__text {
-		font-size: 20px;
-	}
-}
+		&__password {
+			margin-top: 30rpx;
+			color: #007aff;
+			background: #fff;
+			border-radius: 20px;
+			padding: 7rpx 25rpx;
+			font-size: 25rpx;
+		}
 
-.list {
-	background-color: #fff;
-	&__row {
-		@include flex-h-between;
-		padding: 20rpx 30rpx;
-		font-size: 28rpx;
-		> text {
-			padding: 10rpx 0;
+		&__text {
+			font-size: 20px;
 		}
 	}
-}
-.update{
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	&__content{
+
+	.list {
+		background-color: #fff;
+
+		&__row {
+			@include flex-h-between;
+			padding: 20rpx 30rpx;
+			font-size: 28rpx;
+
+			>text {
+				padding: 10rpx 0;
+			}
+		}
+	}
+
+	.update {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 40rpx;
-		height: 40rpx;
-		border-radius: 50%;
-		font-size: 28rpx;
-		background: red;
-		color: #FFF;
-		margin: 0 20rpx;
-	}
-}
 
+		&__content {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 40rpx;
+			height: 40rpx;
+			border-radius: 50%;
+			font-size: 28rpx;
+			background: red;
+			color: #FFF;
+			margin: 0 20rpx;
+		}
+	}
 </style>

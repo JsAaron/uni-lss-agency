@@ -1,7 +1,5 @@
 <script>
-import { upgrade } from '@/api/user';
-import setting from '@/setting.js'; 
-import * as util from '@/utils';
+
 export default {
 	globalData: {
 		product: {},
@@ -73,7 +71,7 @@ export default {
 		});
 		// #endif
 
-		this.androidCheckUpdate()
+	
 	},
 
 	onShow: function() {
@@ -83,25 +81,7 @@ export default {
 		console.log('App Hide');
 	},
 	methods: {
-		/**
-		 * 安卓应用的检测更新实现
-		 */
-		androidCheckUpdate() { 
-			upgrade({
-				appType: '3',
-				appVersion: setting.releases.version.split('.').join(''),
-				xt_id: util.cookies.get('xt_id')
-			}).then(data => {
-				console.log(data)
-				data = JSON.parse(data);
-				this.globalData.update = {
-					has: data.ssupdate == 1 ? true : false,
-					url: data.url
-				};
-			}).catch((res)=>{
-				console.log(res)
-			})
-		}
+
 	}
 };
 </script>
