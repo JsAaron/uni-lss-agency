@@ -1,9 +1,9 @@
 {
-    "name" : "刷就刷代理商版",
+    "name" : "乐讯智付代理商版",
     "appid" : "__UNI__097F247",
-    "description" : "刷就刷代理商版",
-    "versionName" : "1.1.8",
-    "versionCode" : 118,
+    "description" : "乐讯智付代理商版",
+    "versionName" : "1.0.1",
+    "versionCode" : 101,
     "transformPx" : false,
     "uniStatistics" : {
         "enable" : true
