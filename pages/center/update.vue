@@ -1,10 +1,8 @@
 <template>
 	<view>
-				<message ref="Message"></message>
 		<view class="header">
 			<text class="header__text">{{ user_name }}</text>
 		</view>
-
 		<WButton text="下载更新" :rotate="isRotate" @click.native="onUpdate()" bgColor="rgb(47, 133, 252)"></WButton>
 		<view class="update-pocess" v-if="isRotate">
 			<text>下载进度:{{percent}}</text>
@@ -30,7 +28,7 @@
 			};
 		},
 		onLoad(option) {
-			this.url = ""
+			this.url = option.url
 			this.user_name = util.cookies.get('user_name');
 		},
 		props: {},
@@ -47,14 +45,24 @@
 				var dtask = plus.downloader.createDownload(this.url, {}, (d, status) => {
 					// 下载完成
 					if (status == 200) {
+						uni.hideToast()
 						plus.runtime.install(plus.io.convertLocalFileSystemURL(d.filename), {}, {}, error => {
-							this.$refs['Message'].success('安装成功');
-							plus.runtime.restart();
 							this.isRotate = false;
+							uni.showToast({
+								icon: 'none',
+								mask: true,
+								title: '安装成功',
+								duration: 1500
+							});
+							plus.runtime.restart();
 						});
 					} else {
-						uni.hideToast()
-						this.$refs['Message'].error('更新失败');
+						uni.showToast({
+							icon: 'none',
+							mask: true,
+							title: '下载失败',
+							duration: 1500
+						});
 						this.isRotate = false;
 					}
 				});

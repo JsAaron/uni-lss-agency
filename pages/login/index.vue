@@ -94,8 +94,7 @@ export default {
 }
 .zai-logo {
 	width: 100%;
-	width: 100%;
-	height: 510upx;
+	height: 200rpx;
 }
 .zai-title {
 	position: absolute;
