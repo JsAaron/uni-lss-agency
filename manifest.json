@@ -2,8 +2,8 @@
     "name" : "刷就刷代理商版",
     "appid" : "__UNI__097F247",
     "description" : "刷就刷代理商版",
-    "versionName" : "1.1.7",
-    "versionCode" : 117,
+    "versionName" : "1.1.8",
+    "versionCode" : 118,
     "transformPx" : false,
     "uniStatistics" : {
         "enable" : true
@@ -36,10 +36,10 @@
             "sdkConfigs" : {},
             "icons" : {
                 "android" : {
-                    "hdpi" : "C:/Users/Administrator/Desktop/app/刷就刷/hdpi应用图标（72）.png",
-                    "xhdpi" : "C:/Users/Administrator/Desktop/app/刷就刷/xhdpi应用图标（96）.png",
-                    "xxhdpi" : "C:/Users/Administrator/Desktop/app/刷就刷/xxhdpi分屏程序图标（144）.png",
-                    "xxxhdpi" : "C:/Users/Administrator/Desktop/app/刷就刷/xxxhdpi分屏程序图标（192）.png"
+                    "hdpi" : "/Users/wen/资料/新建文件夹 (2)/刷就刷/hdpi应用图标（72）.png",
+                    "xhdpi" : "/Users/wen/资料/新建文件夹 (2)/刷就刷/xhdpi应用图标（96）.png",
+                    "xxhdpi" : "/Users/wen/资料/新建文件夹 (2)/刷就刷/xxhdpi分屏程序图标（144）.png",
+                    "xxxhdpi" : "/Users/wen/资料/新建文件夹 (2)/刷就刷/xxxhdpi分屏程序图标（192）.png"
                 }
             },
             "splashscreen" : {

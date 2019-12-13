@@ -1,11 +1,12 @@
 <script>
-
+import { upgrade } from '@/api/user';
+import setting from '@/setting.js'; 
+import * as util from '@/utils';
 export default {
 	globalData: {
-		
-		product:{},
-		agency:{},
-		
+		product: {},
+		agency: {},
+		update: {},
 		route: {}, //路由页面
 		/**
 		 * 设置需要刷新的路由页面
@@ -32,9 +33,9 @@ export default {
 		}
 	},
 
-	onLaunch: function() {
+	onLaunch() {
 		console.log('App Launch');
-		
+
 		// #ifdef APP-NVUE
 		plus.screen.lockOrientation('portrait-primary');
 
@@ -71,12 +72,36 @@ export default {
 			src: "url('./static/text-icon.ttf')"
 		});
 		// #endif
+
+		this.androidCheckUpdate()
 	},
+
 	onShow: function() {
 		console.log('App Show');
 	},
 	onHide: function() {
 		console.log('App Hide');
+	},
+	methods: {
+		/**
+		 * 安卓应用的检测更新实现
+		 */
+		androidCheckUpdate() { 
+			upgrade({
+				appType: '3',
+				appVersion: setting.releases.version.split('.').join(''),
+				xt_id: util.cookies.get('xt_id')
+			}).then(data => {
+				console.log(data)
+				data = JSON.parse(data);
+				this.globalData.update = {
+					has: data.ssupdate == 1 ? true : false,
+					url: data.url
+				};
+			}).catch((res)=>{
+				console.log(res)
+			})
+		}
 	}
 };
 </script>
@@ -91,7 +116,7 @@ page {
 	// font-family: "PingFang SC", Helvetica, "STHeiti STXihei", "Microsoft YaHei",
 	//   Tohoma, Arial, sans-serif;
 	font-family: Arial;
-	background-color: #F9F8FD;
+	background-color: #f9f8fd;
 	position: relative;
 	font-size: 16px;
 	font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;

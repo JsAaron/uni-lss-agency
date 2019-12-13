@@ -26,7 +26,7 @@
 				<text>版本号</text>
 				<text>{{version}}</text>
 			</view>
-			<view class="list__row lss-hairline--bottom" @click="onGoToUpdate">
+			<view class="list__row lss-hairline--bottom" v-if="hasUpdate" @click="onGoToUpdate">
 				<text>版本更新</text>
 				<view class="update">
 					<text>发现新版本</text>
@@ -50,10 +50,12 @@
 import * as util from '@/utils';
 import { mapState, mapActions } from 'vuex';
 import setting from '@/setting.js'
+
 export default {
 	components: {},
 	data() {	
 		return {
+			hasUpdate:false,
 			show:false,
 			version:setting.releases.version,
 			create_date:'',
@@ -64,10 +66,13 @@ export default {
 		};
 	},
 	onLoad() {
+		if(getApp().globalData.update.has){
+			this.hasUpdate = true
+		}
 		this.dl_type = util.cookies.get('dl_type');
 		if(this.dl_type != '-1'){
 			this.show = true
-		}
+		} 
 		this.user_name = util.cookies.get('user_name')
 		this.create_date= util.cookies.get('create_date')
 		this.wx= util.cookies.get('wx')
