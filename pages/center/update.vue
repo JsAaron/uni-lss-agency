@@ -2,44 +2,10 @@
 	<view>
 		<view class="header">
 			<text class="header__text">{{ user_name }}</text>
-			<view class="header__password" @click="onAmend">修改密码</view>
-		</view>
-
-		<view class="list">
-			<view class="list__row lss-hairline--bottom">
-				<text>手机</text>
-				<text>{{mobileno}}</text>
-			</view>
-			<view class="list__row lss-hairline--bottom">
-				<text>加入时间</text>
-				<text>{{create_date}}</text>
-			</view>
-			<view v-if="show" class="list__row lss-hairline--bottom">
-				<text>微信分润</text>
-				<text>{{wx}}%</text>
-			</view>
-			<view v-if="show" class="list__row lss-hairline--bottom">
-				<text>支付宝分润</text>
-				<text>{{zfb}}%</text>
-			</view>
-			<view class="list__row lss-hairline--bottom">
-				<text>版本号</text>
-				<text>{{version}}</text>
-			</view>
-			<view class="list__row lss-hairline--bottom" @click="onGoToUpdate">
-				<text>版本更新</text>
-				<view class="update">
-					<text>发现新版本</text>
-					<text class="update__content">
-						<text>1</text>
-					</text>
-				</view>
-			</view>
 		</view>
 
 		<WButton
-			text="退出登录"
-			@click.native="onExit()"
+			text="下载更新"
 			bgColor="rgb(47, 133, 252)"
 		></WButton>
 		

@@ -66,6 +66,13 @@
 		},
 
 		{
+			"path": "pages/center/update",
+			"style": {
+				"navigationBarTitleText": "软件更新"
+			}
+		},
+
+		{
 			"path": "pages/agency/index",
 			"style": {
 				"navigationBarTitleText": "代理/商户"

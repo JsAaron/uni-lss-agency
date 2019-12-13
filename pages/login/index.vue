@@ -3,7 +3,6 @@
 		<message ref="Message"></message>
 		<view class="status_bar"></view>
 		<image src="../../static/img/login.png" mode="aspectFit" class="zai-logo"></image>
-		<view class="zai-title">纯支付代理商</view>
 		<view class="zai-form">
 			<input
 				class="zai-input"
@@ -85,7 +84,7 @@ export default {
 
 <style>
 .status_bar {
-	height: var(--status-bar-height);
+	height: calc(var(--status-bar-height) + 50px);
 	width: 100%;
 }
 
@@ -110,13 +109,19 @@ export default {
 }
 .zai-form {
 	margin-top: 100upx;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
 }
+
 .zai-input {
 	background: #e2f5fc;
 	margin-top: 30upx;
 	border-radius: 100upx;
 	padding: 20upx 40upx;
 	font-size: 36upx;
+	width: 500rpx;
 }
 .input-placeholder,
 .zai-input {
