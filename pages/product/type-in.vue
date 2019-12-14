@@ -146,7 +146,6 @@
 				variableName="pic_2"
 				ref="ref_pic_2"
 				customId="typein"
-				required
 				title="补充材料"
 				v-model="fromValue0.pic_2"
 			></QSPics>

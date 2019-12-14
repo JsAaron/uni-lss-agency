@@ -1,9 +1,9 @@
 {
-    "name" : "乐讯智付代理商版",
+    "name" : "森阳科技代理商版",
     "appid" : "__UNI__097F247",
-    "description" : "乐讯智付代理商版",
-    "versionName" : "1.0.1",
-    "versionCode" : 101,
+    "description" : "森阳科技代理商版",
+    "versionName" : "2.0.1",
+    "versionCode" : 201,
     "transformPx" : false,
     "uniStatistics" : {
         "enable" : true
@@ -36,10 +36,10 @@
             "sdkConfigs" : {},
             "icons" : {
                 "android" : {
-                    "hdpi" : "/Users/wen/资料/新建文件夹 (2)/乐讯智付/乐讯智付72.png",
-                    "xhdpi" : "/Users/wen/资料/新建文件夹 (2)/乐讯智付/乐讯智付96.png",
-                    "xxhdpi" : "/Users/wen/资料/新建文件夹 (2)/乐讯智付/乐讯智付144.png",
-                    "xxxhdpi" : "/Users/wen/资料/新建文件夹 (2)/乐讯智付/乐讯智付192.png"
+                    "hdpi" : "/Users/wen/资料/新建文件夹 (2)/森阳科技/森阳科技72.png",
+                    "xhdpi" : "/Users/wen/资料/新建文件夹 (2)/森阳科技/森阳科技96.png",
+                    "xxhdpi" : "/Users/wen/资料/新建文件夹 (2)/森阳科技/森阳科技144.png",
+                    "xxxhdpi" : "/Users/wen/资料/新建文件夹 (2)/森阳科技/森阳科技192.png"
                 }
             },
             "splashscreen" : {
