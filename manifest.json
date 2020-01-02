@@ -1,9 +1,9 @@
 {
-    "name" : "乐讯智付代理商版",
+    "name" : "蚁牧科技代理商版",
     "appid" : "__UNI__097F247",
-    "description" : "乐讯智付代理商版",
-    "versionName" : "2.0.1",
-    "versionCode" : 201,
+    "description" : "蚁牧科技代理商版",
+    "versionName" : "2.0.2",
+    "versionCode" : 202,
     "transformPx" : false,
     "uniStatistics" : {
         "enable" : true
@@ -36,10 +36,10 @@
             "sdkConfigs" : {},
             "icons" : {
                 "android" : {
-                    "hdpi" : "C:/Users/Administrator/Desktop/app/乐讯智付/乐讯智付72.png",
-                    "xhdpi" : "C:/Users/Administrator/Desktop/app/乐讯智付/乐讯智付96.png",
-                    "xxhdpi" : "C:/Users/Administrator/Desktop/app/乐讯智付/乐讯智付144.png",
-                    "xxxhdpi" : "C:/Users/Administrator/Desktop/app/乐讯智付/乐讯智付192.png"
+                    "hdpi" : "C:/Users/Administrator/Desktop/app/脸付/图层 3 拷贝.png",
+                    "xhdpi" : "C:/Users/Administrator/Desktop/app/脸付/图层 3 拷贝.png",
+                    "xxhdpi" : "C:/Users/Administrator/Desktop/app/脸付/图层 3 拷贝.png",
+                    "xxxhdpi" : "C:/Users/Administrator/Desktop/app/脸付/图层 3 拷贝.png"
                 }
             },
             "splashscreen" : {
