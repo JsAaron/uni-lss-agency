@@ -101,12 +101,7 @@
 
 				<view class="qiun-columns">
 					<view class="qiun-charts">
-						<canvas
-							canvas-id="canvasRing"
-							id="canvasRing"
-							class="charts"
-							@touchstart="touchRing"
-						></canvas>
+						<canvas canvas-id="canvasRing" id="canvasRing" class="charts" @touchstart="touchRing"></canvas>
 					</view>
 				</view>
 
@@ -141,6 +136,8 @@ import mStatistics from './statistics.vue';
 import uCharts from '@/components/u-charts/u-charts.js';
 import MescrollUni from '@/components/mescroll-uni/mescroll-uni.vue';
 import permision from '@/js_sdk/wa-permission/permission.js';
+import dayjs from 'dayjs';
+
 export default {
 	components: {
 		mTrade,
@@ -290,35 +287,18 @@ export default {
 			this.updateCharts();
 		},
 
-		getFormatDate(index = 1) {
-			var date = new Date(); //获取当前时间
-			date.setDate(date.getDate() - index); //设置天数 -1 天
-			return date.Format('yyyy-MM-dd');
-		},
-
-		dateConversion(value) {
-			var d = new Date(value);
-			var date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-			return date;
+		getFormatDate(index = 0) {
+			return dayjs().subtract(index, 'day').format('YYYY-MM-DD');
 		},
 
 		getDate(type) {
-			const date = new Date();
-			let year = date.getFullYear();
-			let month = date.getMonth() + 1;
-			let day = date.getDate();
-
+			let djs = dayjs();
 			if (type === 'start') {
-				year = year - 60;
-			} else if (type === 'end') {
-				year = year + 2;
-			} else if (type === 'pre') {
-				month = month - 1;
+				return djs.subtract(10, 'year').format('YYYY-MM-DD');
 			}
-
-			month = month > 9 ? month : '0' + month;
-			day = day > 9 ? day : '0' + day;
-			return `${year}-${month}-${day}`;
+			if (type === 'end') {
+				return djs.add(1, 'year').format('YYYY-MM-DD');
+			}
 		},
 
 		getTableDataPayjyje() {
@@ -473,7 +453,7 @@ export default {
 		width: 10rpx;
 		height: 30rpx;
 		background: rgb(96, 168, 252);
-		&--w{
+		&--w {
 			background: #fff;
 		}
 	}

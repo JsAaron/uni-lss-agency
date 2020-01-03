@@ -1,14 +1,16 @@
 <template>
 	<view class="container">
-		<sl-filter
-			class="sl-filter"
-			:independence="true"
-			:color="titleColor"
-			:themeColor="themeColor"
-			:menuList.sync="menuList"
-			:topFixed="true"
-			@result="onFilter"
-		></sl-filter>
+		<view class="sl-filter">
+			<sl-filter
+				:independence="true"
+				:color="titleColor"
+				:themeColor="themeColor"
+				:menuList.sync="menuList"
+				:topFixed="true"
+				@result="onFilter"
+			></sl-filter>
+		</view>
+
 		<mix-pulldown-refresh
 			ref="mixPulldownRefresh"
 			class="panel-content"
@@ -122,7 +124,7 @@ export default {
 			menuList: [
 				{
 					title: '支付日期',
-					key: 'pay_date',
+					key: 'filter_date',
 					detailTitle: '请选择支付时间段',
 					isMutiple: false,
 					reflexTitle: true,
@@ -130,7 +132,7 @@ export default {
 				},
 				{
 					title: '支付方式',
-					key: 'pay_type',
+					key: 'filter_type',
 					detailTitle: '请选择支付方式（单选）',
 					isMutiple: false,
 					reflexTitle: true,
@@ -159,7 +161,7 @@ export default {
 				},
 				{
 					title: '支付状态',
-					key: 'pay_state',
+					key: 'filter_state',
 					detailTitle: '请选择支付状态（单选）',
 					isMutiple: false,
 					reflexTitle: true,
@@ -309,26 +311,26 @@ export default {
 			this.loadNewsList('refresh');
 		},
 
-		onFilter(val) {
-			if (val.hasOwnProperty('pay_date')) {
-				if (val.pay_date.start) {
-					this.startDataValue = val.pay_date.start;
+		onFilter(data) {
+			if (data.hasOwnProperty('filter_date')) {
+				if (data.filter_date) {
+					this.startDataValue = data.filter_date.start
+					this.endDataValue = data.filter_date.end
+					this.resetPageData();
 				}
-				if (val.pay_date.end) {
-					this.endDataValue = val.pay_date.end;
-				}
+			}
+
+			if (data.hasOwnProperty('filter_type')) {
+				this.searchForm.pay_type = data.filter_type;
 				this.resetPageData();
 			}
-			if (val.hasOwnProperty('pay_type')) {
-				this.searchForm.pay_type = val.pay_type;
-				this.resetPageData();
-			}
-			if (val.hasOwnProperty('pay_state')) {
-				this.searchForm.pay_state = val.pay_state;
+			
+			if (data.hasOwnProperty('filter_state')) {
+				this.searchForm.pay_state = data.filter_state;
 				this.resetPageData();
 			}
 		},
-
+ 
 		getTableDataMx() {
 			let query = {
 				parent_agentid: this.agentid,
@@ -382,9 +384,9 @@ export default {
 		font-size: 28rpx;
 		color: #363636;
 	}
-	&__row-left{
+	&__row-left {
 		line-height: 150%;
-		view:not(:first-child){
+		view:not(:first-child) {
 			color: #999;
 		}
 	}

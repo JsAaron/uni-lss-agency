@@ -1,4 +1,5 @@
 import axios from '@/js_sdk/gangdiedao-uni-axios'
+import setting from '@/setting.js';
 
 /**
  * 请求接口日志记录
@@ -21,7 +22,7 @@ function _reslog(res) {
 
 // 创建自定义接口服务实例
 const service = axios.create({
-	baseURL: "http://47.104.153.115:8080/7080Sys",
+	baseURL: setting.baseURL,
 	timeout: 6000,
 	// #ifdef H5
 	withCredentials: true,

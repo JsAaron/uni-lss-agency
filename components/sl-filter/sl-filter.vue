@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<view :style="{ height: tabHeight + 1 + 'px' }">
+		<view :style="{ height: tabHeight  + 'px' }">
 			<view
 				:class="topFixed ? 'select-tab-fixed-top' : 'select-tab'"
 				:style="{ height: tabHeight + 'px' }"
@@ -307,6 +307,10 @@ export default {
 
 .arrows {
 	margin-left: 5px;
+}
+
+.select-tab .select-tab-item{
+	margin: 0 auto;
 }
 
 .select-tab .select-tab-item,

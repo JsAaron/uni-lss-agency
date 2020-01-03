@@ -29,8 +29,12 @@
 						<text>{{ item.detailTitle }}</text>
 					</view>
 					<view class="filter-content-detail">
+						<!-- 新增搜索 -->
+						<view v-if="item.key == 'filter_search'">
+							<uni-search-bar :radius="50" :cancelButton="none" @input="input"></uni-search-bar>
+						</view>
 						<!-- 新增日期 -->
-						<view class="filter-date-item" v-if="item.key == 'pay_date'">
+						<view class="filter-date-item" v-else-if="item.key == 'filter_date'">
 							<view class="filter-date">
 								<picker
 									class="filter-date-picker"
@@ -92,16 +96,17 @@
 </template>
 
 <script>
+import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue';
+import dayjs from 'dayjs';
+
 export default {
+	components: { uniSearchBar },
 	data() {
-		const currentDate = this.getDate({
-			format: true
-		});
 		return {
 			title: 'picker',
 			index: 0,
-			startDataValue: this.getDate('last'),
-			endDataValue: currentDate,
+			startDataValue: this.getDate('oneMonth'),
+			endDataValue: this.getDate(),
 
 			selectArr: [],
 			result: {},
@@ -160,9 +165,15 @@ export default {
 		}
 	},
 	methods: {
+		input(e) {
+			this.result = {
+				filter_search: e.value
+			};
+		},
+
 		initDate() {
 			this.result = {
-				pay_date: {
+				filter_date: {
 					start: this.startDataValue,
 					end: this.endDataValue
 				}
@@ -180,22 +191,17 @@ export default {
 		},
 
 		getDate(type) {
-			const date = new Date();
-			let year = date.getFullYear();
-			let month = date.getMonth() + 1;
-			let day = date.getDate();
-
+			let djs = dayjs();
 			if (type === 'start') {
-				year = year - 60;
-			} else if (type === 'end') {
-				year = year + 2;
-			} else if (type === 'last') {
-				month = month - 1;
+				return djs.subtract(10, 'year').format('YYYY-MM-DD');
 			}
-
-			month = month > 9 ? month : '0' + month;
-			day = day > 9 ? day : '0' + day;
-			return `${year}-${month}-${day}`;
+			if (type === 'end') {
+				return djs.add(1, 'year').format('YYYY-MM-DD');
+			}
+			if (type == 'oneMonth') {
+				return djs.subtract(1, 'month').format('YYYY-MM-DD');
+			}
+			return djs.format('YYYY-MM-DD');
 		},
 
 		getSelectedObj() {
@@ -509,12 +515,9 @@ export default {
 			this.$emit('confirm', obj);
 		},
 		resetClick(list, key) {
-			if (key == 'date') {
-				const currentDate = this.getDate({
-					format: true
-				});
-				this.startDataValue = this.getDate('last');
-				this.endDataValue = currentDate;
+			if (key == 'filter_date') {
+				this.startDataValue = this.getDate('oneMonth');
+				this.endDataValue = this.getDate();
 			} else {
 				this.resetSelected(list, key);
 			}
