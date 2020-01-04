@@ -389,6 +389,7 @@ export default {
 		view:not(:first-child) {
 			color: #999;
 		}
+		width:350rpx;
 	}
 	&__col {
 		display: flex;
