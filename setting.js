@@ -7,11 +7,11 @@ export default {
 	imgPrefixUrl:'https://img.facess.net',	//图片域名替换地址'
 	impUpLoadUrl:'https://lss.facess.net/7080Sys/moblieapp/currencyUpload', // 服务器地址(上传图片)
 
-	appName:'森阳科技代理商版',
+	appName:'森阳智付代理商版',
 	
 	// 版本
 	releases: {
-		version: "2.0.2"
+		version: "2.0.4"
 	},
 	
 	// 在读取持久化数据失败时默认用户信息

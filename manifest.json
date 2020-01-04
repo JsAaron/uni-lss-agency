@@ -1,9 +1,9 @@
 {
-    "name" : "蚁牧科技代理商版",
+    "name" : "森阳智付代理商版",
     "appid" : "__UNI__097F247",
-    "description" : "蚁牧科技代理商版",
-    "versionName" : "2.0.2",
-    "versionCode" : 202,
+    "description" : "森阳智付代理商版",
+    "versionName" : "2.0.4",
+    "versionCode" : 204,
     "transformPx" : false,
     "uniStatistics" : {
         "enable" : true
@@ -36,10 +36,10 @@
             "sdkConfigs" : {},
             "icons" : {
                 "android" : {
-                    "hdpi" : "C:/Users/Administrator/Desktop/app/脸付/图层 3 拷贝.png",
-                    "xhdpi" : "C:/Users/Administrator/Desktop/app/脸付/图层 3 拷贝.png",
-                    "xxhdpi" : "C:/Users/Administrator/Desktop/app/脸付/图层 3 拷贝.png",
-                    "xxxhdpi" : "C:/Users/Administrator/Desktop/app/脸付/图层 3 拷贝.png"
+                    "hdpi" : "/Users/wen/资料/新建文件夹 (2)/森阳科技/森阳科技72.png",
+                    "xhdpi" : "/Users/wen/资料/新建文件夹 (2)/森阳科技/森阳科技96.png",
+                    "xxhdpi" : "/Users/wen/资料/新建文件夹 (2)/森阳科技/森阳科技144.png",
+                    "xxxhdpi" : "/Users/wen/资料/新建文件夹 (2)/森阳科技/森阳科技192.png"
                 }
             },
             "splashscreen" : {

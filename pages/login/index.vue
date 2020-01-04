@@ -42,13 +42,13 @@ import { mapGetters, mapMutations, mapState, mapActions } from 'vuex';
 import { $$set, $$get } from '@/common/global';
 import setting from '@/setting.js';
 export default {
-	data() {
+	data() {	
 		return {
 			appName:setting.appName,
 			isRotate: false,
-			username: '',
+			username: util.cookies.get('login_name') || '',
 			password: ''
-		};
+		}; 
 	},
 	props: {},
 	created() {},

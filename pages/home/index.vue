@@ -101,7 +101,12 @@
 
 				<view class="qiun-columns">
 					<view class="qiun-charts">
-						<canvas canvas-id="canvasRing" id="canvasRing" class="charts" @touchstart="touchRing"></canvas>
+						<canvas
+							canvas-id="canvasRing"
+							id="canvasRing"
+							class="charts"
+							@touchstart="touchRing"
+						></canvas>
 					</view>
 				</view>
 
@@ -137,6 +142,8 @@ import uCharts from '@/components/u-charts/u-charts.js';
 import MescrollUni from '@/components/mescroll-uni/mescroll-uni.vue';
 import permision from '@/js_sdk/wa-permission/permission.js';
 import dayjs from 'dayjs';
+import { upgrade } from '@/api/user';
+import setting from '@/setting.js';
 
 export default {
 	components: {
@@ -171,6 +178,7 @@ export default {
 		};
 	},
 	onLoad() {
+		this.detectionUpdate();
 		uni.setNavigationBarTitle({
 			title: util.cookies.get('user_name')
 		});
@@ -193,6 +201,24 @@ export default {
 		}
 	},
 	methods: {
+		detectionUpdate() {
+			util.detectionAndroidUpdate(data => {
+				uni.showModal({
+					title: '版本更新',
+					content: '有新的版本发布，是否立即进行新版本下载安装？',
+					confirmText: '立即更新',
+					cancelText: '下次更新',
+					success: function(res) {
+						if (res.confirm) {
+							util.gotoPage('/pages/center/update?url=' + data.url);
+						} else if (res.cancel) {
+							console.log('稍后更新');
+						}
+					}
+				});
+			});
+		},
+
 		async requestAndroidPermission(permisionID) {
 			var result = await permision.requestAndroidPermission(permisionID);
 			var strStatus;
@@ -288,7 +314,9 @@ export default {
 		},
 
 		getFormatDate(index = 0) {
-			return dayjs().subtract(index, 'day').format('YYYY-MM-DD');
+			return dayjs()
+				.subtract(index, 'day')
+				.format('YYYY-MM-DD');
 		},
 
 		getDate(type) {
