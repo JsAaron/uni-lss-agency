@@ -651,7 +651,7 @@ export default {
 					step_1_value: 'name'
 				},
 				pic_1: [{ required: true, path: '' }],
-				pic_2: [{ required: true, path: '' }]
+				pic_2: [{ required: false, path: '' }]
 			},
 
 			// ============ 商户信息 ==============
@@ -812,7 +812,7 @@ export default {
 			}
 			if (data.supple_materials != null && data.supple_materials != '') {
 				this.setInputDataFc('ref_pic_2', [
-					{ required: true, path: 'https://img.facess.net/' + data.supple_materials }
+					{ required: false, path: 'https://img.facess.net/' + data.supple_materials }
 				]);
 			}
 		},
