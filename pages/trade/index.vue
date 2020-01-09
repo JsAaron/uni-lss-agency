@@ -20,7 +20,7 @@
 		>
 			<view class="swiper-box">
 				<scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadMore">
-					<view class="content__row lss-hairline--bottom">
+					<view class="content__row">
 						<view class="content__col">
 							<view>订单总数</view>
 							<view class="content--gray">{{ totalData.order_num }}笔</view>
@@ -44,7 +44,7 @@
 					</view>
 
 					<view
-						class="content__row lss-hairline--bottom"
+						class="content__row"
 						v-for="(item, index) in agentData.newsList"
 						:key="index"
 					>
@@ -417,4 +417,5 @@ export default {
 		border-bottom: 2px solid #000;
 	}
 }
+
 </style>

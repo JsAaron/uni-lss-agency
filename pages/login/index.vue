@@ -39,7 +39,6 @@
 <script>
 import * as util from '@/utils';
 import { mapGetters, mapMutations, mapState, mapActions } from 'vuex';
-import { $$set, $$get } from '@/common/global';
 import setting from '@/setting.js';
 export default {
 	data() {	

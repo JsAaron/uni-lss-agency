@@ -1,7 +1,7 @@
 {
-    "name" : "森阳智付代理商版",
+    "name" : "友惠掌柜宝",
     "appid" : "__UNI__097F247",
-    "description" : "森阳智付代理商版",
+    "description" : "友惠掌柜宝",
     "versionName" : "2.0.4",
     "versionCode" : 204,
     "transformPx" : false,
@@ -36,10 +36,10 @@
             "sdkConfigs" : {},
             "icons" : {
                 "android" : {
-                    "hdpi" : "/Users/wen/资料/新建文件夹 (2)/森阳科技/森阳科技72.png",
-                    "xhdpi" : "/Users/wen/资料/新建文件夹 (2)/森阳科技/森阳科技96.png",
-                    "xxhdpi" : "/Users/wen/资料/新建文件夹 (2)/森阳科技/森阳科技144.png",
-                    "xxxhdpi" : "/Users/wen/资料/新建文件夹 (2)/森阳科技/森阳科技192.png"
+                    "hdpi" : "",
+                    "xhdpi" : "",
+                    "xxhdpi" : "",
+                    "xxxhdpi" : ""
                 }
             },
             "splashscreen" : {
@@ -60,10 +60,12 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 小程序特有相关 */
-        "appid" : "wx3ae92fa03906e0f7",
+        "appid" : "wxd3cace4fbb434e92",
         "setting" : {
             "urlCheck" : false,
-            "postcss" : false
+            "postcss" : false,
+            "es6" : true,
+            "minified" : false
         },
         "usingComponents" : true
     },
@@ -82,6 +84,7 @@
         },
         "template" : "h5.template.html",
         "optimization" : {
+            "subPackages" : true,
             "treeShaking" : {
                 "enable" : true
             }
