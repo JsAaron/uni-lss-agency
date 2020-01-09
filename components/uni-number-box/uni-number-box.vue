@@ -11,7 +11,7 @@
 			:disabled="disabled"
 			v-model="inputValue"
 			class="uni-numbox__value"
-			type="number"
+			type="digit"
 			@blur="_onBlur"
 		/>
 		<view
