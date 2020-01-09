@@ -9,9 +9,6 @@ import {
 	cookies
 } from './cookies.js'
 
-
-console.log(getPlatform())
-
 /**
  * 安卓应用的检测更新实现
  */
