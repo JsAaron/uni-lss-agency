@@ -11,9 +11,9 @@
 				"disableScroll": true,
 				"navigationBarTitleText": "首页",
 				"app-plus": {
-					"bounce" : "none",
+					"bounce": "none",
 					"titleNView": {
-						"tags": [{ 
+						"tags": [{
 							"tag": "img",
 							"src": "/static/img/home-icon.png",
 							"position": {
@@ -90,7 +90,7 @@
 				"navigationBarTitleText": "分润设置"
 			}
 		},
-	
+
 		{
 			"path": "pages/product/type-in",
 			"style": {
@@ -100,7 +100,7 @@
 		{
 			"path": "pages/product/details/entry",
 			"style": {
-					"navigationStyle": "custom"
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -112,10 +112,14 @@
 		{
 			"path": "pages/product/details/index",
 			"style": {
-					"navigationStyle": "custom"
+				"navigationStyle": "custom"
 			}
 		}
 	],
+
+
+
+
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarBackgroundColor": "#2F85FC",

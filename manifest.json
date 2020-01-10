@@ -1,9 +1,9 @@
 {
-    "name" : "乐讯智付代理商版",
+    "name" : "友惠掌柜宝",
     "appid" : "__UNI__097F247",
-    "description" : "乐讯智付代理商版",
-    "versionName" : "2.0.1",
-    "versionCode" : 201,
+    "description" : "友惠掌柜宝",
+    "versionName" : "2.0.4",
+    "versionCode" : 204,
     "transformPx" : false,
     "uniStatistics" : {
         "enable" : true
@@ -36,10 +36,10 @@
             "sdkConfigs" : {},
             "icons" : {
                 "android" : {
-                    "hdpi" : "C:/Users/Administrator/Desktop/app/乐讯智付/乐讯智付72.png",
-                    "xhdpi" : "C:/Users/Administrator/Desktop/app/乐讯智付/乐讯智付96.png",
-                    "xxhdpi" : "C:/Users/Administrator/Desktop/app/乐讯智付/乐讯智付144.png",
-                    "xxxhdpi" : "C:/Users/Administrator/Desktop/app/乐讯智付/乐讯智付192.png"
+                    "hdpi" : "",
+                    "xhdpi" : "",
+                    "xxhdpi" : "",
+                    "xxxhdpi" : ""
                 }
             },
             "splashscreen" : {
@@ -60,10 +60,12 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 小程序特有相关 */
-        "appid" : "wx3ae92fa03906e0f7",
+        "appid" : "wxd3cace4fbb434e92",
         "setting" : {
             "urlCheck" : false,
-            "postcss" : false
+            "postcss" : false,
+            "es6" : true,
+            "minified" : false
         },
         "usingComponents" : true
     },
@@ -82,6 +84,7 @@
         },
         "template" : "h5.template.html",
         "optimization" : {
+            "subPackages" : true,
             "treeShaking" : {
                 "enable" : true
             }

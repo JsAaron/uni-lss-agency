@@ -1,7 +1,3 @@
-import {
-	$$set,
-	$$get
-} from '@/common/global';
 
 import {
 	md5Ajax

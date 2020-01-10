@@ -420,6 +420,7 @@ page,
 	}
 	&__left {
 		font-size: 30rpx;
+		max-width: 500rpx;
 	}
 	&__name {
 	}

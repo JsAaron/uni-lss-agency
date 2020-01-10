@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App'
 import store from './store'
-import config from '@/common/config'
 
 // 使用自定义消息提示
 import boboMessage from '@/components/bobo-message/bobo-message.vue'

@@ -141,6 +141,10 @@ import mStatistics from './statistics.vue';
 import uCharts from '@/components/u-charts/u-charts.js';
 import MescrollUni from '@/components/mescroll-uni/mescroll-uni.vue';
 import permision from '@/js_sdk/wa-permission/permission.js';
+import dayjs from 'dayjs';
+import { upgrade } from '@/api/user';
+import setting from '@/setting.js';
+
 export default {
 	components: {
 		mTrade,
@@ -174,6 +178,7 @@ export default {
 		};
 	},
 	onLoad() {
+		this.detectionUpdate();
 		uni.setNavigationBarTitle({
 			title: util.cookies.get('user_name')
 		});
@@ -196,6 +201,24 @@ export default {
 		}
 	},
 	methods: {
+		detectionUpdate() {
+			util.detectionAndroidUpdate(data => {
+				uni.showModal({
+					title: '版本更新',
+					content: '有新的版本发布，是否立即进行新版本下载安装？',
+					confirmText: '立即更新',
+					cancelText: '下次更新',
+					success: function(res) {
+						if (res.confirm) {
+							util.gotoPage('/pages/center/update?url=' + data.url);
+						} else if (res.cancel) {
+							console.log('稍后更新');
+						}
+					}
+				});
+			});
+		},
+
 		async requestAndroidPermission(permisionID) {
 			var result = await permision.requestAndroidPermission(permisionID);
 			var strStatus;
@@ -290,35 +313,20 @@ export default {
 			this.updateCharts();
 		},
 
-		getFormatDate(index = 1) {
-			var date = new Date(); //获取当前时间
-			date.setDate(date.getDate() - index); //设置天数 -1 天
-			return date.Format('yyyy-MM-dd');
-		},
-
-		dateConversion(value) {
-			var d = new Date(value);
-			var date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-			return date;
+		getFormatDate(index = 0) {
+			return dayjs()
+				.subtract(index, 'day')
+				.format('YYYY-MM-DD');
 		},
 
 		getDate(type) {
-			const date = new Date();
-			let year = date.getFullYear();
-			let month = date.getMonth() + 1;
-			let day = date.getDate();
-
+			let djs = dayjs();
 			if (type === 'start') {
-				year = year - 60;
-			} else if (type === 'end') {
-				year = year + 2;
-			} else if (type === 'pre') {
-				month = month - 1;
+				return djs.subtract(10, 'year').format('YYYY-MM-DD');
 			}
-
-			month = month > 9 ? month : '0' + month;
-			day = day > 9 ? day : '0' + day;
-			return `${year}-${month}-${day}`;
+			if (type === 'end') {
+				return djs.add(1, 'year').format('YYYY-MM-DD');
+			}
 		},
 
 		getTableDataPayjyje() {
@@ -473,7 +481,7 @@ export default {
 		width: 10rpx;
 		height: 30rpx;
 		background: rgb(96, 168, 252);
-		&--w{
+		&--w {
 			background: #fff;
 		}
 	}

@@ -29,6 +29,9 @@ export default {
 						type: "0"
 					})
 					.then(async res => {
+						
+						util.cookies.set('login_name',username)
+						
 						util.cookies.set('uuid', res.id)
 						util.cookies.set('agentid', res.agentid)
 						
@@ -37,8 +40,7 @@ export default {
 						util.cookies.set('xt_id', res.xt_id)
 						util.cookies.set('token', res.accessToken)
 						util.cookies.set('user_name',res.name)
-						console.log(res)
-										
+
 						util.cookies.set('create_date', res.create_date)
 						util.cookies.set('wx', res.wx)
 						util.cookies.set('zfb', res.zfb)

@@ -10,7 +10,6 @@ export function getCheckUser(data) {
 
 
 export function upgrade(data){
-	console.log(data)
 	return request({
 		url: '/moblieapp/versionUpgrade',
 		method: 'post',
