@@ -2,13 +2,9 @@
 	<view>
 		<message ref="Message"></message>
 
-		<drag-button
-			v-if="action == ''"
-			:title="rightText"
-			:isDock="true"
-			:existTabBar="true"
-			@btnClick="onAmend"
-		/>
+		<view v-if="action != 'add'">
+			<drag-button :title="rightText" :isDock="true" :existTabBar="true" @btnClick="onAmend" />
+		</view>
 
 		<QSInput
 			v-if="action == 'add'"
@@ -265,7 +261,7 @@ export default {
 		}
 		if (this.action != 'add') {
 			this.agentData = JSON.parse(options.agentData);
-			console.log(this.agentData);
+			// console.log(this.agentData);
 		}
 		this.dl_type = options.dl_type;
 		this.pageType = options.pageType;
