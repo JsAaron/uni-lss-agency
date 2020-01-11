@@ -1,15 +1,12 @@
 <template>
 	<view class="container">
-		<uni-nav-bar
-			left-icon="arrowleft"
-			fixed
-			status-bar
-			:right-text="showRightText ? '进件' : ''"
-			background-color="#2F85FC"
-			title="进件详情"
-			color="#ffffff"
-			@click-left="onBack"
-			@click-right="onAmend"
+
+		<drag-button
+			v-if="showRightText"
+			title="进件"
+			:isDock="true"
+			:existTabBar="true"
+			@btnClick="onAmend"
 		/>
 
 		<!-- 顶部选项卡 -->

@@ -2,16 +2,12 @@
 	<view>
 		<message ref="Message"></message>
 
-		<uni-nav-bar
-			left-icon="arrowleft"
-			fixed
-			status-bar
-			:right-text="action == 'add' ? '' : rightText"
-			background-color="#2F85FC"
-			:title="titleText"
-			color="#ffffff"
-			@click-left="onBack"
-			@click-right="onAmend"
+		<drag-button
+			v-if="action == ''"
+			:title="rightText"
+			:isDock="true"
+			:existTabBar="true"
+			@btnClick="onAmend"
 		/>
 
 		<QSInput
@@ -222,7 +218,6 @@ export default {
 	data() {
 		return {
 			submit_success: false,
-			titleText: '',
 			rightText: '编辑',
 			disabled: true,
 			pageType: '',
@@ -273,8 +268,10 @@ export default {
 			console.log(this.agentData);
 		}
 		this.dl_type = options.dl_type;
-		this.titleText = options.title;
 		this.pageType = options.pageType;
+		uni.setNavigationBarTitle({
+			title: options.title
+		});
 	},
 	onReady() {
 		if (this.action == 'add') {

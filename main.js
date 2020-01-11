@@ -18,7 +18,9 @@ import QSPickerCustom2 from '@/components/QS-inputs-split/elements/QS-picker-cus
 import QSPics from '@/components/QS-inputs-split/elements/QS-pics/index.vue';
 import QSInfinitePics from '@/components/QS-inputs-split/elements/QS-infinitePics/index.vue';
 import QSwitch from '@/components/QS-inputs-split/elements/QS-switch/index.vue';
+import dragButton from "@/components/drag-button/drag-button.vue";
 
+Vue.component('dragButton', dragButton);
 Vue.component('WButton', WButton);
 Vue.component('message', boboMessage)
 Vue.component('QSInput', QSInput);

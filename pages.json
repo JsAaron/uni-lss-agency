@@ -81,7 +81,7 @@
 		{
 			"path": "pages/agency/access",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": ""
 			}
 		},
 		{
@@ -90,7 +90,6 @@
 				"navigationBarTitleText": "分润设置"
 			}
 		},
-
 		{
 			"path": "pages/product/type-in",
 			"style": {
@@ -112,7 +111,7 @@
 		{
 			"path": "pages/product/details/index",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "进件详情"
 			}
 		}
 	],
