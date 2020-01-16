@@ -7,7 +7,7 @@ export default {
 	imgPrefixUrl:'https://img.facess.net',	//图片域名替换地址'
 	impUpLoadUrl:'https://lss.facess.net/7080Sys/moblieapp/currencyUpload', // 服务器地址(上传图片)
 
-	appName:'友惠掌柜宝',
+	appName:'景怡世纪代理商版',
 	
 	// 版本
 	releases: {
