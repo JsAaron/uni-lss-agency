@@ -1,9 +1,9 @@
 {
-    "name" : "景怡世纪代理商版",
+    "name" : "消费鼓励金代理商版",
     "appid" : "__UNI__6ABA038",
-    "description" : "景怡世纪代理商版",
-    "versionName" : "2.0.4",
-    "versionCode" : 204,
+    "description" : "消费鼓励金代理商版",
+    "versionName" : "2.0.1",
+    "versionCode" : 201,
     "transformPx" : false,
     "uniStatistics" : {
         "enable" : true
