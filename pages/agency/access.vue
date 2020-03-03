@@ -52,6 +52,17 @@
 			v-model="fromValue0.mobileNo"
 		></QSInput>
 
+		<QSInput
+			:name="formName0"
+			variableName="wechat_no"
+			ref="ref_wechat_no"
+			title="微信号(分账)"
+			required
+			:tapClear="!disabled"
+			:disabled="disabled"
+			v-model="fromValue0.wechat_no"
+		></QSInput>
+
 		<QSPickerCustom
 			:name="formName0"
 			variableName="prov_cd"
@@ -91,6 +102,30 @@
 			:disabled="disabled"
 			v-model="fromValue0.compaddress"
 		></QSInput>
+
+		<QSPickerCustom
+			v-if="pageType == 'business'"
+			:name="formName0"
+			variableName="businessid"
+			ref="ref_businessid"
+			required
+			:steps="fromValue0.steps"
+			v-model="fromValue0.businessid"
+			@change="onChangePicker1"
+			title="微商城一级分类"
+		/>
+
+		<QSPickerCustom
+			v-if="pageType == 'business'"
+			:name="formName0"
+			variableName="businessid_two"
+			ref="ref_businessid_two"
+			required
+			:steps="fromValue0.steps"
+			v-model="fromValue0.businessid_two"
+			@change="onChangePicker1"
+			title="微商城二级分类"
+		/>
 
 		<QSPickerCustom
 			v-if="pageType == 'business'"
@@ -152,7 +187,7 @@
 			text="新增"
 			:rotate="fromValue0.isRotate"
 			@click.native="onEnsure()"
-			bgColor="rgb(47, 133, 252)"
+			bgColor="#1aad19"
 		></WButton>
 		<view v-else>
 			<!-- 切换 -->
@@ -161,7 +196,7 @@
 				text="确定修改"
 				:rotate="fromValue0.isRotate"
 				@click.native="onEnsure()"
-				bgColor="rgb(47, 133, 252)"
+				bgColor="#1aad19"
 			></WButton>
 			<view v-else>
 				<!-- 新增,提交审核 -->
@@ -170,13 +205,13 @@
 						text="分润设置"
 						:rotate="fromValue0.isRotate"
 						@click.native="onShare()"
-						bgColor="rgb(47, 133, 252)"
+						bgColor="#1aad19"
 					></WButton>
 					<WButton
 						text="提交审核"
 						:rotate="fromValue0.isRotate"
 						@click.native="onExamine()"
-						bgColor="rgb(47, 133, 252)"
+						bgColor="#1aad19"
 					></WButton>
 				</view>
 				<view v-if="agentData.pass == '2'">
@@ -184,14 +219,14 @@
 						v-if="submit_success"
 						text="完成"
 						@click.native="onBack()"
-						bgColor="rgb(47, 133, 252)"
+						bgColor="#1aad19"
 					></WButton>
 					<WButton
 						v-else
 						text="通过审核"
 						:rotate="fromValue0.isRotate"
 						@click.native="onExamined()"
-						bgColor="rgb(47, 133, 252)"
+						bgColor="#1aad19"
 					></WButton>
 				</view>
 			</view>
@@ -205,6 +240,7 @@ import QSApp from '@/components/QS-inputs-split/js/app.js';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
 import { getProvcd, saveAgent, getShopsType, delAgent } from '@/api/agent';
+import * as oneclassService from '@/api/oneclass';
 import * as userService from '@/api/user';
 
 export default {
@@ -248,13 +284,24 @@ export default {
 				},
 				dataSet: {
 					dateFormatArray: ['-', '-', '-']
-				}
+				},
+
+				wechat_no: '',
+				businessid: '',
+				businessid_two: ''
 			}
 		};
 	},
 	props: {},
 	created() {},
 	onLoad(options) {
+		console.log(options);
+		options = {
+			action: 'add',
+			dl_type: '4',
+			pageType: 'business',
+			title: '新增商户'
+		};
 		this.action = options.action;
 		if (this.action) {
 			this.disabled = false;
@@ -274,6 +321,7 @@ export default {
 			this.initAddressData();
 			if (this.pageType == 'business') {
 				this.initPickerData();
+				this.initClassifyData();
 			}
 		} else {
 			this.initData();
@@ -286,6 +334,7 @@ export default {
 			this.initAddressData();
 			if (this.pageType == 'business') {
 				this.initPickerData();
+				this.initClassifyData();
 			}
 			this.setIntputValueFc('ref_legal', data.legal);
 			this.setIntputValueFc('ref_userName', data.userName);
@@ -301,6 +350,25 @@ export default {
 					data: data.contractendate
 				});
 			}
+		},
+
+		//============== 商城分类 ===============
+
+		initClassifyData() {
+			console.log(123);
+			oneclassService
+				.getOneclass({
+					xt_id: util.cookies.get('xt_id')
+				})
+				.then(data => {
+					let arr = data.map(item => {
+						return {
+							name: item.businessname,
+							value: item.businessid
+						};
+					});
+					this.setInputDataFc('ref_businessid', [arr]);
+				});
 		},
 
 		//=============== 类型 ==================
@@ -346,7 +414,6 @@ export default {
 		updateOneType(one_type) {
 			return getShopsType().then(data => {
 				let arr = [];
-				console.log(123, data);
 				data.map(item => {
 					if (item.typeid == one_type) {
 						// 强制初始化赋值，所以updateOneType在change会调用一次

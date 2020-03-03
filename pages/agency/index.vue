@@ -140,7 +140,7 @@ export default {
 				top: 0,
 				items: items,
 				current: 0,
-				activeColor: '#007aff',
+				activeColor: '#1aad19',
 				styleType: 'button'
 			},
 			searchForm: {
@@ -639,7 +639,7 @@ page,
 		position: absolute;
 		right: 10rpx;
 		top: 32rpx;
-		color: #007aff;
+		color: #1aad19;
 		&:active {
 			color: #000000;
 		}
@@ -667,7 +667,7 @@ page,
 			content: '';
 			width: 0;
 			height: 0;
-			border-bottom: 4upx solid #007aff;
+			border-bottom: 4upx solid #1aad19;
 			position: absolute;
 			left: 50%;
 			bottom: 0;
@@ -676,7 +676,7 @@ page,
 		}
 	}
 	.current {
-		color: #007aff;
+		color: #1aad19;
 		&:after {
 			width: 50%;
 		}
@@ -719,7 +719,7 @@ page,
 	&__right {
 		@include flex-h-left;
 		font-size: 28rpx;
-		color: #007aff;
+		color: #1aad19;
 	}
 }
 </style>

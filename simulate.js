@@ -16,7 +16,7 @@ function simulate() {
 		"center": "/pages/center/index",
 		"agency": "/pages/agency/index",
 		"agency-amend": "/pages/agency/amend",
-		"add-business": "/pages/agency/add-business",
+		"add-business": "/pages/agency/access",
 		"trade":"/pages/trade/index"
 	}
 	// return pages["trade"]
@@ -27,8 +27,8 @@ function simulate() {
 	// return pages["product"]
 	// return pages["product-details"]
 	// return pages["center"]
-	// return pages["add-business"]
-	// return pages["agency"]
+	return pages["add-business"]
+	return pages["agency"]
 
 }
 
