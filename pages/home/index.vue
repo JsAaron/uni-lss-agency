@@ -180,7 +180,7 @@ export default {
 	onLoad() {
 		this.detectionUpdate();
 		uni.setNavigationBarTitle({
-			title: util.cookies.get('user_name')
+			title: "消费鼓励金"
 		});
 		this.cWidth = uni.upx2px(750);
 		this.cHeight = uni.upx2px(550);
@@ -480,7 +480,7 @@ export default {
 		margin: 0 20rpx;
 		width: 10rpx;
 		height: 30rpx;
-		background: rgb(96, 168, 252);
+		background: #1aad19;
 		&--w {
 			background: #fff;
 		}
