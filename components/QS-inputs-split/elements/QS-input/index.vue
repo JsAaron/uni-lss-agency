@@ -309,8 +309,12 @@
 			async inputCustomTapFc() {
 				try {
 					const data = await _app.inputCustomTapFc(this.customId);
-					if (data !== undefined && data !== null) {
-						this.setValue(data);
+					if(this.customId == "map"){
+						this.$emit('getMap',data);
+					}else{
+						if (data !== undefined && data !== null) {
+							this.setValue(data);
+						}
 					}
 				} catch (e) {
 					//TODO handle the exception

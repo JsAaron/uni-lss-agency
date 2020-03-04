@@ -1,93 +1,104 @@
 {
-    "name" : "消费鼓励金代理商版",
-    "appid" : "__UNI__6ABA038",
-    "description" : "消费鼓励金代理商版",
-    "versionName" : "2.0.1",
-    "versionCode" : 201,
-    "transformPx" : false,
-    "uniStatistics" : {
-        "enable" : true
-    },
-    "app-plus" : {
-        "usingComponents" : true,
-        "nvueCompiler" : "uni-app",
-        "launchwebview" : {
-            "render" : "onscreen"
-        },
-        /* 5+App特有相关 */
-        "modules" : {},
-        /* 模块配置 */
-        "distribute" : {
-            /* 应用发布信息 */
-            "android" : {
-                /* android打包配置 */
-                "permissions" : [
-                    "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
-                ],
-                "abiFilters" : [ "armeabi-v7a" ]
-            },
-            "ios" : {},
-            /* ios打包配置 */
-            "sdkConfigs" : {},
-            "icons" : {
-                "android" : {
-                    "hdpi" : "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（72）.png",
-                    "xhdpi" : "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（96）.png",
-                    "xxhdpi" : "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（144）.png",
-                    "xxxhdpi" : "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（192）.png"
-                }
-            },
-            "splashscreen" : {
-                "android" : {
-                    "hdpi" : "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（480）.png",
-                    "xhdpi" : "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（720）.png",
-                    "xxhdpi" : "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（1080）.png"
-                }
-            }
-        },
-        "splashscreen" : {
-            "waiting" : false,
-            "alwaysShowBeforeRender" : false
-        }
-    },
-    /* SDK配置 */
-    "quickapp" : {},
-    /* 快应用特有相关 */
-    "mp-weixin" : {
-        /* 小程序特有相关 */
-        "appid" : "wxd3cace4fbb434e92",
-        "setting" : {
-            "urlCheck" : false,
-            "postcss" : false,
-            "es6" : true,
-            "minified" : false
-        },
-        "usingComponents" : true
-    },
-    "mp-alipay" : {
-        "usingComponents" : true
-    },
-    "mp-baidu" : {
-        "usingComponents" : true
-    },
-    "mp-toutiao" : {
-        "usingComponents" : true
-    },
-    "h5" : {
-        "router" : {
-            "base" : ""
-        },
-        "template" : "h5.template.html",
-        "optimization" : {
-            "subPackages" : true,
-            "treeShaking" : {
-                "enable" : true
-            }
-        }
-    }
+	"name": "消费鼓励金代理商版",
+	"appid": "__UNI__82F8B3E",
+	"description": "消费鼓励金代理商版",
+	"versionName": "2.0.1",
+	"versionCode": 201,
+	"transformPx": false,
+	"uniStatistics": {
+		"enable": true
+	},
+	"app-plus": {
+		"usingComponents": true,
+		"nvueCompiler": "uni-app",
+		"launchwebview": {
+			"render": "onscreen"
+		},
+		/* 5+App特有相关 */
+		"modules": {},
+		/* 模块配置 */
+		"distribute": {
+			/* 应用发布信息 */
+			"android": {
+				/* android打包配置 */
+				"permissions": [
+					"<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
+				],
+				"abiFilters": ["armeabi-v7a"]
+			},
+			"ios": {},
+			/* ios打包配置 */
+			"sdkConfigs": {},
+			"icons": {
+				"android": {
+					"hdpi": "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（72）.png",
+					"xhdpi": "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（96）.png",
+					"xxhdpi": "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（144）.png",
+					"xxxhdpi": "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（192）.png"
+				}
+			},
+			"splashscreen": {
+				"android": {
+					"hdpi": "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（480）.png",
+					"xhdpi": "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（720）.png",
+					"xxhdpi": "D:/github/develop/uni/uni-lss-package/景怡世纪/代理/景怡世纪（1080）.png"
+				}
+			}
+		},
+		"splashscreen": {
+			"waiting": false,
+			"alwaysShowBeforeRender": false
+		}
+	},
+	/* SDK配置 */
+	"quickapp": {},
+	/* 快应用特有相关 */
+	"mp-weixin": {
+		/* 小程序特有相关 */
+		"appid": "wxd3cace4fbb434e92",
+		"setting": {
+			"urlCheck": false,
+			"postcss": false,
+			"es6": true,
+			"minified": true
+		},
+		"usingComponents": true,
+		"permission": {
+			"scope.userLocation": {
+				"desc": "需要获取当前所在位置"
+			}
+		},
+		"optimization": {
+			"subPackages": true,
+			"treeShaking": {
+				"enable": true
+			}
+		}
+	},
+	"mp-alipay": {
+		"usingComponents": true
+	},
+	"mp-baidu": {
+		"usingComponents": true
+	},
+	"mp-toutiao": {
+		"usingComponents": true
+	},
+	"h5": {
+		"router": {
+			"base": ""
+		},
+		"template": "h5.template.html",
+		"optimization": {
+			"subPackages": true,
+			"treeShaking": {
+				"enable": true
+			}
+		}
+	}
 }

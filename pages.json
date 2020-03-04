@@ -116,6 +116,22 @@
 		}
 	],
 
+	"subPackages": [{
+		"root": "public",
+		"pages": [{
+			"path": "map/index",
+			"style": {
+				"navigationBarTitleText": "地图"
+			}
+		},
+		{
+			"path": "map/search",
+			"style": {
+				"navigationBarTitleText": "搜索"
+			}
+		}]
+	}],
+
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarBackgroundColor": "#51B511",

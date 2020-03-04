@@ -1,12 +1,51 @@
 import log from './log.js';
+import permision from '@/js_sdk/wa-permission/permission.js';
+
+
 /**
  * inputTap custom类型点击触发函数
  * @param {any} customId
  */
 export function inputCustomTapFc(customId) { // 必须return一个Promise对象, 可以resolve数据给相应的input赋值
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		switch (customId) {
-			case '自定义id':
+			case 'map':
+
+				resolve()
+
+				// // uni.authorize({
+				// // 	scope: 'scope.userLocation',
+				// // 	success() {
+				// // 		uni.chooseLocation({
+				// // 			success: function(res) {
+				// // 				resolve(res)
+				// // 			}
+				// // 		});
+				// // 	}
+				// // })
+
+
+
+				// var result = await permision.requestAndroidPermission('android.permission.ACCESS_FINE_LOCATION');
+				// var strStatus;
+				// if (result == 1) {
+				// 	uni.chooseLocation({
+				// 		success: function(res) {
+				// 			resolve(res)
+				// 		}
+				// 	});
+				// } else if (result == 0) {
+				// 	uni.showModal({
+				// 		title: '特别提示',
+				// 		content: '请授定位,否则无法获取到定位数据',
+				// 		success: function(res) {
+				// 			if (res.confirm) {
+				// 				permision.gotoAppPermissionSetting();
+				// 			}
+				// 		}
+				// 	});
+				// }
+
 				break;
 			default:
 				uni.scanCode({ //示例, 扫码后赋值

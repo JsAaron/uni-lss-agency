@@ -64,6 +64,66 @@
 		></QSInput>
 
 		<QSPickerCustom
+			v-if="pageType == 'business'"
+			:name="formName0"
+			variableName="businessid"
+			ref="ref_businessid"
+			required
+			:steps="fromValue0.steps"
+			v-model="fromValue0.businessid"
+			@change="onChangeBusinessid"
+			title="微商城一级分类"
+		/>
+
+		<QSPickerCustom
+			v-if="pageType == 'business'"
+			:name="formName0"
+			variableName="businessid_two"
+			ref="ref_businessid_two"
+			required
+			:steps="fromValue0.steps"
+			v-model="fromValue0.businessid_two"
+			title="微商城二级分类"
+		/>
+
+		<QSInput
+			:name="formName0"
+			variableName="map"
+			ref="ref_map"
+			title="获取位置"
+			customId="map"
+			placeholder="点击定位获取"
+			rightButtonTex="定位"
+			required
+			disabled
+			:tapClear=false
+			v-model="fromValue0.map"
+			@getMap="onGetMap"
+		></QSInput>
+
+		<QSInput
+			:name="formName0"
+			variableName="longitude"
+			ref="ref_longitude"
+			title="经度"
+			disabled
+			:tapClear=false
+			required
+			v-model="fromValue0.longitude" 
+		></QSInput>
+
+		<QSInput
+			:name="formName0"
+			variableName="latitude"
+			ref="ref_latitude"
+			title="纬度"
+			:tapClear=false
+			disabled
+			required
+			v-model="fromValue0.latitude"
+		></QSInput>
+
+		<QSPickerCustom
 			:name="formName0"
 			variableName="prov_cd"
 			ref="ref_prov_cd"
@@ -102,30 +162,6 @@
 			:disabled="disabled"
 			v-model="fromValue0.compaddress"
 		></QSInput>
-
-		<QSPickerCustom
-			v-if="pageType == 'business'"
-			:name="formName0"
-			variableName="businessid"
-			ref="ref_businessid"
-			required
-			:steps="fromValue0.steps"
-			v-model="fromValue0.businessid"
-			@change="onChangePicker1"
-			title="微商城一级分类"
-		/>
-
-		<QSPickerCustom
-			v-if="pageType == 'business'"
-			:name="formName0"
-			variableName="businessid_two"
-			ref="ref_businessid_two"
-			required
-			:steps="fromValue0.steps"
-			v-model="fromValue0.businessid_two"
-			@change="onChangePicker1"
-			title="微商城二级分类"
-		/>
 
 		<QSPickerCustom
 			v-if="pageType == 'business'"
@@ -215,12 +251,7 @@
 					></WButton>
 				</view>
 				<view v-if="agentData.pass == '2'">
-					<WButton
-						v-if="submit_success"
-						text="完成"
-						@click.native="onBack()"
-						bgColor="#1aad19"
-					></WButton>
+					<WButton v-if="submit_success" text="完成" @click.native="onBack()" bgColor="#1aad19"></WButton>
 					<WButton
 						v-else
 						text="通过审核"
@@ -288,7 +319,10 @@ export default {
 
 				wechat_no: '',
 				businessid: '',
-				businessid_two: ''
+				businessid_two: '',
+				map: '',
+				longitude: '',
+				latitude: ''
 			}
 		};
 	},
@@ -317,6 +351,15 @@ export default {
 		});
 	},
 	onReady() {
+		// uni.chooseLocation({
+		//     success: function (res) {
+		//         console.log('位置名称：' + res.name);
+		//         console.log('详细地址：' + res.address);
+		//         console.log('纬度：' + res.latitude);
+		//         console.log('经度：' + res.longitude);
+		//     }
+		// });
+
 		if (this.action == 'add') {
 			this.initAddressData();
 			if (this.pageType == 'business') {
@@ -355,7 +398,6 @@ export default {
 		//============== 商城分类 ===============
 
 		initClassifyData() {
-			console.log(123);
 			oneclassService
 				.getOneclass({
 					xt_id: util.cookies.get('xt_id')
@@ -369,6 +411,30 @@ export default {
 					});
 					this.setInputDataFc('ref_businessid', [arr]);
 				});
+		},
+
+		onChangeBusinessid(item) {
+			oneclassService
+				.getTwoclass({
+					businessid: item.data[0].value
+				})
+				.then(data => {
+					let arr = data.map(item => {
+						return {
+							name: item.two_businessname,
+							value: item.two_businessid
+						};
+					});
+					this.setInputDataFc('ref_businessid_two', [arr]);
+				});
+		},
+
+		onGetMap(e) {
+			console.log(111)
+			util.gotoPage('/public/map/index')
+			// this.setIntputValueFc('ref_map', e.address);
+			// this.setIntputValueFc('ref_latitude', e.latitude);
+			// this.setIntputValueFc('ref_longitude', e.longitude);
 		},
 
 		//=============== 类型 ==================
@@ -755,45 +821,39 @@ export default {
 			//商户补充
 			if (this.pageType == 'business') {
 				query.one_type = this.fromValue0.picker1.data[0].value.typeid;
-				query.two_type = this.fromValue0.picker2.data
-					? this.fromValue0.picker2.data[0].value.typeid
-					: '';
-				query.three_type = this.fromValue0.picker3.data
-					? this.fromValue0.picker3.data[0].value.typeid
-					: '';
+				query.two_type = this.fromValue0.picker2.data ? this.fromValue0.picker2.data[0].value.typeid : '';
+				query.three_type = this.fromValue0.picker3.data ? this.fromValue0.picker3.data[0].value.typeid : '';
 			}
 
-			userService
-				.getCheckUser({ userCode: data.userCode || this.agentData.userCode })
-				.then(data2 => {
-					if (data2 == 'true') {
-						saveAgent(query)
-							.then(data => {
-								this.fromValue0.isRotate = false;
-								this.onAmend();
-								if (this.action == 'add') {
-									this.$refs['Message'].success('新增成功');
-									this.resetInit();
-									getApp().globalData.agency = {
-										action: 'add'
-									};
-								} else {
-									this.$refs['Message'].success('修改成功');
-									getApp().globalData.agency = {
-										agentid: this.agentData.agentid,
-										agentData: query,
-										action: 'update'
-									};
-								}
-							})
-							.catch(err => {
-								this.fromValue0.isRotate = false;
-								this.$refs['Message'].error(err);
-							});
-					} else {
-						this.$refs['Message'].error('该账号已存在,请更换账号试试');
-					}
-				});
+			userService.getCheckUser({ userCode: data.userCode || this.agentData.userCode }).then(data2 => {
+				if (data2 == 'true') {
+					saveAgent(query)
+						.then(data => {
+							this.fromValue0.isRotate = false;
+							this.onAmend();
+							if (this.action == 'add') {
+								this.$refs['Message'].success('新增成功');
+								this.resetInit();
+								getApp().globalData.agency = {
+									action: 'add'
+								};
+							} else {
+								this.$refs['Message'].success('修改成功');
+								getApp().globalData.agency = {
+									agentid: this.agentData.agentid,
+									agentData: query,
+									action: 'update'
+								};
+							}
+						})
+						.catch(err => {
+							this.fromValue0.isRotate = false;
+							this.$refs['Message'].error(err);
+						});
+				} else {
+					this.$refs['Message'].error('该账号已存在,请更换账号试试');
+				}
+			});
 		}
 	}
 };
