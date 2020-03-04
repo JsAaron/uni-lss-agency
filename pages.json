@@ -114,7 +114,7 @@
 				"navigationBarTitleText": "进件详情"
 			}
 		}
-	],
+    ],
 
 	"subPackages": [{
 		"root": "public",

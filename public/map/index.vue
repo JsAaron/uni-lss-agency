@@ -24,7 +24,7 @@
 		<map id='map' :scale='map.scale' :show-location='map.showLocation' :longitude='map.longitude' :latitude='map.latitude'
 		 :width='map.width' :height='map.height' :controls='map.controls' :markers='map.markers' @regionchange='mapChange'>
 			<!-- <cover-view class='icon-position' style="margin-top: 100px;"> -->
-				<cover-image src="./static/icon_position.png" class="icon-img"></cover-image>
+				<cover-image src="/public/static/map/icon_position.png" class="icon-img"></cover-image>
 			<!-- </cover-view> -->
 		</map>
 		
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+	import * as util from '@/utils';
 	const app = getApp()
 	var QQMapWX = require('./qqmap-wx-jssdk.min.js')
 	var qqmapsdk = new QQMapWX({
@@ -57,13 +58,13 @@
 					longitude: 113.76927057974245,
 					latitude: 34.76670519464811,
 					showLocation: true,
-					iconPath: './static/icon_position.png',
+					iconPath: '/public/static/map/icon_position.png',
 					width: 40,
 					height: 40,
 					scale: 16,
 					controls: [{
 						id: 'map',
-						iconPath: './static/icon_position.png',
+						iconPath: '/public/static/map/icon_position.png',
 						position: { left: 1200, top: 1200, width: 40, height: 40},
 						clickable: false
 					}]
@@ -102,7 +103,6 @@
 			    uni.getLocation({
 			      type: 'gcj02',
 			      success: function(res) {
-			        console.log(res)
 			        let map = that.data.map
 			        map.longitude = res.longitude
 			        map.latitude = res.latitude
@@ -208,7 +208,7 @@
 			},
 			addressSearch() {
 				uni.navigateTo({
-					url: '/pages/address-search/address-search'
+					url: '/public/map/search'
 				})
 			},
 			submit() {
@@ -220,6 +220,7 @@
 					lat: address.location.lat,
 					lng: address.location.lng
 				}
+				util.gotoPage('back')
 				console.log(address, a)
 			}
 		}
