@@ -215,13 +215,14 @@
 				let that = this
 				let detail = that.detail || ''
 				let address = that.address
-				let a = {
+				let map = {
 					address: address.title + detail,
-					lat: address.location.lat,
-					lng: address.location.lng
+					latitude: address.location.lat,
+					longitude: address.location.lng
 				}
+				let prePages = util.getParentRouterPage()
+				prePages.$$updateMap(map)
 				util.gotoPage('back')
-				console.log(address, a)
 			}
 		}
 	}

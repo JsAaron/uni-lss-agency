@@ -94,22 +94,8 @@ export function gotoPage(type, url, time) {
 /**
  * 获取上一个页面路由
  */
-export function getRouterPrevPage(serial = 2) {
-	var pages = getCurrentPages();
-	return pages[pages.length - serial];
+export function getParentRouterPage() {
+	let pages = getCurrentPages()
+	let prePages = pages[pages.length - 2].$vm
+	return prePages
 }
-
-/**
- * 获取页面
- * @param {Object} value
- * 默认当前页面
- */
-export function getRouterPath(value = 1) {
-	var pages = getCurrentPages();
-	let serial = pages.length - value //任意页面
-	if (value === 'prev') {
-		serial = pages.length - 2 //前一页
-	}
-	return pages[serial].route
-}
-

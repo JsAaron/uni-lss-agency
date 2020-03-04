@@ -116,14 +116,14 @@ export default {
 	computed: {},
 	onShow() {
 		//开通
-		if (app.globalData.product.action == 'update-typeIn') {
+		if (app.globalData.productVar.action == 'update-typeIn') {
 			this.loadNewsList('refresh');
-			app.globalData.product = {};
+			app.globalData.productVar = {};
 		}
 		//进件
-		if (app.globalData.product.action == 'update-entry') {
+		if (app.globalData.productVar.action == 'update-entry') {
 			this.loadNewsList('refresh');
-			app.globalData.product = {};
+			app.globalData.productVar = {};
 		}
 	},
 	async onLoad() {

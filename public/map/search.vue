@@ -42,7 +42,7 @@
 				qqmapsdk.getSuggestion({
 					keyword: n,
 					success: res => {
-						console.log(res)
+						// console.log(res)
 						that.setData({
 							list: res.data
 						})
@@ -61,11 +61,9 @@
 				this.searchList(val)
 			},
 			address(item) {
-				console.log(item);
 				let pages = getCurrentPages()
 				let prePages = pages[pages.length - 2].$vm
-				
-				console.log(prePages);
+			
 				let list = prePages.list
 				let map = prePages.map
 				map.longitude = item.location.lng

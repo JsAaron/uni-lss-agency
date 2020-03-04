@@ -86,43 +86,6 @@
 			title="微商城二级分类"
 		/>
 
-		<QSInput
-			:name="formName0"
-			variableName="map"
-			ref="ref_map"
-			title="获取位置"
-			customId="map"
-			placeholder="点击定位获取"
-			rightButtonTex="定位"
-			required
-			disabled
-			:tapClear=false
-			v-model="fromValue0.map"
-			@getMap="onGetMap"
-		></QSInput>
-
-		<QSInput
-			:name="formName0"
-			variableName="longitude"
-			ref="ref_longitude"
-			title="经度"
-			disabled
-			:tapClear=false
-			required
-			v-model="fromValue0.longitude" 
-		></QSInput>
-
-		<QSInput
-			:name="formName0"
-			variableName="latitude"
-			ref="ref_latitude"
-			title="纬度"
-			:tapClear=false
-			disabled
-			required
-			v-model="fromValue0.latitude"
-		></QSInput>
-
 		<QSPickerCustom
 			:name="formName0"
 			variableName="prov_cd"
@@ -154,13 +117,55 @@
 		/>
 
 		<QSInput
+			v-if="pageType == 'agency'"
 			:name="formName0"
 			variableName="compaddress"
 			ref="ref_compaddress"
-			title="地址"
-			:tapClear="!disabled"
-			:disabled="disabled"
+			title="获取位置"
+			required
+			disabled
+			:tapClear="false"
 			v-model="fromValue0.compaddress"
+		></QSInput>
+
+		<QSInput
+			v-if="pageType == 'business'"
+			:name="formName0"
+			variableName="compaddress"
+			ref="ref_compaddress"
+			title="获取位置"
+			customId="map"
+			placeholder="点击定位获取"
+			rightButtonTex="定位"
+			required
+			disabled
+			:tapClear="false"
+			v-model="fromValue0.compaddress"
+			@getMap="onGetMap"
+		></QSInput>
+
+		<QSInput
+			v-if="pageType == 'business'"
+			:name="formName0"
+			variableName="longitude"
+			ref="ref_longitude"
+			title="经度"
+			disabled
+			:tapClear="false"
+			required
+			v-model="fromValue0.longitude"
+		></QSInput>
+
+		<QSInput
+			v-if="pageType == 'business'"
+			:name="formName0"
+			variableName="latitude"
+			ref="ref_latitude"
+			title="纬度"
+			:tapClear="false"
+			disabled
+			required
+			v-model="fromValue0.latitude"
 		></QSInput>
 
 		<QSPickerCustom
@@ -251,7 +256,12 @@
 					></WButton>
 				</view>
 				<view v-if="agentData.pass == '2'">
-					<WButton v-if="submit_success" text="完成" @click.native="onBack()" bgColor="#1aad19"></WButton>
+					<WButton
+						v-if="submit_success"
+						text="完成"
+						@click.native="onBack()"
+						bgColor="#1aad19"
+					></WButton>
 					<WButton
 						v-else
 						text="通过审核"
@@ -320,7 +330,6 @@ export default {
 				wechat_no: '',
 				businessid: '',
 				businessid_two: '',
-				map: '',
 				longitude: '',
 				latitude: ''
 			}
@@ -329,20 +338,18 @@ export default {
 	props: {},
 	created() {},
 	onLoad(options) {
-		console.log(options);
-		options = {
-			action: 'add',
-			dl_type: '4',
-			pageType: 'business',
-			title: '新增商户'
-		};
+		// options = {
+		// 	action: 'add',
+		// 	dl_type: '4',
+		// 	pageType: 'business',
+		// 	title: '新增商户'
+		// };
 		this.action = options.action;
 		if (this.action) {
 			this.disabled = false;
 		}
 		if (this.action != 'add') {
 			this.agentData = JSON.parse(options.agentData);
-			// console.log(this.agentData);
 		}
 		this.dl_type = options.dl_type;
 		this.pageType = options.pageType;
@@ -351,20 +358,11 @@ export default {
 		});
 	},
 	onReady() {
-		// uni.chooseLocation({
-		//     success: function (res) {
-		//         console.log('位置名称：' + res.name);
-		//         console.log('详细地址：' + res.address);
-		//         console.log('纬度：' + res.latitude);
-		//         console.log('经度：' + res.longitude);
-		//     }
-		// });
-
 		if (this.action == 'add') {
 			this.initAddressData();
 			if (this.pageType == 'business') {
 				this.initPickerData();
-				this.initClassifyData();
+				this.setOneClassify();
 			}
 		} else {
 			this.initData();
@@ -374,11 +372,20 @@ export default {
 	methods: {
 		initData() {
 			let data = this.agentData;
+			console.log(data);
 			this.initAddressData();
 			if (this.pageType == 'business') {
 				this.initPickerData();
-				this.initClassifyData();
+				if (data.businessid) {
+					this.setOneClassify(data.businessid);
+					this.setTwoClassify(data.businessid, data.businessid_two[0]);
+				}
+				//设置经纬度
+				this.setIntputValueFc('ref_longitude', data.longitude);
+				this.setIntputValueFc('ref_latitude', data.latitude);
 			}
+
+			this.setIntputValueFc('ref_wechat_no', data.wechat_no);
 			this.setIntputValueFc('ref_legal', data.legal);
 			this.setIntputValueFc('ref_userName', data.userName);
 			this.setIntputValueFc('ref_mobileNo', data.mobileNo);
@@ -397,13 +404,24 @@ export default {
 
 		//============== 商城分类 ===============
 
-		initClassifyData() {
+		setOneClassify(businessid) {
 			oneclassService
 				.getOneclass({
 					xt_id: util.cookies.get('xt_id')
 				})
 				.then(data => {
 					let arr = data.map(item => {
+						if (item.businessid == businessid) {
+							this.initBusinessid = true
+							this.$refs['ref_businessid'].confirm({
+								data: [
+									{
+										name: item.businessname,
+										value: item.businessid
+									}
+								]
+							});
+						}
 						return {
 							name: item.businessname,
 							value: item.businessid
@@ -413,13 +431,23 @@ export default {
 				});
 		},
 
-		onChangeBusinessid(item) {
+		setTwoClassify(businessid, businessid_two) {
 			oneclassService
 				.getTwoclass({
-					businessid: item.data[0].value
+					businessid: businessid
 				})
 				.then(data => {
 					let arr = data.map(item => {
+						if (item.two_businessid == businessid_two) {
+							this.$refs['ref_businessid_two'].confirm({
+								data: [
+									{
+										name: item.two_businessname,
+										value: item.two_businessid
+									}
+								]
+							});
+						}
 						return {
 							name: item.two_businessname,
 							value: item.two_businessid
@@ -429,12 +457,22 @@ export default {
 				});
 		},
 
+		onChangeBusinessid(item) {
+			if (this.initBusinessid) {
+				this.initBusinessid = false;
+				return;
+			}
+			this.setTwoClassify(item.data[0].value);
+		},
+
 		onGetMap(e) {
-			console.log(111)
-			util.gotoPage('/public/map/index')
-			// this.setIntputValueFc('ref_map', e.address);
-			// this.setIntputValueFc('ref_latitude', e.latitude);
-			// this.setIntputValueFc('ref_longitude', e.longitude);
+			util.gotoPage('/public/map/index');
+		},
+
+		$$updateMap(data) {
+			this.setIntputValueFc('ref_compaddress', data.address);
+			this.setIntputValueFc('ref_latitude', data.latitude);
+			this.setIntputValueFc('ref_longitude', data.longitude);
 		},
 
 		//=============== 类型 ==================
@@ -725,7 +763,7 @@ export default {
 					if (res.confirm) {
 						delAgent({ agentid: this.agentData.agentid, type: 2 }).then(() => {
 							this.$refs['Message'].success('提交成功,等待审核');
-							getApp().globalData.agency = {
+							getApp().globalData.agencyVar = {
 								action: 'examine'
 							};
 						});
@@ -744,7 +782,7 @@ export default {
 							this.$refs['Message'].success('审核通过');
 							this.submit_success = true;
 							this.rightText = '';
-							getApp().globalData.agency = {
+							getApp().globalData.agencyVar = {
 								action: 'examine'
 							};
 						});
@@ -781,6 +819,7 @@ export default {
 		},
 
 		resetInit() {
+			this.fromValue0.wechat_no = '';
 			this.fromValue0.legal = '';
 			this.fromValue0.userName = '';
 			this.fromValue0.mobileNo = '';
@@ -802,12 +841,16 @@ export default {
 				userName: data.userName,
 				mobileNo: data.mobileNo,
 
+				wechat_no: data.wechat_no,
+				businessid: data.businessid,
+				businessid_two: data.businessid_two || [],
+				compaddress: data.compaddress ? data.compaddress : '',
+
 				prov_cd: data.prov_cd.data[0].value.areaid,
 				userCode: data.userCode || this.agentData.userCode,
 				id: this.agentData ? this.agentData.userId : '',
 				city: data.city.data ? data.city.data[0].value.areaid : '',
 				areaid: data.areaid.data ? data.areaid.data[0].value.areaid : '',
-				compaddress: data.compaddress ? data.compaddress : '',
 				contractendate: data.contractendate ? data.contractendate.data : '',
 				contractstdate: data.contractstdate ? data.contractstdate.data : ''
 			};
@@ -821,39 +864,45 @@ export default {
 			//商户补充
 			if (this.pageType == 'business') {
 				query.one_type = this.fromValue0.picker1.data[0].value.typeid;
-				query.two_type = this.fromValue0.picker2.data ? this.fromValue0.picker2.data[0].value.typeid : '';
-				query.three_type = this.fromValue0.picker3.data ? this.fromValue0.picker3.data[0].value.typeid : '';
+				query.two_type = this.fromValue0.picker2.data
+					? this.fromValue0.picker2.data[0].value.typeid
+					: '';
+				query.three_type = this.fromValue0.picker3.data
+					? this.fromValue0.picker3.data[0].value.typeid
+					: '';
 			}
 
-			userService.getCheckUser({ userCode: data.userCode || this.agentData.userCode }).then(data2 => {
-				if (data2 == 'true') {
-					saveAgent(query)
-						.then(data => {
-							this.fromValue0.isRotate = false;
-							this.onAmend();
-							if (this.action == 'add') {
-								this.$refs['Message'].success('新增成功');
-								this.resetInit();
-								getApp().globalData.agency = {
-									action: 'add'
-								};
-							} else {
-								this.$refs['Message'].success('修改成功');
-								getApp().globalData.agency = {
-									agentid: this.agentData.agentid,
-									agentData: query,
-									action: 'update'
-								};
-							}
-						})
-						.catch(err => {
-							this.fromValue0.isRotate = false;
-							this.$refs['Message'].error(err);
-						});
-				} else {
-					this.$refs['Message'].error('该账号已存在,请更换账号试试');
-				}
-			});
+			userService
+				.getCheckUser({ userCode: data.userCode || this.agentData.userCode })
+				.then(data2 => {
+					if (data2 == 'true') {
+						saveAgent(query)
+							.then(data => {
+								this.fromValue0.isRotate = false;
+								this.onAmend();
+								if (this.action == 'add') {
+									this.$refs['Message'].success('新增成功');
+									this.resetInit();
+									getApp().globalData.agencyVar = {
+										action: 'add'
+									};
+								} else {
+									this.$refs['Message'].success('修改成功');
+									getApp().globalData.agencyVar = {
+										agentid: this.agentData.agentid,
+										agentData: query,
+										action: 'update'
+									};
+								}
+							})
+							.catch(err => {
+								this.fromValue0.isRotate = false;
+								this.$refs['Message'].error(err);
+							});
+					} else {
+						this.$refs['Message'].error('该账号已存在,请更换账号试试');
+					}
+				});
 		}
 	}
 };

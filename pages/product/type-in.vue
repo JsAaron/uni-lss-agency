@@ -1284,7 +1284,7 @@ export default {
 						delAgent({ agentid: this.agentData.agentid, type: 2 }).then(() => {
 							this.$refs['Message'].success('提交成功,等待审核');
 							this.submit_success = true;
-							getApp().globalData.product = {
+							getApp().globalData.productVar = {
 								agentid: this.agentData.agentid,
 								action: 'update-typeIn',
 								pass: 2

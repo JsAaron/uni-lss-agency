@@ -1104,7 +1104,7 @@ export default {
 					this.fromValue1.isRotate = false;
 					this.$refs['Message'].success('提交成功');
 					this.submit_success = true;
-					getApp().globalData.product = {
+					getApp().globalData.productVar = {
 						action: 'update-entry'
 					};
 				})

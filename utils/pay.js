@@ -32,7 +32,6 @@ export function verifyPassword(data) {
  *      code: "805017",
         xx_no: String(this.data.xx_no),
         money: String(Number(this.data.money) * 100),
-        agentid: app.globalData.login.taccountid, //用户id
         parent_agentid: this.data.parent_agentid //商户id
  */
 export function createBankCardTrade(data) {

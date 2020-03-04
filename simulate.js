@@ -27,7 +27,7 @@ function simulate() {
 	// return pages["product"]
 	// return pages["product-details"]
 	// return pages["center"]
-	return pages["add-business"]
+	// return pages["add-business"]
 	return pages["agency"]
 
 }

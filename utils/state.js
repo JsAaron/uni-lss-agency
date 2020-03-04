@@ -41,7 +41,6 @@ function getBankCardName(bankname) {
  * 获取银行卡列表
  * data
  *  cardType: "2",
- *  taccountid: app.globalData.login.taccountid
  */
 function getBankCard(taccountid, cardType) {
 	return new Promise((resolve, reject) => {
@@ -180,29 +179,5 @@ export function getAdvert() {
 				funcode: "0109"
 			}
 		}).then(reslove).catch(reject);
-	});
-}
-
-/**
- * 检测版本
- */
-export function checkVersion() {
-	// this.checkVersion().then(response => {
-	//   if (response && response.data) {
-	//     //启动功能
-	//     //0-不显示，1-显示
-	//     if (response.data.isxx == '1') {
-	//       app.globalData.displayModule = true
-	//     }
-	//   }
-	//   this.nextProcess()
-	// })
-	return new Promise((resolve, reject) => {
-		unifyAjax({
-			data: {
-				funcode: "0125",
-				translateno: app.globalData.version
-			}
-		}).then(resolve).catch(resolve);
 	});
 }

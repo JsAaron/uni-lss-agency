@@ -191,19 +191,19 @@ export default {
 	},
 	onShow() {
 		// 强制更新状态
-		if (app.globalData.agency.action == 'update') {
+		if (app.globalData.agencyVar.action == 'update') {
 			this.updateState();
-			app.globalData.agency = {};
+			app.globalData.agencyVar = {};
 		}
 		//新增强制刷新
-		if (app.globalData.agency.action == 'add') {
+		if (app.globalData.agencyVar.action == 'add') {
 			this.loadNewsList('refresh');
-			app.globalData.agency = {};
+			app.globalData.agencyVar = {};
 		}
 		// 未开通，审核
-		if (app.globalData.agency.action == 'examine') {
+		if (app.globalData.agencyVar.action == 'examine') {
 			this.loadNewsList('refresh');
-			app.globalData.agency = {};
+			app.globalData.agencyVar = {};
 		}
 	},
 	async onLoad() {
@@ -220,8 +220,8 @@ export default {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
 			if (tabItem.newsList) {
 				tabItem.newsList.map((item, index) => {
-					if (item.agentid == app.globalData.agency.agentid) {
-						Object.assign(item, app.globalData.agency.agentData);
+					if (item.agentid == app.globalData.agencyVar.agentid) {
+						Object.assign(item, app.globalData.agencyVar.agentData);
 					}
 				});
 			}
