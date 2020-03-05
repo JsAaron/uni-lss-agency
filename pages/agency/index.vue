@@ -113,22 +113,22 @@ export default {
 		uniSegmentedControl
 	},
 	data() {
-		//-1窝单方，0-一级代理商，1-二级代理商，2-三级代理商，4商家
+		//-1窝单方，0-合伙人商，1-城市领导人商，2-推广者商，4商家
 		let dl_type = util.cookies.get('dl_type');
 
 		let items = [];
 		let type;
 		if (dl_type == -1) {
 			type = 'all';
-			items = ['一级代理', '二级代理', '三级代理', '商户'];
+			items = ['合伙人', '城市领导人', '推广者', '商户'];
 		}
 		if (dl_type == 0) {
 			type = 'one';
-			items = ['二级代理', '三级代理', '商户'];
+			items = ['城市领导人', '推广者', '商户'];
 		}
 		if (dl_type == 1) {
 			type = 'two';
-			items = ['三级代理', '商户'];
+			items = ['推广者', '商户'];
 		}
 		if (dl_type == 2) {
 			type = 'three';
@@ -237,13 +237,13 @@ export default {
 
 			if (this.segmented.type == 'all') {
 				if (this.segmented.current == 0) {
-					title = '新增一级代理商';
+					title = '新增合伙人商';
 					dl_type = 0;
 				} else if (this.segmented.current == 1) {
-					title = '新增二级代理商';
+					title = '新增城市领导人商';
 					dl_type = 1;
 				} else if (this.segmented.current == 2) {
-					title = '新增三级代理商';
+					title = '新增推广者商';
 					dl_type = 2;
 				} else if (this.segmented.current == 3) {
 					title = '新增商户';
@@ -252,10 +252,10 @@ export default {
 				}
 			} else if (this.segmented.type == 'one') {
 				if (this.segmented.current == 0) {
-					title = '新增二级代理商';
+					title = '新增城市领导人商';
 					dl_type = 1;
 				} else if (this.segmented.current == 1) {
-					title = '新增三级代理商';
+					title = '新增推广者商';
 					dl_type = 2;
 				} else if (this.segmented.current == 2) {
 					title = '新增商户';
@@ -264,7 +264,7 @@ export default {
 				}
 			} else if (this.segmented.type == 'two') {
 				if (this.segmented.current == 0) {
-					title = '新增三级代理商';
+					title = '新增推广者商';
 					dl_type = 2;
 				} else if (this.segmented.current == 1) {
 					title = '新增商户';
@@ -382,7 +382,7 @@ export default {
 				}
 			}
 
-			//二级代理商，二项
+			//城市领导人商，二项
 			if (this.segmented.type == 'two') {
 				if (this.segmented.current == 0) {
 					this.threeParam(param);
@@ -391,7 +391,7 @@ export default {
 				}
 			}
 
-			//三级代理商，一项
+			//推广者商，一项
 			if (this.segmented.type == 'three') {
 				if (this.segmented.current == 0) {
 					this.shopParam(param);
@@ -418,7 +418,7 @@ export default {
 				// #endif
 			}
 
-			//一级代理
+			//合伙人
 			let query = {
 				pageIndex: ++tabItem.pageIndex,
 				pageSize: 30,
@@ -489,11 +489,11 @@ export default {
 			let pageType = 'agency';
 			if (this.segmented.type == 'all') {
 				if (this.segmented.current == 0) {
-					title = '一级代理商信息';
+					title = '合伙人商信息';
 				} else if (this.segmented.current == 1) {
-					title = '二级代理商信息';
+					title = '城市领导人商信息';
 				} else if (this.segmented.current == 2) {
-					title = '三级代理商信息';
+					title = '推广者商信息';
 				} else if (this.segmented.current == 3) {
 					title = '商户信息';
 					pageType = 'business';
@@ -502,9 +502,9 @@ export default {
 
 			if (this.segmented.type == 'one') {
 				if (this.segmented.current == 0) {
-					title = '二级代理商信息';
+					title = '城市领导人商信息';
 				} else if (this.segmented.current == 1) {
-					title = '三级代理商信息';
+					title = '推广者商信息';
 				} else if (this.segmented.current == 2) {
 					title = '商户信息';
 					pageType = 'business';
@@ -513,7 +513,7 @@ export default {
 
 			if (this.segmented.type == 'two') {
 				if (this.segmented.current == 0) {
-					title = '三级代理商信息';
+					title = '推广者商信息';
 				} else if (this.segmented.current == 1) {
 					title = '商户信息';
 					pageType = 'business';

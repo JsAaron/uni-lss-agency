@@ -85,7 +85,7 @@ export default {
 	justify-content: center;
 	align-items: center;
 	width: 70%;
-	font-size: 25upx;
+	font-size: 22upx;
 	box-sizing: border-box;
 	margin: 0 auto;
 	overflow: hidden;

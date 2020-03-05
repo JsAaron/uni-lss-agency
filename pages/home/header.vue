@@ -14,20 +14,20 @@
 				</view>
 				<view class="header__col" v-if="showOneAgent">
 					<view>{{ totalData.one_agent_num }}</view>
-					<view>一级代理商总数</view>
+					<view>一级合伙人总数</view>
 				</view>
 				<view class="header__col" v-if="twoOneAgent">
 					<view>{{ totalData.two_agent_num }}</view>
-					<view>二级代理商总数</view>
+					<view>二级城市领导人总数</view>
 				</view>
 				<view class="header__col" v-if="threeOneAgent">
 					<view>{{ totalData.three_agent_num }}</view>
-					<view>三级代理商总数</view>
+					<view>三级推广者总数</view>
 				</view>
 				<view class="header__col">
 					<view>{{ totalData.agent_num }}</view>
 					<view>商户总数</view>
-				</view>
+				</view> 
 			</view>
 		</view>
 	</view>
