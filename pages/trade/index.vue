@@ -38,7 +38,7 @@
 							<view class="content--gray">{{ totalData.payment_amount }}元</view>
 						</view>
 						<view class="content__col">
-							<view>优惠</view>
+							<view>鼓励金抵扣</view>
 							<view class="content--gray">{{ totalData.discount_amount }}元</view>
 						</view>
 					</view>

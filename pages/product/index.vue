@@ -258,7 +258,7 @@ export default {
 
 		//================================
 
-		//新闻详情
+
 		navToDetails(index) {
 			let tabItem = this.tabBars[this.tabCurrentIndex];
 			let data = tabItem.newsList[index];
@@ -379,7 +379,7 @@ page,
 			content: '';
 			width: 0;
 			height: 0;
-			border-bottom: 4upx solid #007aff;
+			border-bottom: 4upx solid #1aad19;
 			position: absolute;
 			left: 50%;
 			bottom: 0;
@@ -388,7 +388,7 @@ page,
 		}
 	}
 	.current {
-		color: #007aff;
+		color: #1aad19;
 		&:after {
 			width: 50%;
 		}
@@ -431,7 +431,7 @@ page,
 	&__right {
 		@include flex-h-left;
 		font-size: 28rpx;
-		color: #007aff;
+		color: #1aad19;
 	}
 }
 </style>

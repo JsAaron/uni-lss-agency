@@ -35,7 +35,7 @@
 			</view>
 		</view>
 
-		<WButton text="退出登录" @click.native="onExit()" bgColor="rgb(47, 133, 252)"></WButton>
+		<WButton text="退出登录" @click.native="onExit()" bgColor="#1aad19"></WButton>
 	</view>
 </template>
 

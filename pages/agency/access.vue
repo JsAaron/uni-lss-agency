@@ -136,7 +136,8 @@
 			title="获取位置"
 			customId="map"
 			placeholder="点击定位获取"
-			rightButtonTex="定位"
+			:rightButtonTex="fromValue0.compaddress ? '重新定位' : '定位'"
+			rightButtonStyle="background:#1aad19"
 			required
 			disabled
 			:tapClear="false"
@@ -256,12 +257,7 @@
 					></WButton>
 				</view>
 				<view v-if="agentData.pass == '2'">
-					<WButton
-						v-if="submit_success"
-						text="完成"
-						@click.native="onBack()"
-						bgColor="#1aad19"
-					></WButton>
+					<WButton v-if="submit_success" text="完成" @click.native="onBack()" bgColor="#1aad19"></WButton>
 					<WButton
 						v-else
 						text="通过审核"
@@ -372,7 +368,7 @@ export default {
 	methods: {
 		initData() {
 			let data = this.agentData;
-			console.log(data);
+			// console.log(data);
 			this.initAddressData();
 			if (this.pageType == 'business') {
 				this.initPickerData();
@@ -466,10 +462,14 @@ export default {
 		},
 
 		onGetMap(e) {
-			util.gotoPage('/public/map/index');
+			let longitude = this.agentData.longitude
+			let latitude = this.agentData.latitude
+			util.gotoPage(`/public/map/index?longitude=${longitude}&latitude=${latitude}`);
 		},
 
 		$$updateMap(data) {
+			this.agentData.longitude = data.longitude
+			this.agentData.latitude = data.latitude
 			this.setIntputValueFc('ref_compaddress', data.address);
 			this.setIntputValueFc('ref_latitude', data.latitude);
 			this.setIntputValueFc('ref_longitude', data.longitude);
@@ -842,8 +842,6 @@ export default {
 				mobileNo: data.mobileNo,
 
 				wechat_no: data.wechat_no,
-				businessid: data.businessid,
-				businessid_two: data.businessid_two || [],
 				compaddress: data.compaddress ? data.compaddress : '',
 
 				prov_cd: data.prov_cd.data[0].value.areaid,
@@ -870,6 +868,11 @@ export default {
 				query.three_type = this.fromValue0.picker3.data
 					? this.fromValue0.picker3.data[0].value.typeid
 					: '';
+
+				query.latitude = data.latitude;
+				query.longitude = data.longitude;
+				query.businessid = data.businessid
+				query.businessid_two = data.businessid_two || []
 			}
 
 			userService
@@ -901,6 +904,7 @@ export default {
 							});
 					} else {
 						this.$refs['Message'].error('该账号已存在,请更换账号试试');
+						this.fromValue0.isRotate = false;
 					}
 				});
 		}

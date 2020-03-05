@@ -8,7 +8,7 @@
 			status-bar
 			:right-text="barText"
 			left-text="返回"
-			background-color="#2F85FC"
+			background-color="#1aad19"
 			:title="title"
 			color="#ffffff"
 			@click-left="onBackPage"
@@ -176,7 +176,7 @@
 				text="下一步"
 				:rotate="fromValue0.isRotate"
 				@click.native="getStep0()"
-				bgColor="rgb(47, 133, 252)"
+				bgColor="#1aad19"
 			></WButton>
 		</block>
 
@@ -239,6 +239,16 @@
 			></QSInput>
 
 			<view class="type-title">基本信息</view>
+
+			<QSPics
+				:name="formName1"
+				variableName="agentlogo"
+				ref="ref_agentlogo"
+				customId="typein"
+				required
+				title="店铺LOGO"
+				v-model="fromValue1.agentlogo"
+			></QSPics>
 
 			<QSPics
 				:name="formName1"
@@ -353,7 +363,7 @@
 				text="下一步"
 				:rotate="fromValue1.isRotate"
 				@click.native="getStep1()"
-				bgColor="rgb(47, 133, 252)"
+				bgColor="#1aad19"
 			></WButton>
 		</block>
 
@@ -451,14 +461,14 @@
 				v-if="submit_success"
 				text="完成"
 				@click.native="onBackPage"
-				bgColor="rgb(47, 133, 252)"
+				bgColor="#1aad19"
 			></WButton>
 			<WButton
 				v-else
 				text="下一步"
 				:rotate="fromValue2.isRotate"
 				@click.native="getStep2()"
-				bgColor="rgb(47, 133, 252)"
+				bgColor="#1aad19"
 			></WButton>
 		</block>
 	</view>
@@ -533,6 +543,7 @@ export default {
 				bank_branch: '',
 				account_name: '',
 				bank_account: '',
+				agentlogo:[{ required: true, path: '' }],
 				agent_face: [{ required: true, path: '' }],
 				agent_shop: [{ required: true, path: '' }],
 				prov_cd: '',
@@ -809,6 +820,12 @@ export default {
 			this.setIntputValueFc('ref_account_name', data.account_name);
 			this.setIntputValueFc('ref_bank_account', data.bank_account);
 
+			if (this.hasUserValue(data.agentlogo)) {
+				this.setInputDataFc('ref_agentlogo', [
+					{ required: true, path: 'https://img.facess.net/' + data.agentlogo }
+				]);
+			}
+
 			if (this.hasUserValue(data.agent_face)) {
 				this.setInputDataFc('ref_agent_face', [
 					{ required: true, path: 'https://img.facess.net/' + data.agent_face }
@@ -968,6 +985,7 @@ export default {
 			let query = {
 				account_city: data.account_city,
 				account_name: data.account_name,
+				agentlogo: this.getUploadUrl('agentlogo', data),
 				agent_face: this.getUploadUrl('agent_face', data),
 				agent_shop: this.getUploadUrl('agent_shop', data),
 				agentid: this.agentid,

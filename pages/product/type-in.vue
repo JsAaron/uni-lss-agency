@@ -7,7 +7,7 @@
 			status-bar
 			:right-text="barText"
 			left-text="返回"
-			background-color="#2F85FC"
+			background-color="#1aad19"
 			title="录入资料"
 			color="#ffffff"
 			@click-left="onBackPage"
@@ -154,7 +154,7 @@
 				text="下一步"
 				:rotate="fromValue0.isRotate"
 				@click.native="getStep0()"
-				bgColor="rgb(47, 133, 252)"
+				bgColor="#1aad19"
 			></WButton>
 		</block>
 
@@ -344,7 +344,7 @@
 				text="下一步"
 				:rotate="fromValue1.isRotate"
 				@click.native="getStep1()"
-				bgColor="rgb(47, 133, 252)"
+				bgColor="#1aad19"
 			></WButton>
 		</block>
 
@@ -491,7 +491,7 @@
 				text="下一步"
 				:rotate="fromValue2.isRotate"
 				@click.native="getStep2()"
-				bgColor="rgb(47, 133, 252)"
+				bgColor="#1aad19"
 			></WButton>
 		</block>
 
@@ -541,7 +541,7 @@
 				text="下一步"
 				:rotate="fromValue3.isRotate"
 				@click.native="getStep3()"
-				bgColor="rgb(47, 133, 252)"
+				bgColor="#1aad19"
 			></WButton>
 		</block>
 
@@ -550,9 +550,9 @@
 				v-if="submit_success"
 				text="完成"
 				@click.native="onBackPage()"
-				bgColor="rgb(47, 133, 252)"
+				bgColor="#1aad19"
 			></WButton>
-			<WButton v-else text="确定提交" @click.native="getStep4()" bgColor="rgb(47, 133, 252)"></WButton>
+			<WButton v-else text="确定提交" @click.native="getStep4()" bgColor="#1aad19"></WButton>
 		</block>
 	</view>
 </template>
@@ -589,7 +589,7 @@ export default {
 			submit_success: false,
 
 			// ============ 步骤条 ==============
-			stepActive: 0,
+			stepActive:0,
 			stepList: [
 				{
 					title: '经营信息'

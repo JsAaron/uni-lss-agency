@@ -8,7 +8,7 @@
 			:existTabBar="true"
 			@btnClick="onAmend"
 		/>
-
+	
 		<!-- 顶部选项卡 -->
 		<scroll-view
 			id="nav-bar"
@@ -252,7 +252,7 @@ page,
 			content: '';
 			width: 0;
 			height: 0;
-			border-bottom: 4upx solid #007aff;
+			border-bottom: 4upx solid #1aad19;
 			position: absolute;
 			left: 50%;
 			bottom: 0;
@@ -261,7 +261,7 @@ page,
 		}
 	}
 	.current {
-		color: #007aff;
+		color: #1aad19;
 		&:after {
 			width: 50%;
 		}

@@ -42,7 +42,7 @@
 			text="修改密码"
 			:rotate="fromValue.isRotate"
 			@click.native="onEnsure()"
-			bgColor="rgb(47, 133, 252)"
+			bgColor="#1aad19"
 		></WButton>
 	</view>
 </template>

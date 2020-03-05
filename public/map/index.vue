@@ -85,38 +85,37 @@
 				title: '搜索地址'
 			})
 		},
-		onLoad() {
+		onLoad(options) {
+			if(options.longitude && options.latitude != "undefined"){
 			let map = this.map
-			// this.getWidthHeight(e => {
-			// 	console.log(e);
-			//   map.controls[0].position.top = e.height - 45
-			//   map.controls[0].position.left = e.width/2 - 10
-			//   this.setData({
-			// 	map: map
-			//   })
-			// })
-			
+				map.latitude = options.latitude
+				map.longitude = options.longitude
+				this.setData({
+					map: map
+				})
+			}else{
+				this.getAddress()
+			}
 		},
 		methods: {
 			getAddress (){
-			    let that = this
 			    uni.getLocation({
 			      type: 'gcj02',
-			      success: function(res) {
-			        let map = that.data.map
+			      success: res => {
+			        let map = this.map
 			        map.longitude = res.longitude
 			        map.latitude = res.latitude
-			        that.getWidthHeight(e => {
-			          map.controls[0].position.top = e.height / 2 - 35
-			          map.controls[0].position.left = e.width / 2 - 20
-			          that.setData({
+			        this.getWidthHeight(e => {
+			          // map.controls[0].position.top = e.height / 2 - 35
+			          // map.controls[0].position.left = e.width / 2 - 20
+			          this.setData({
 			            map: map,
-			            position: {
+			            position: { 
 			              longitude: res.longitude,
 			              latitude: res.latitude
-			            }
+			            } 
 			          })
-			          that.getAddressList(1)
+			          this.getAddressList(1)
 			        })
 			      },
 			    })
@@ -132,7 +131,6 @@
 			getAddressList(s = 0) {
 				let that = this
 				let position = that.position
-				console.log(position)
 				qqmapsdk.reverseGeocoder({
 					location: {
 						latitude: position.latitude,
@@ -155,7 +153,6 @@
 						}
 						
 						setTimeout(() => {
-							console.log('************');
 							that.scrollTop = 1
 						}, 1000)
 					},

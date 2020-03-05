@@ -7,7 +7,7 @@
 			text="下载更新"
 			:rotate="isRotate"
 			@click.native="onUpdate()"
-			bgColor="rgb(47, 133, 252)"
+			bgColor="#1aad19"
 		></WButton>
 		<view class="update-pocess" v-if="isRotate">
 			<text>下载进度:{{ percent }}</text>
